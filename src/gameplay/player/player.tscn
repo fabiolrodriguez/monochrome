@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/player/player.gd" id="1_player"]
+[ext_resource type="Script" path="res://src/gameplay/weapons/weapon.gd" id="2_weapon"]
+[ext_resource type="PackedScene" path="res://src/gameplay/projectiles/player_projectile.tscn" id="3_projectile"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_player"]
+radius = 5.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape_player")
+
+[node name="Weapon" type="Node2D" parent="."]
+script = ExtResource("2_weapon")
+projectile_scene = ExtResource("3_projectile")
+
+[node name="Muzzle" type="Marker2D" parent="Weapon"]
+position = Vector2(9, 0)
+
+[node name="FireCooldown" type="Timer" parent="Weapon"]
+wait_time = 0.15
+one_shot = true
+
