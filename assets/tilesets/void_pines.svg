@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="16" viewBox="0 0 64 16" shape-rendering="crispEdges">
+  <!-- Four compact 16x16 pine variants for sparse, collidable obstacles. -->
+  <g fill="#e5e6e8">
+    <path d="M7 0h2v3h2L9 6h4L10 9h4l-5 5H2l4-5H2l4-3H4l3-3z"/>
+    <path d="M23 1h2v2h2l-2 3h4l-3 3h4l-5 5h-7l4-5h-4l4-3h-3l4-3z"/>
+    <path d="M39 0h2v3h3l-3 3h4l-3 3h4l-5 5h-8l5-5h-4l4-3h-3l4-3z"/>
+    <path d="M55 1h2v2h3l-3 3h4l-4 3h5l-5 5h-8l5-5h-4l4-3h-3l4-3z"/>
+  </g>
+  <g fill="#777a80">
+    <path d="M7 11h2v5H7zm16 0h2v5h-2zm16 0h2v5h-2zm16 0h2v5h-2z"/>
+  </g>
+  <g fill="#15171b">
+    <path d="M6 5h2v1H6zm3 3h2v1H9zm12-3h2v1h-2zm5 3h2v1h-2zm10-3h2v1h-2zm6 3h2v1h-2zm10-3h2v1h-2zm6 3h2v1h-2z"/>
+  </g>
+</svg>
+

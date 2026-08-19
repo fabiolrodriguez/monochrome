@@ -1,0 +1,265 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/app/main_menu.gd" id="1"]
+[ext_resource type="Resource" path="res://src/data/progression/default_skill_tree.tres" id="2_tree"]
+[ext_resource type="Script" path="res://src/presentation/ui/skill_tree_view.gd" id="3_view"]
+[ext_resource type="Theme" path="res://assets/ui/monochrome_theme.tres" id="4_theme"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_theme")
+script = ExtResource("1")
+skill_tree = ExtResource("2_tree")
+
+[node name="Title" type="Label" parent="."]
+offset_left = 52.0
+offset_top = 22.0
+offset_right = 268.0
+offset_bottom = 50.0
+theme_override_font_sizes/font_size = 13
+text = "PROJECT MONOCHROME"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="."]
+offset_left = 76.0
+offset_top = 51.0
+offset_right = 244.0
+offset_bottom = 65.0
+theme_override_colors/font_color = Color(0.55, 0.56, 0.59, 1)
+theme_override_font_sizes/font_size = 8
+text = "UI_MENU_SUBTITLE"
+horizontal_alignment = 1
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_left = 90.0
+offset_top = 68.0
+offset_right = 230.0
+offset_bottom = 170.0
+
+[node name="Layout" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Coins" type="Label" parent="Panel/Layout"]
+layout_mode = 2
+text = "COINS: 0"
+horizontal_alignment = 1
+
+[node name="Play" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_PLAY"
+
+[node name="Progression" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_PROGRESSION"
+
+[node name="Controls" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_CONTROLS"
+
+[node name="Quit" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_QUIT"
+
+[node name="SkillTree" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="SkillTree"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="Panel" parent="SkillTree"]
+layout_mode = 1
+anchors_preset = 15
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TreeCanvas" type="Control" parent="SkillTree/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 22.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+clip_contents = true
+script = ExtResource("3_view")
+
+[node name="Title" type="Label" parent="SkillTree/Panel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 142.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 11
+text = "UI_SKILL_TREE"
+
+[node name="Coins" type="Label" parent="SkillTree/Panel"]
+layout_mode = 0
+offset_left = 145.0
+offset_top = 5.0
+offset_right = 216.0
+offset_bottom = 19.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.3, 1)
+theme_override_font_sizes/font_size = 7
+text = "COINS: 0"
+horizontal_alignment = 2
+
+[node name="Zoom" type="HBoxContainer" parent="SkillTree/Panel"]
+layout_mode = 0
+offset_left = 220.0
+offset_top = 3.0
+offset_right = 304.0
+offset_bottom = 21.0
+theme_override_constants/separation = 1
+alignment = 2
+
+[node name="Out" type="Button" parent="SkillTree/Panel/Zoom"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "−"
+
+[node name="Value" type="Label" parent="SkillTree/Panel/Zoom"]
+custom_minimum_size = Vector2(32, 18)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "90%"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="In" type="Button" parent="SkillTree/Panel/Zoom"]
+custom_minimum_size = Vector2(18, 18)
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "+"
+
+[node name="Hint" type="Label" parent="SkillTree/Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -21.0
+offset_right = -49.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.78, 0.79, 0.82, 1)
+theme_override_font_sizes/font_size = 6
+text = "UI_SKILL_HINT"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Back" type="Button" parent="SkillTree/Panel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -45.0
+offset_top = -21.0
+offset_right = -5.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 7
+text = "UI_BACK"
+
+[node name="Controls" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Controls"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="PanelContainer" parent="Controls"]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 22.0
+offset_right = 290.0
+offset_bottom = 158.0
+
+[node name="Layout" type="VBoxContainer" parent="Controls/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Controls/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "UI_CONTROLS"
+horizontal_alignment = 1
+
+[node name="KeyboardTitle" type="Label" parent="Controls/Panel/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.3, 1)
+theme_override_font_sizes/font_size = 7
+text = "UI_CONTROLS_KEYBOARD"
+
+[node name="Keyboard" type="Label" parent="Controls/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_CONTROLS_KEYBOARD_DESC"
+autowrap_mode = 2
+
+[node name="GamepadTitle" type="Label" parent="Controls/Panel/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.3, 1)
+theme_override_font_sizes/font_size = 7
+text = "UI_CONTROLS_GAMEPAD"
+
+[node name="Gamepad" type="Label" parent="Controls/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_CONTROLS_GAMEPAD_DESC"
+autowrap_mode = 2
+
+[node name="Spacer" type="Control" parent="Controls/Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Back" type="Button" parent="Controls/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "UI_BACK"

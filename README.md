@@ -4,12 +4,60 @@ Action roguelite 2D em Godot 4.7, construído incrementalmente a partir do GDD d
 
 ## Estado atual
 
-Fundação do **Milestone 1 — movimento + tiro**:
+Expansão da vertical slice após os milestones principais:
 
 - viewport lógico 320×180, escala inteira e filtering nearest;
 - movimento em 8 direções com teclado ou analógico esquerdo;
 - mira independente com mouse ou analógico direito;
 - tiro contínuo com botão esquerdo ou RT;
+- componente reutilizável de vida e dano;
+- arquétipos Chaser, Shooter e Tank;
+- configuração dos arquétipos por `EnemyData`, sem números de balanceamento presos ao script;
+- projéteis inimigos e dano de contato;
+- tileset 16×16 reaproveitável, pintado proceduralmente sem imagem de cenário estática;
+- diretor de ameaça com orçamento crescente e limite de inimigos ativos;
+- drops de XP com atração por proximidade;
+- curva de experiência, múltiplos level ups e HUD de progresso;
+- escolha pausada de um entre três upgrades com mouse, teclado ou gamepad;
+- pool ponderado e níveis máximos orientados por `UpgradeData`;
+- cinco upgrades funcionais: dano, cadência, movimento, vida e velocidade de projétil;
+- encerramento da run ao zerar a vida, com reinício explícito;
+- textos do novo fluxo em português brasileiro e inglês;
+- `LevelData` para duração, pool de inimigos, progressão e conteúdo futuro;
+- Void Garden com duração de seis minutos e três segmentos de pressão;
+- cronômetro regressivo e conclusão da fase;
+- reserva de orçamento do diretor, garantindo variedade de Chasers, Shooters e Tanks;
+- objetivo de sobrevivência instanciado por cena e configurado por `ObjectiveData`;
+- progresso do objetivo no HUD e conclusão desacoplada do `LevelController`;
+- valores de combate da run explicitamente reiniciados ao instanciar player, arma e upgrades;
+- menu de pausa com ESC/Start, continuar e reiniciar, sem conflito com outros modais;
+- atlas florestal 16×16 reutilizável, com colisão e composição procedural de clareiras e pequenas salas;
+- pinheiros 16×16 reutilizáveis e espaçados, com colisão independente;
+- mapa em TAB/Select com setores revelados conforme a exploração;
+- Void Garden delimitada por tiles florestais, com câmera e spawns restritos à área jogável;
+- The Watcher configurado por `BossData`, com barra de vida e três fases de padrões;
+- transição do objetivo de sobrevivência para o confronto final;
+- autofire alternável pelo botão direito do mouse ou Y do controle;
+- menu inicial com total permanente de moedas;
+- XP garantido por inimigo e moedas como drop raro independente;
+- moedas coletadas e recompensa do boss salvas automaticamente;
+- save JSON versionado para moeda, fases desbloqueadas e concluídas;
+- retorno ao menu principal pelo pause e encerramento de run;
+- árvore permanente espacial com quinze nós conectados, custos e pré-requisitos;
+- nós compactos por ícone, painel de inspeção por hover/foco e zoom de 65% a 150%;
+- bônus permanentes aplicados a cada nova run e persistidos no save v2;
+- nó de sistema que desbloqueia um reroll funcional por run;
+- nós permanentes de unlock para Perfuração, Tiro múltiplo e Ricochete;
+- upgrades bloqueados ficam fora do pool até a compra do respectivo nó;
+- Multishot com dispersão simétrica, Piercing com hits adicionais e Ricochet buscando o próximo alvo;
+- pool pré-aquecido e limitado para projéteis do jogador, preparado para maior densidade de tiros;
+- áudio ambiente distinto no menu e em Void Garden;
+- feedback sonoro para UI, disparo, impacto, coleta, dash, mortes e boss;
+- ícones monocromáticos 16×16 incorporados aos cards de upgrade;
+- dash com cooldown e invulnerabilidade curta;
+- três upgrades defensivos funcionais: Armadura, Regeneração e Barreira;
+- Elite Hunter periódico, com silhueta dourada, vida elevada e recompensa garantida;
+- flash de impacto em inimigos e player;
 - colisão e arte placeholder desacopladas;
 - layers de física nomeadas para os sistemas futuros.
 
@@ -24,7 +72,7 @@ src/
   data/          Resources customizados e conteúdo orientado por dados
   gameplay/      player, armas, projéteis, inimigos e componentes
   levels/        cenas e lógica específica de fases
-  presentation/  desenho, efeitos e UI
+  presentation/  tilemaps, desenho, efeitos e UI
 assets/          arte, áudio e fontes substituíveis
 tests/           testes automatizados quando o primeiro domínio testável surgir
 ```
@@ -41,5 +89,9 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 
 ## Próximo milestone
 
-Milestone 2: componente de vida/dano, três arquétipos de inimigo, projéteis inimigos e uma primeira base de pooling medida com o profiler.
+Próximo: opções de áudio/acessibilidade, cura como drop e uma tela de seleção de fases antes de iniciar a segunda fase.
 
+## Créditos de assets
+
+- Efeitos e ambientes: PixelLoops Audio — Free Starter Sound Effects Pack. Licença incluída em `assets/licenses/pixelloops_audio_license.txt`.
+- Ícones monocromáticos 16×16: pacote fornecido localmente para o projeto.

@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SurviveObjectiveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/survive_objective_data.gd" id="1_data"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/survive_objective.tscn" id="2_scene"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"survive_void_garden"
+title_key = &"OBJECTIVE_SURVIVE_TITLE"
+description_key = &"OBJECTIVE_SURVIVE_DESC"
+objective_scene = ExtResource("2_scene")
+required_duration = 0.0

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/data/bosses/boss_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"the_watcher"
+name_key = &"BOSS_WATCHER_NAME"
+description_key = &"BOSS_WATCHER_DESC"
+maximum_health = 1200.0
+movement_speed = 18.0
+contact_damage = 20.0
+projectile_speed = 72.0
+projectile_damage = 9.0
+phase_thresholds = Array[float]([0.7, 0.3])
+

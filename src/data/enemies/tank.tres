@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/data/enemies/enemy_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+id = &"tank"
+behavior = 2
+maximum_health = 100.0
+movement_speed = 18.0
+contact_damage = 20.0
+experience_value = 15.0
+threat_cost = 5.0
+coin_drop_chance = 0.3
+coin_value = 2

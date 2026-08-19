@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/upgrades/upgrade_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/pack_16x16/sprite_03.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1")
+id = &"max_health"
+name_key = &"UPGRADE_MAX_HEALTH_NAME"
+description_key = &"UPGRADE_MAX_HEALTH_DESC"
+icon = ExtResource("2_icon")
+category = 1
+tags = Array[StringName]([&"DEFENSE"])
+stat = 3
+amount_per_level = 20.0

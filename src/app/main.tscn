@@ -1,32 +1,416 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=34 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/gameplay/player/player.tscn" id="2_player"]
-[ext_resource type="Script" path="res://src/presentation/world_grid.gd" id="3_grid"]
+[ext_resource type="Script" path="res://src/presentation/tiled_floor.gd" id="3_floor"]
+[ext_resource type="PackedScene" path="res://src/gameplay/enemies/enemy.tscn" id="4_enemy"]
+[ext_resource type="Script" path="res://src/gameplay/spawning/threat_director.gd" id="7_director"]
+[ext_resource type="Script" path="res://src/gameplay/upgrades/upgrade_controller.gd" id="8_upgrades"]
+[ext_resource type="Script" path="res://src/presentation/ui/level_up_ui.gd" id="9_level_ui"]
+[ext_resource type="Resource" path="res://src/data/upgrades/damage.tres" id="10_damage"]
+[ext_resource type="Resource" path="res://src/data/upgrades/fire_rate.tres" id="11_fire_rate"]
+[ext_resource type="Resource" path="res://src/data/upgrades/movement_speed.tres" id="12_move"]
+[ext_resource type="Resource" path="res://src/data/upgrades/max_health.tres" id="13_health"]
+[ext_resource type="Resource" path="res://src/data/upgrades/projectile_speed.tres" id="14_projectile_speed"]
+[ext_resource type="Script" path="res://src/gameplay/levels/level_controller.gd" id="15_level_controller"]
+[ext_resource type="Resource" path="res://src/data/levels/void_garden.tres" id="16_void_garden"]
+[ext_resource type="Script" path="res://src/gameplay/objectives/objective_manager.gd" id="17_objectives"]
+[ext_resource type="Script" path="res://src/presentation/ui/pause_menu.gd" id="18_pause"]
+[ext_resource type="PackedScene" path="res://src/presentation/forest_walls.tscn" id="19_walls"]
+[ext_resource type="PackedScene" path="res://src/presentation/pine_obstacles.tscn" id="20_pines"]
+[ext_resource type="Script" path="res://src/gameplay/exploration/exploration_tracker.gd" id="21_exploration"]
+[ext_resource type="Script" path="res://src/presentation/ui/map_menu.gd" id="22_map_menu"]
+[ext_resource type="Script" path="res://src/presentation/ui/map_view.gd" id="23_map_view"]
+[ext_resource type="Script" path="res://src/gameplay/bosses/boss_controller.gd" id="24_boss_controller"]
+[ext_resource type="PackedScene" path="res://src/gameplay/bosses/the_watcher.tscn" id="25_watcher"]
+[ext_resource type="Script" path="res://src/gameplay/run/run_currency.gd" id="26_run_currency"]
+[ext_resource type="Theme" path="res://assets/ui/monochrome_theme.tres" id="27_theme"]
+[ext_resource type="Script" path="res://src/gameplay/projectiles/player_projectile_pool.gd" id="28_projectile_pool"]
+[ext_resource type="PackedScene" path="res://src/gameplay/projectiles/player_projectile.tscn" id="29_player_projectile"]
+[ext_resource type="Resource" path="res://src/data/upgrades/multishot.tres" id="30_multishot"]
+[ext_resource type="Resource" path="res://src/data/upgrades/piercing.tres" id="31_piercing"]
+[ext_resource type="Resource" path="res://src/data/upgrades/ricochet.tres" id="32_ricochet"]
+[ext_resource type="Resource" path="res://src/data/upgrades/armor.tres" id="33_armor"]
+[ext_resource type="Resource" path="res://src/data/upgrades/regeneration.tres" id="34_regeneration"]
+[ext_resource type="Resource" path="res://src/data/upgrades/barrier.tres" id="35_barrier"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_main")
 
-[node name="WorldGrid" type="Node2D" parent="."]
-script = ExtResource("3_grid")
+[node name="TiledFloor" type="TileMapLayer" parent="."]
+z_index = -10
+script = ExtResource("3_floor")
 
-[node name="Projectiles" type="Node2D" parent="." groups=["projectile_container"]]
+[node name="ForestWalls" parent="." instance=ExtResource("19_walls")]
+
+[node name="PineObstacles" parent="." instance=ExtResource("20_pines")]
+
+[node name="Projectiles" type="Node2D" parent="." groups=["player_projectile_pool", "projectile_container"]]
+y_sort_enabled = true
+script = ExtResource("28_projectile_pool")
+projectile_scene = ExtResource("29_player_projectile")
+
+[node name="Pickups" type="Node2D" parent="." groups=["pickup_container"]]
+
+[node name="Enemies" type="Node2D" parent="." groups=["enemy_container"]]
 y_sort_enabled = true
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
 position = Vector2(160, 90)
 
+[node name="ExplorationTracker" type="Node" parent="."]
+script = ExtResource("21_exploration")
+player_path = NodePath("../Player")
+
+[node name="ThreatDirector" type="Node" parent="."]
+script = ExtResource("7_director")
+enemy_scene = ExtResource("4_enemy")
+
+[node name="SpawnTimer" type="Timer" parent="ThreatDirector"]
+
+[node name="LevelController" type="Node" parent="."]
+script = ExtResource("15_level_controller")
+data = ExtResource("16_void_garden")
+threat_director_path = NodePath("../ThreatDirector")
+
+[node name="ObjectiveManager" type="Node" parent="."]
+script = ExtResource("17_objectives")
+level_controller_path = NodePath("../LevelController")
+
+[node name="BossController" type="Node" parent="."]
+script = ExtResource("24_boss_controller")
+level_controller_path = NodePath("../LevelController")
+boss_scene = ExtResource("25_watcher")
+
+[node name="RunCurrency" type="Node" parent="." groups=["run_currency"]]
+script = ExtResource("26_run_currency")
+boss_controller_path = NodePath("../BossController")
+level_controller_path = NodePath("../LevelController")
+
+[node name="UpgradeController" type="Node" parent="."]
+script = ExtResource("8_upgrades")
+player_path = NodePath("../Player")
+level_up_ui_path = NodePath("../LevelUpUI")
+pool = [ExtResource("10_damage"), ExtResource("11_fire_rate"), ExtResource("12_move"), ExtResource("13_health"), ExtResource("14_projectile_speed"), ExtResource("30_multishot"), ExtResource("31_piercing"), ExtResource("32_ricochet"), ExtResource("33_armor"), ExtResource("34_regeneration"), ExtResource("35_barrier")]
+
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
+limit_left = -648
+limit_top = -648
+limit_right = 648
+limit_bottom = 648
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Instructions" type="Label" parent="HUD"]
-offset_left = 6.0
+[node name="Timer" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 140.0
 offset_top = 5.0
-offset_right = 314.0
-offset_bottom = 21.0
-theme_override_colors/font_color = Color(0.7, 0.7, 0.72, 1)
+offset_right = 180.0
+offset_bottom = 19.0
+theme_override_font_sizes/font_size = 10
+text = "06:00"
+horizontal_alignment = 1
+
+[node name="Objective" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 6.0
+offset_top = 22.0
+offset_right = 126.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.82, 0.82, 0.84, 1)
 theme_override_font_sizes/font_size = 8
-text = "WASD / LEFT STICK: MOVE   MOUSE / RIGHT STICK: AIM   LMB / RT: FIRE"
+text = "OBJECTIVE_SURVIVE_TITLE"
+
+[node name="ObjectiveProgress" type="ProgressBar" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 6.0
+offset_top = 35.0
+offset_right = 86.0
+offset_bottom = 40.0
+mouse_filter = 2
+value = 0.0
+show_percentage = false
+
+[node name="AutoFire" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 244.0
+offset_top = 23.0
+offset_right = 314.0
+offset_bottom = 35.0
+theme_override_colors/font_color = Color(0.72, 0.82, 1, 1)
+theme_override_font_sizes/font_size = 8
+text = "UI_AUTOFIRE_ON"
+horizontal_alignment = 2
+
+[node name="Coins" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 244.0
+offset_top = 37.0
+offset_right = 314.0
+offset_bottom = 49.0
+theme_override_colors/font_color = Color(0.8, 0.8, 0.82, 1)
+theme_override_font_sizes/font_size = 8
+text = "0"
+horizontal_alignment = 2
+
+[node name="BossName" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 95.0
+offset_top = 23.0
+offset_right = 225.0
+offset_bottom = 35.0
+theme_override_font_sizes/font_size = 8
+text = "BOSS_WATCHER_NAME"
+horizontal_alignment = 1
+
+[node name="BossHealth" type="ProgressBar" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 80.0
+offset_top = 36.0
+offset_right = 240.0
+offset_bottom = 42.0
+mouse_filter = 2
+value = 100.0
+show_percentage = false
+
+[node name="Health" type="ProgressBar" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 6.0
+offset_top = 164.0
+offset_right = 86.0
+offset_bottom = 174.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 7
+value = 100.0
+show_percentage = false
+
+[node name="Experience" type="ProgressBar" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 96.0
+offset_top = 164.0
+offset_right = 278.0
+offset_bottom = 174.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 7
+value = 0.0
+show_percentage = false
+
+[node name="Level" type="Label" parent="HUD"]
+theme = ExtResource("27_theme")
+offset_left = 284.0
+offset_top = 162.0
+offset_right = 314.0
+offset_bottom = 176.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 9
+text = "1"
+horizontal_alignment = 2
+
+[node name="LevelUpUI" type="CanvasLayer" parent="."]
+layer = 10
+script = ExtResource("9_level_ui")
+
+[node name="Panel" type="PanelContainer" parent="LevelUpUI"]
+theme = ExtResource("27_theme")
+offset_left = 35.0
+offset_top = 35.0
+offset_right = 285.0
+offset_bottom = 145.0
+
+[node name="Layout" type="VBoxContainer" parent="LevelUpUI/Panel"]
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="LevelUpUI/Panel/Layout"]
+theme_override_font_sizes/font_size = 9
+text = "UI_LEVEL_UP"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="LevelUpUI/Panel/Layout"]
+theme_override_colors/font_color = Color(0.7, 0.7, 0.72, 1)
+theme_override_font_sizes/font_size = 6
+text = "UI_CHOOSE_UPGRADE"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="LevelUpUI/Panel/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Card1" type="Button" parent="LevelUpUI/Panel/Layout/Cards"]
+custom_minimum_size = Vector2(78, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 5
+text = "Upgrade"
+text_overrun_behavior = 0
+autowrap_mode = 2
+
+[node name="Card2" type="Button" parent="LevelUpUI/Panel/Layout/Cards"]
+custom_minimum_size = Vector2(78, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 5
+text = "Upgrade"
+text_overrun_behavior = 0
+autowrap_mode = 2
+
+[node name="Card3" type="Button" parent="LevelUpUI/Panel/Layout/Cards"]
+custom_minimum_size = Vector2(78, 46)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 5
+text = "Upgrade"
+text_overrun_behavior = 0
+autowrap_mode = 2
+
+[node name="Reroll" type="Button" parent="LevelUpUI/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_REROLL"
+
+[node name="PauseMenu" type="CanvasLayer" parent="."]
+layer = 15
+script = ExtResource("18_pause")
+level_up_panel_path = NodePath("../LevelUpUI/Panel")
+run_result_panel_path = NodePath("../DeathUI/Panel")
+map_overlay_path = NodePath("../MapMenu/Overlay")
+
+[node name="Overlay" type="Control" parent="PauseMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("27_theme")
+
+[node name="Dim" type="ColorRect" parent="PauseMenu/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="Panel" type="PanelContainer" parent="PauseMenu/Overlay"]
+layout_mode = 0
+offset_left = 94.0
+offset_top = 48.0
+offset_right = 226.0
+offset_bottom = 132.0
+
+[node name="Layout" type="VBoxContainer" parent="PauseMenu/Overlay/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 3
+alignment = 1
+
+[node name="Title" type="Label" parent="PauseMenu/Overlay/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+text = "UI_PAUSED"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="PauseMenu/Overlay/Panel/Layout"]
+layout_mode = 2
+text = "UI_RESUME"
+
+[node name="Restart" type="Button" parent="PauseMenu/Overlay/Panel/Layout"]
+layout_mode = 2
+text = "UI_RESTART"
+
+[node name="MainMenu" type="Button" parent="PauseMenu/Overlay/Panel/Layout"]
+layout_mode = 2
+text = "UI_MAIN_MENU"
+
+[node name="MapMenu" type="CanvasLayer" parent="."]
+layer = 16
+script = ExtResource("22_map_menu")
+pause_overlay_path = NodePath("../PauseMenu/Overlay")
+level_up_panel_path = NodePath("../LevelUpUI/Panel")
+run_result_panel_path = NodePath("../DeathUI/Panel")
+
+[node name="Overlay" type="Control" parent="MapMenu"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("27_theme")
+
+[node name="Dim" type="ColorRect" parent="MapMenu/Overlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.015, 0.017, 0.02, 0.96)
+
+[node name="Border" type="Panel" parent="MapMenu/Overlay"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 20.0
+offset_right = 308.0
+offset_bottom = 162.0
+
+[node name="Title" type="Label" parent="MapMenu/Overlay"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 5.0
+offset_right = 160.0
+offset_bottom = 19.0
+theme_override_font_sizes/font_size = 11
+text = "UI_MAP"
+
+[node name="Hint" type="Label" parent="MapMenu/Overlay"]
+layout_mode = 0
+offset_left = 160.0
+offset_top = 7.0
+offset_right = 304.0
+offset_bottom = 18.0
+theme_override_colors/font_color = Color(0.55, 0.56, 0.59, 1)
+theme_override_font_sizes/font_size = 7
+text = "UI_MAP_CLOSE_HINT"
+horizontal_alignment = 2
+
+[node name="MapView" type="Control" parent="MapMenu/Overlay"]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 21.0
+offset_right = 307.0
+offset_bottom = 161.0
+mouse_filter = 2
+script = ExtResource("23_map_view")
+tracker_path = NodePath("../../../ExplorationTracker")
+player_path = NodePath("../../../Player")
+
+[node name="DeathUI" type="CanvasLayer" parent="."]
+process_mode = 3
+layer = 20
+
+[node name="Panel" type="PanelContainer" parent="DeathUI"]
+theme = ExtResource("27_theme")
+offset_left = 90.0
+offset_top = 55.0
+offset_right = 230.0
+offset_bottom = 125.0
+
+[node name="Layout" type="VBoxContainer" parent="DeathUI/Panel"]
+alignment = 1
+
+[node name="Title" type="Label" parent="DeathUI/Panel/Layout"]
+theme_override_font_sizes/font_size = 11
+text = "UI_RUN_ENDED"
+horizontal_alignment = 1
+
+[node name="Restart" type="Button" parent="DeathUI/Panel/Layout"]
+layout_mode = 2
+text = "UI_RESTART"
+
+[node name="MainMenu" type="Button" parent="DeathUI/Panel/Layout"]
+layout_mode = 2
+text = "UI_MAIN_MENU"

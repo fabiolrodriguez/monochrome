@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="16" viewBox="0 0 64 16" shape-rendering="crispEdges">
+  <!-- Four connected 16x16 forest-wall variants on a transparent background. -->
+  <g fill="#d9dadd">
+    <path d="M0 4h3V2h4V0h4v2h3v3h2v7h-3v4H2v-3H0z"/>
+    <path d="M16 3h2V1h5v2h4V0h3v4h2v9h-4v3H18v-2h-2z"/>
+    <path d="M32 5h3V1h4v2h5V1h3v4h1v8h-3v3H34v-2h-2z"/>
+    <path d="M48 2h4V0h4v3h4V1h3v4h1v8h-4v3H50v-3h-2z"/>
+  </g>
+  <g fill="#74777d">
+    <path d="M6 7h4v9H6zm16-2h4v11h-4zm16 3h4v8h-4zm16-2h5v10h-5z"/>
+  </g>
+  <g fill="#111318">
+    <path d="M3 5h3v2H3zm8 3h3v2h-3zm8-3h3v2h-3zm8 4h3v2h-3zm8-4h3v2h-3zm8 4h3v2h-3zm8-5h3v2h-3zm9 5h3v2h-3z"/>
+  </g>
+</svg>
+

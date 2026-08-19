@@ -1,0 +1,30 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/enemies/enemy.gd" id="1_enemy"]
+[ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="2_health"]
+[ext_resource type="PackedScene" path="res://src/gameplay/projectiles/enemy_projectile.tscn" id="3_projectile"]
+[ext_resource type="Resource" path="res://src/data/enemies/chaser.tres" id="4_chaser"]
+[ext_resource type="PackedScene" path="res://src/gameplay/pickups/experience_pickup.tscn" id="5_xp"]
+[ext_resource type="PackedScene" path="res://src/gameplay/pickups/coin_pickup.tscn" id="6_coin"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_enemy"]
+radius = 7.0
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_enemy")
+data = ExtResource("4_chaser")
+enemy_projectile_scene = ExtResource("3_projectile")
+experience_pickup_scene = ExtResource("5_xp")
+coin_pickup_scene = ExtResource("6_coin")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape_enemy")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2_health")
+
+[node name="ShotCooldown" type="Timer" parent="."]
+wait_time = 1.35
+one_shot = true

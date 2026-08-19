@@ -1,0 +1,203 @@
+[gd_resource type="Resource" script_class="SkillTreeCatalog" load_steps=21 format=3]
+
+[ext_resource type="Script" path="res://src/data/progression/skill_tree_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://src/data/progression/skill_node_data.gd" id="2_node"]
+
+[sub_resource type="Resource" id="Node_core"]
+script = ExtResource("2_node")
+id = &"core"
+title_key = &"SKILL_CORE_NAME"
+description_key = &"SKILL_CORE_DESC"
+cost = 0
+tree_position = Vector2(240, 110)
+
+[sub_resource type="Resource" id="Node_vitality_1"]
+script = ExtResource("2_node")
+id = &"vitality_1"
+title_key = &"SKILL_VITALITY_1_NAME"
+description_key = &"SKILL_VITALITY_1_DESC"
+cost = 5
+prerequisites = Array[StringName]([&"core"])
+stat_key = &"max_health"
+stat_value = 5.0
+tree_position = Vector2(240, 65)
+
+[sub_resource type="Resource" id="Node_vitality_2"]
+script = ExtResource("2_node")
+id = &"vitality_2"
+title_key = &"SKILL_VITALITY_2_NAME"
+description_key = &"SKILL_VITALITY_2_DESC"
+cost = 30
+prerequisites = Array[StringName]([&"vitality_1"])
+stat_key = &"max_health"
+stat_value = 5.0
+tree_position = Vector2(240, 20)
+
+[sub_resource type="Resource" id="Node_vitality_3"]
+script = ExtResource("2_node")
+id = &"vitality_3"
+title_key = &"SKILL_VITALITY_3_NAME"
+description_key = &"SKILL_VITALITY_3_DESC"
+cost = 120
+prerequisites = Array[StringName]([&"vitality_2"])
+stat_key = &"max_health"
+stat_value = 10.0
+tree_position = Vector2(310, 20)
+
+[sub_resource type="Resource" id="Node_power_1"]
+script = ExtResource("2_node")
+id = &"power_1"
+title_key = &"SKILL_POWER_1_NAME"
+description_key = &"SKILL_POWER_1_DESC"
+cost = 5
+prerequisites = Array[StringName]([&"core"])
+stat_key = &"damage"
+stat_value = 0.02
+tree_position = Vector2(170, 110)
+
+[sub_resource type="Resource" id="Node_power_2"]
+script = ExtResource("2_node")
+id = &"power_2"
+title_key = &"SKILL_POWER_2_NAME"
+description_key = &"SKILL_POWER_2_DESC"
+cost = 30
+prerequisites = Array[StringName]([&"power_1"])
+stat_key = &"damage"
+stat_value = 0.03
+tree_position = Vector2(100, 110)
+
+[sub_resource type="Resource" id="Node_power_3"]
+script = ExtResource("2_node")
+id = &"power_3"
+title_key = &"SKILL_POWER_3_NAME"
+description_key = &"SKILL_POWER_3_DESC"
+cost = 120
+prerequisites = Array[StringName]([&"power_2"])
+stat_key = &"damage"
+stat_value = 0.05
+tree_position = Vector2(30, 110)
+
+[sub_resource type="Resource" id="Node_mobility_1"]
+script = ExtResource("2_node")
+id = &"mobility_1"
+title_key = &"SKILL_MOBILITY_1_NAME"
+description_key = &"SKILL_MOBILITY_1_DESC"
+cost = 5
+prerequisites = Array[StringName]([&"core"])
+stat_key = &"movement_speed"
+stat_value = 0.02
+tree_position = Vector2(310, 110)
+
+[sub_resource type="Resource" id="Node_mobility_2"]
+script = ExtResource("2_node")
+id = &"mobility_2"
+title_key = &"SKILL_MOBILITY_2_NAME"
+description_key = &"SKILL_MOBILITY_2_DESC"
+cost = 30
+prerequisites = Array[StringName]([&"mobility_1"])
+stat_key = &"movement_speed"
+stat_value = 0.03
+tree_position = Vector2(380, 110)
+
+[sub_resource type="Resource" id="Node_mobility_3"]
+script = ExtResource("2_node")
+id = &"mobility_3"
+title_key = &"SKILL_MOBILITY_3_NAME"
+description_key = &"SKILL_MOBILITY_3_DESC"
+cost = 120
+prerequisites = Array[StringName]([&"mobility_2"])
+stat_key = &"movement_speed"
+stat_value = 0.05
+tree_position = Vector2(450, 110)
+
+[sub_resource type="Resource" id="Node_cadence"]
+script = ExtResource("2_node")
+id = &"cadence"
+title_key = &"SKILL_CADENCE_NAME"
+description_key = &"SKILL_CADENCE_DESC"
+cost = 75
+prerequisites = Array[StringName]([&"power_2"])
+stat_key = &"fire_rate"
+stat_value = 0.02
+tree_position = Vector2(100, 170)
+
+[sub_resource type="Resource" id="Node_velocity"]
+script = ExtResource("2_node")
+id = &"velocity"
+title_key = &"SKILL_VELOCITY_NAME"
+description_key = &"SKILL_VELOCITY_DESC"
+cost = 75
+prerequisites = Array[StringName]([&"power_2"])
+stat_key = &"projectile_speed"
+stat_value = 0.03
+tree_position = Vector2(170, 200)
+
+[sub_resource type="Resource" id="Node_magnet"]
+script = ExtResource("2_node")
+id = &"magnet"
+title_key = &"SKILL_MAGNET_NAME"
+description_key = &"SKILL_MAGNET_DESC"
+cost = 75
+prerequisites = Array[StringName]([&"mobility_2"])
+stat_key = &"pickup_radius"
+stat_value = 8.0
+tree_position = Vector2(380, 170)
+
+[sub_resource type="Resource" id="Node_fortune"]
+script = ExtResource("2_node")
+id = &"fortune"
+title_key = &"SKILL_FORTUNE_NAME"
+description_key = &"SKILL_FORTUNE_DESC"
+cost = 100
+prerequisites = Array[StringName]([&"vitality_2", &"power_2"])
+stat_key = &"coin_gain"
+stat_value = 0.1
+tree_position = Vector2(240, 170)
+
+[sub_resource type="Resource" id="Node_reroll"]
+script = ExtResource("2_node")
+id = &"reroll"
+title_key = &"SKILL_REROLL_NAME"
+description_key = &"SKILL_REROLL_DESC"
+node_type = 1
+cost = 250
+prerequisites = Array[StringName]([&"cadence", &"magnet"])
+unlock_id = &"reroll"
+tree_position = Vector2(310, 210)
+
+[sub_resource type="Resource" id="Node_unlock_piercing"]
+script = ExtResource("2_node")
+id = &"unlock_piercing"
+title_key = &"SKILL_UNLOCK_PIERCING_NAME"
+description_key = &"SKILL_UNLOCK_PIERCING_DESC"
+node_type = 2
+cost = 180
+prerequisites = Array[StringName]([&"power_3"])
+unlock_id = &"piercing"
+tree_position = Vector2(30, 65)
+
+[sub_resource type="Resource" id="Node_unlock_multishot"]
+script = ExtResource("2_node")
+id = &"unlock_multishot"
+title_key = &"SKILL_UNLOCK_MULTISHOT_NAME"
+description_key = &"SKILL_UNLOCK_MULTISHOT_DESC"
+node_type = 2
+cost = 420
+prerequisites = Array[StringName]([&"unlock_piercing"])
+unlock_id = &"multishot"
+tree_position = Vector2(-20, 20)
+
+[sub_resource type="Resource" id="Node_unlock_ricochet"]
+script = ExtResource("2_node")
+id = &"unlock_ricochet"
+title_key = &"SKILL_UNLOCK_RICOCHET_NAME"
+description_key = &"SKILL_UNLOCK_RICOCHET_DESC"
+node_type = 2
+cost = 500
+prerequisites = Array[StringName]([&"unlock_piercing"])
+unlock_id = &"ricochet"
+tree_position = Vector2(80, 20)
+
+[resource]
+script = ExtResource("1_catalog")
+nodes = [SubResource("Node_core"), SubResource("Node_vitality_1"), SubResource("Node_power_1"), SubResource("Node_mobility_1"), SubResource("Node_vitality_2"), SubResource("Node_power_2"), SubResource("Node_mobility_2"), SubResource("Node_vitality_3"), SubResource("Node_power_3"), SubResource("Node_mobility_3"), SubResource("Node_cadence"), SubResource("Node_velocity"), SubResource("Node_magnet"), SubResource("Node_fortune"), SubResource("Node_reroll"), SubResource("Node_unlock_piercing"), SubResource("Node_unlock_multishot"), SubResource("Node_unlock_ricochet")]

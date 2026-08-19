@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="16" viewBox="0 0 64 16" shape-rendering="crispEdges">
+  <!-- Four reusable 16x16 floor tiles. Low contrast avoids optical-flow discomfort. -->
+  <rect width="64" height="16" fill="#08090b"/>
+  <rect x="18" y="3" width="3" height="2" fill="#101216"/>
+  <rect x="27" y="11" width="2" height="2" fill="#0d0f12"/>
+  <path d="M34 4h5v1h-5zm8 7h3v2h-3z" fill="#111318"/>
+  <path d="M50 2h2v2h-2zm7 6h4v1h-4zm-4 5h2v1h-2z" fill="#121419"/>
+</svg>
+
