@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var player: Player = $Player
-@onready var health_bar: ProgressBar = $HUD/Health
+@onready var health_bar: HealthSegments = $HUD/Health
 @onready var experience_bar: ProgressBar = $HUD/Experience
 @onready var level_label: Label = $HUD/Level
 @onready var death_panel: PanelContainer = $DeathUI/Panel
@@ -19,11 +19,25 @@ extends Node2D
 @onready var run_currency: RunCurrency = $RunCurrency
 @onready var coins_label: Label = $HUD/Coins
 @onready var main_menu_button: Button = $DeathUI/Panel/Layout/MainMenu
+@onready var reward_label: Label = $DeathUI/Panel/Layout/Reward
+@onready var upgrade_controller: UpgradeController = $UpgradeController
+@onready var telemetry: RunTelemetry = $RunTelemetry
+@onready var summary_label: Label = $DeathUI/Panel/Layout/Summary
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	AudioManager.play_ambience(&"void_garden")
+	var forest_level := level_controller.data.id == &"void_garden" or level_controller.data.id == &"white_forest"
+	$PineObstacles.visible = forest_level
+	$RuinWallDetails.visible = level_controller.data.id == &"void_garden" or level_controller.data.id == &"dead_factory"
+	$IndustrialCaveDetails.visible = level_controller.data.id == &"dead_factory" or level_controller.data.id == &"the_hive" or level_controller.data.id == &"black_lake" or level_controller.data.id == &"broken_city" or level_controller.data.id == &"the_core"
+	if not forest_level:
+		for child: Node in $PineObstacles.get_children():
+			var collision_body := child as CollisionObject2D
+			if collision_body != null:
+				collision_body.collision_layer = 0
+				collision_body.collision_mask = 0
 	player.health.health_changed.connect(_on_player_health_changed)
 	player.experience.experience_changed.connect(_on_experience_changed)
 	player.experience.level_changed.connect(_on_level_changed)
@@ -32,13 +46,16 @@ func _ready() -> void:
 	level_controller.time_changed.connect(_on_level_time_changed)
 	objective_manager.objective_progress_changed.connect(_on_objective_progress_changed)
 	objective_manager.objective_completed.connect(_on_objective_completed)
+	objective_manager.objective_failed.connect(_on_objective_failed)
 	boss_controller.boss_spawned.connect(_on_boss_spawned)
 	boss_controller.boss_health_changed.connect(_on_boss_health_changed)
 	boss_controller.boss_defeated.connect(_on_boss_defeated)
 	run_currency.coins_changed.connect(_on_run_coins_changed)
+	SettingsManager.settings_changed.connect(_refresh_localized_hud)
 	restart_button.pressed.connect(_restart_run)
 	main_menu_button.pressed.connect(_return_to_main_menu)
 	death_panel.hide()
+	reward_label.hide()
 	boss_name.hide()
 	boss_health.hide()
 	auto_fire_label.hide()
@@ -51,8 +68,7 @@ func _ready() -> void:
 
 
 func _on_player_health_changed(current: float, maximum: float) -> void:
-	health_bar.max_value = maximum
-	health_bar.value = current
+	health_bar.set_health(current, maximum)
 
 
 func _on_experience_changed(current: float, required: float) -> void:
@@ -62,6 +78,7 @@ func _on_experience_changed(current: float, required: float) -> void:
 
 func _on_level_changed(level: int) -> void:
 	level_label.text = str(level)
+	telemetry.set_level(level)
 
 
 func _on_auto_fire_changed(enabled: bool) -> void:
@@ -70,12 +87,26 @@ func _on_auto_fire_changed(enabled: bool) -> void:
 
 func _on_run_coins_changed(current_run: int) -> void:
 	coins_label.text = "%s: %d" % [tr("UI_COINS_SHORT"), current_run]
+	telemetry.set_coins(current_run)
+
+
+func _refresh_localized_hud() -> void:
+	_on_run_coins_changed(run_currency.current_run_coins)
+	if objective_manager.active_objective.is_complete:
+		objective_label.text = tr("OBJECTIVE_DEFEAT_BOSS") % tr(level_controller.data.boss.name_key)
+	else:
+		objective_label.text = tr(level_controller.data.objective.title_key)
+	if boss_controller.active_boss != null:
+		boss_name.text = tr(boss_controller.active_boss.data.name_key)
 
 
 func _on_player_died() -> void:
 	AudioManager.play_sfx(&"enemy_defeat", -7.0)
+	upgrade_controller.finalize_run()
 	ProgressionManager.flush_save()
 	result_title.text = tr("UI_RUN_ENDED")
+	reward_label.hide()
+	_show_run_summary(&"player_defeated")
 	death_panel.show()
 	get_tree().paused = true
 	restart_button.grab_focus()
@@ -94,8 +125,18 @@ func _on_objective_progress_changed(_data: ObjectiveData, current: float, requir
 
 
 func _on_objective_completed(_data: ObjectiveData) -> void:
-	objective_label.text = tr("OBJECTIVE_DEFEAT_WATCHER")
+	objective_label.text = tr("OBJECTIVE_DEFEAT_BOSS") % tr(level_controller.data.boss.name_key)
 	objective_progress.hide()
+
+
+func _on_objective_failed(_data: ObjectiveData) -> void:
+	upgrade_controller.finalize_run()
+	result_title.text = tr("UI_OBJECTIVE_FAILED")
+	reward_label.hide()
+	_show_run_summary(&"objective_failed")
+	death_panel.show()
+	get_tree().paused = true
+	restart_button.grab_focus()
 
 
 func _on_boss_spawned(boss: TheWatcher) -> void:
@@ -111,13 +152,30 @@ func _on_boss_health_changed(current: float, maximum: float) -> void:
 
 
 func _on_boss_defeated() -> void:
+	upgrade_controller.finalize_run()
+	var boss_data := level_controller.data.boss
+	player.experience.add_experience(boss_data.experience_reward)
+	player.health.heal(boss_data.healing_reward)
 	ProgressionManager.complete_level(level_controller.data.id, level_controller.data.next_levels)
 	boss_name.hide()
 	boss_health.hide()
 	result_title.text = tr("UI_STAGE_COMPLETE")
+	reward_label.text = tr("UI_BOSS_REWARD") % [roundi(boss_data.experience_reward), boss_data.coin_reward, roundi(boss_data.healing_reward)]
+	reward_label.show()
+	_show_run_summary(&"stage_complete")
+	AudioManager.play_sfx(&"confirm", -6.0)
 	death_panel.show()
 	get_tree().paused = true
 	restart_button.grab_focus()
+
+
+func _show_run_summary(reason: StringName) -> void:
+	telemetry.finish(reason, level_controller.data.id)
+	summary_label.text = tr("UI_RUN_SUMMARY") % [
+		telemetry.get_formatted_time(), telemetry.enemies_defeated, telemetry.highest_level,
+		roundi(telemetry.damage_dealt), roundi(telemetry.damage_received),
+		telemetry.coins_collected, telemetry.upgrades_collected,
+	]
 
 
 func _restart_run() -> void:

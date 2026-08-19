@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/enemies/enemy.gd" id="1_enemy"]
 [ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="2_health"]
@@ -6,6 +6,8 @@
 [ext_resource type="Resource" path="res://src/data/enemies/chaser.tres" id="4_chaser"]
 [ext_resource type="PackedScene" path="res://src/gameplay/pickups/experience_pickup.tscn" id="5_xp"]
 [ext_resource type="PackedScene" path="res://src/gameplay/pickups/coin_pickup.tscn" id="6_coin"]
+[ext_resource type="PackedScene" path="res://src/gameplay/pickups/healing_pickup.tscn" id="7_healing"]
+[ext_resource type="Texture2D" path="res://assets/art/dungeon_bw/dungeon_16x16_bw.png" id="8_atlas"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_enemy"]
 radius = 7.0
@@ -18,6 +20,12 @@ data = ExtResource("4_chaser")
 enemy_projectile_scene = ExtResource("3_projectile")
 experience_pickup_scene = ExtResource("5_xp")
 coin_pickup_scene = ExtResource("6_coin")
+healing_pickup_scene = ExtResource("7_healing")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("8_atlas")
+region_enabled = true
+region_rect = Rect2(144, 288, 16, 16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape_enemy")

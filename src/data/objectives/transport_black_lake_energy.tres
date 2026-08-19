@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TransportEnergyObjectiveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/transport_energy_objective_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/transport_energy_objective.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"transport_black_lake_energy"
+title_key = &"OBJECTIVE_ENERGY_TITLE"
+description_key = &"OBJECTIVE_ENERGY_DESC"
+objective_scene = ExtResource("2")
+can_fail = true
+energy_start_position = Vector2(160, 125)
+destination_positions = Array[Vector2]([Vector2(-410, -330), Vector2(430, -250), Vector2(-120, 430)])
+destination_count = 3
+carried_movement_multiplier = 0.85

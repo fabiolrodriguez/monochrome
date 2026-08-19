@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="HuntElitesObjectiveData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/hunt_elites_objective_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/hunt_elites_objective.tscn" id="2"]
+[ext_resource type="Resource" path="res://src/data/enemies/elite_hunter.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = &"hunt_white_forest"
+title_key = &"OBJECTIVE_ELITES_TITLE"
+description_key = &"OBJECTIVE_ELITES_DESC"
+objective_scene = ExtResource("2")
+can_fail = true
+elite_data = ExtResource("3")
+elite_count = 3
+elite_positions = Array[Vector2]([Vector2(-430, -350), Vector2(430, -300), Vector2(40, 440)])

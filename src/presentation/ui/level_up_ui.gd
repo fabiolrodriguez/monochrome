@@ -6,6 +6,7 @@ signal reroll_requested
 
 @onready var panel: PanelContainer = $Panel
 @onready var buttons: Array[Button] = [$Panel/Layout/Cards/Card1, $Panel/Layout/Cards/Card2, $Panel/Layout/Cards/Card3]
+@onready var icons: Array[TextureRect] = [$Panel/Layout/Cards/Card1/Icon, $Panel/Layout/Cards/Card2/Icon, $Panel/Layout/Cards/Card3/Icon]
 @onready var reroll_button: Button = $Panel/Layout/Reroll
 
 var _options: Array[UpgradeData] = []
@@ -27,9 +28,8 @@ func present(options: Array[UpgradeData], levels: Dictionary[StringName, int]) -
 		if button.visible:
 			var upgrade := options[index]
 			var next_level: int = levels.get(upgrade.id, 0) + 1
-			button.icon = upgrade.icon
-			button.expand_icon = false
-			button.add_theme_constant_override("icon_max_width", 10)
+			button.icon = null
+			icons[index].texture = upgrade.icon
 			button.text = "%s\n%s\n%s %d/%d" % [tr(upgrade.name_key), tr(upgrade.description_key), tr("UI_LEVEL"), next_level, upgrade.max_level]
 	panel.show()
 	get_tree().paused = true

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DefendPointsObjectiveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/defend_points_objective_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/defend_points_objective.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"defend_broken_city"
+title_key = &"OBJECTIVE_DEFENSE_TITLE"
+description_key = &"OBJECTIVE_DEFENSE_DESC"
+objective_scene = ExtResource("2")
+can_fail = true
+point_count = 3
+duration_per_point = 45.0
+point_positions = Array[Vector2]([Vector2(-390, -300), Vector2(420, -180), Vector2(-40, 420)])

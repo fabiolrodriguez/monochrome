@@ -1,0 +1,8 @@
+Source pack: monochrome-caves
+Files supplied locally by the project owner on 2026-08-19.
+Original source file used: bw_tiles.png
+
+No author name or license file was included with the downloaded pack. The asset
+is therefore tracked as prototype-only until its redistribution/commercial-use
+terms can be confirmed. The 256x256 example map (bw.png) is intentionally not
+included or used; only the reusable 16x16 tile sheet is incorporated.

@@ -1,16 +1,20 @@
-[gd_resource type="Resource" script_class="BossData" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://src/data/bosses/boss_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/bosses/the_watcher.tscn" id="2_scene"]
 
 [resource]
 script = ExtResource("1")
 id = &"the_watcher"
 name_key = &"BOSS_WATCHER_NAME"
 description_key = &"BOSS_WATCHER_DESC"
+scene = ExtResource("2_scene")
 maximum_health = 1200.0
 movement_speed = 18.0
 contact_damage = 20.0
 projectile_speed = 72.0
 projectile_damage = 9.0
 phase_thresholds = Array[float]([0.7, 0.3])
-
+coin_reward = 25
+experience_reward = 120.0
+healing_reward = 40.0

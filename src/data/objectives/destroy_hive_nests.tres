@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="DestroyNestsObjectiveData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/destroy_nests_objective_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/destroy_nests_objective.tscn" id="2"]
+[ext_resource type="Resource" path="res://src/data/enemies/hive_drone.tres" id="3"]
+
+[resource]
+script = ExtResource("1")
+id = &"destroy_hive_nests"
+title_key = &"OBJECTIVE_NESTS_TITLE"
+description_key = &"OBJECTIVE_NESTS_DESC"
+objective_scene = ExtResource("2")
+can_fail = true
+spawn_enemy_data = ExtResource("3")
+nest_count = 4
+nest_health = 280.0
+nest_spawn_interval = 6.0
+nest_positions = Array[Vector2]([Vector2(-430, -340), Vector2(440, -300), Vector2(-390, 390), Vector2(410, 420)])
+experience_reward = 30.0
+coin_reward = 4
+healing_reward = 8.0

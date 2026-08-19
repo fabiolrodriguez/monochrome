@@ -30,6 +30,10 @@ func save_game(data: Dictionary) -> bool:
 	return true
 
 
+func reset_game() -> bool:
+	return save_game(_default_data())
+
+
 func _default_data() -> Dictionary:
 	return {
 		"version": SAVE_VERSION,

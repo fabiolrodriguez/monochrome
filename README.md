@@ -58,6 +58,13 @@ Expansão da vertical slice após os milestones principais:
 - três upgrades defensivos funcionais: Armadura, Regeneração e Barreira;
 - Elite Hunter periódico, com silhueta dourada, vida elevada e recompensa garantida;
 - flash de impacto em inimigos e player;
+- variações 16×16 de alvenaria aplicadas proceduralmente sobre paredes existentes;
+- cards de level up com fundo preto sólido e foco dourado;
+- recompensa do Watcher com XP, moedas, cura e resumo no painel de conclusão;
+- seleção de fases no menu, exibindo rotas bloqueadas e desbloqueadas pelo progresso;
+- drop raro de cura nos inimigos, com chance e valor maiores para elites;
+- atlas Dungeon 16×16 aplicado a player, inimigos, elite, pickups, chão, vegetação, paredes e ruínas;
+- arte procedural preservada somente para sinais de gameplay, como projéteis, mira, barreira e boss;
 - colisão e arte placeholder desacopladas;
 - layers de física nomeadas para os sistemas futuros.
 
@@ -84,14 +91,32 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 - GDScript com tipagem estática e `class_name` apenas para tipos reutilizados.
 - Cenas compõem comportamentos pequenos; dados de conteúdo serão `Resource`.
 - Textos visíveis serão localizados antes da primeira UI de produção.
+- Toda nova interface deve incluir as chaves em inglês, português brasileiro e espanhol no mesmo milestone.
+- Preferências de volume, tela cheia e idioma vivem em `user://settings.cfg`, separadas do progresso da campanha.
 - Gameplay nunca deve depender do tamanho ou formato de um sprite placeholder.
 - Novos inputs devem ser adicionados ao Input Map, nunca consultados por tecla diretamente.
 
 ## Próximo milestone
 
-Próximo: opções de áudio/acessibilidade, cura como drop e uma tela de seleção de fases antes de iniciar a segunda fase.
+Próximo: acessibilidade e feedback audiovisual, incluindo intensidade de flashes, tremor de tela e leitura dos impactos.
+
+## Build de playtest no Windows
+
+O preset `Windows Playtest` exporta para `build/windows/ProjectMonochrome.exe` com o PCK embutido. É necessário instalar os templates de exportação correspondentes à versão do Godot antes de gerar a build.
+
+Os arquivos locais ficam em `%APPDATA%\Godot\app_userdata\Project Monochrome\`:
+
+- `savegame.json`: progressão permanente;
+- `settings.cfg`: volume, fullscreen e idioma;
+- `run_history.jsonl`: uma linha JSON por run, útil para balanceamento.
+
+No menu de opções da build de playtest é possível liberar todas as fases ou zerar somente a progressão. O reset exige confirmação e não apaga configurações nem o histórico das runs.
 
 ## Créditos de assets
 
 - Efeitos e ambientes: PixelLoops Audio — Free Starter Sound Effects Pack. Licença incluída em `assets/licenses/pixelloops_audio_license.txt`.
 - Ícones monocromáticos 16×16: pacote fornecido localmente para o projeto.
+- Dungeon 16x16 1Bit Black and White Tileset © 2025 Stealthness Games, CC BY-NC-SA 4.0. Licença em `assets/licenses/dungeon_16x16_bw_license.txt`. Uso atual restrito ao protótipo não comercial.
+- Monochrome Caves: folha modular 16×16 fornecida localmente. O download não incluía autoria/licença; origem e restrição provisória a protótipo documentadas em `assets/licenses/monochrome_caves_source.txt`. O mapa-exemplo estático não foi incorporado.
+- Kenney 1-Bit Platformer Pack 1.1, CC0. O atlas transparente é usado apenas para props compatíveis com visão top-down; licença incluída em `assets/licenses/kenney_1bit_platformer_license.txt`.
+- 1bitDungeon: tiles top-down e ícones de moeda/poção. Permitido em projetos comerciais e não comerciais, com edição e crédito opcional; redistribuição dos assets é proibida. Termos e cuidado para repositório público documentados em `assets/licenses/one_bit_dungeon_source.txt`.

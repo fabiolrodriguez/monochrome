@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CoreSequenceObjectiveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/objectives/core_sequence_objective_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/objectives/core_sequence_objective.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"complete_the_core"
+title_key = &"OBJECTIVE_CORE_TITLE"
+description_key = &"OBJECTIVE_CORE_DESC"
+objective_scene = ExtResource("2")
+can_fail = true
+core_positions = Array[Vector2]([Vector2(-390, -300), Vector2(420, -250)])
+terminal_position = Vector2(0, 390)
+terminal_duration = 35.0
+final_event_duration = 45.0
+core_health = 420.0

@@ -1,0 +1,37 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/bosses/the_watcher.gd" id="1"]
+[ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="2"]
+[ext_resource type="PackedScene" path="res://src/gameplay/projectiles/enemy_projectile.tscn" id="3"]
+[ext_resource type="Texture2D" path="res://assets/art/kenney_1bit/monochrome_tilemap.png" id="4"]
+
+[sub_resource type="AtlasTexture" id="Atlas_tower"]
+atlas = ExtResource("4")
+region = Rect2(128, 304, 16, 16)
+
+[sub_resource type="SpriteFrames" id="Frames_tower"]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_tower")}], "loop": true, "name": &"idle", "speed": 2.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_tower")}], "loop": true, "name": &"phase_1", "speed": 4.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_tower")}], "loop": true, "name": &"phase_2", "speed": 7.0}]
+
+[sub_resource type="CircleShape2D" id="Circle_tower"]
+radius = 20.0
+
+[node name="TheTower" type="CharacterBody2D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1")
+projectile_scene = ExtResource("3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("Frames_tower")
+animation = &"idle"
+autoplay = "idle"
+scale = Vector2(2.5, 2.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Circle_tower")
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("2")
+
+[node name="AttackTimer" type="Timer" parent="."]
+wait_time = 1.35

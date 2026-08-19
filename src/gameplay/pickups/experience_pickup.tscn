@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/pickups/experience_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://assets/art/dungeon_bw/dungeon_16x16_bw.png" id="2_atlas"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_pickup"]
 radius = 4.0
@@ -10,6 +11,11 @@ collision_layer = 32
 collision_mask = 2
 script = ExtResource("1_pickup")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_atlas")
+region_enabled = true
+region_rect = Rect2(176, 256, 16, 16)
+scale = Vector2(0.75, 0.75)
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape_pickup")
-

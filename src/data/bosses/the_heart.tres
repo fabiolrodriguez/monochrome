@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/bosses/boss_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/bosses/the_heart.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"the_heart"
+name_key = &"BOSS_HEART_NAME"
+description_key = &"BOSS_HEART_DESC"
+scene = ExtResource("2")
+maximum_health = 3200.0
+movement_speed = 22.0
+contact_damage = 34.0
+projectile_speed = 78.0
+projectile_damage = 12.0
+phase_thresholds = Array[float]([0.7, 0.3])
+coin_reward = 120
+experience_reward = 450.0
+healing_reward = 90.0

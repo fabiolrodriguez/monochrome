@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://src/data/levels/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://src/data/levels/spawn_segment_data.gd" id="2"]
+[ext_resource type="Resource" path="res://src/data/enemies/chaser.tres" id="3"]
+[ext_resource type="Resource" path="res://src/data/enemies/shooter.tres" id="4"]
+[ext_resource type="Resource" path="res://src/data/enemies/tank.tres" id="5"]
+[ext_resource type="Resource" path="res://src/data/enemies/elite_hunter.tres" id="6"]
+[ext_resource type="Resource" path="res://src/data/objectives/activate_dead_factory.tres" id="7"]
+[ext_resource type="Resource" path="res://src/data/bosses/the_machine.tres" id="8"]
+
+[sub_resource type="Resource" id="Segment_intro"]
+script = ExtResource("2")
+starts_at_ratio = 0.0
+budget_multiplier = 1.15
+spawn_interval_multiplier = 0.92
+maximum_active_enemies = 26
+
+[sub_resource type="Resource" id="Segment_pressure"]
+script = ExtResource("2")
+starts_at_ratio = 0.35
+budget_multiplier = 1.55
+spawn_interval_multiplier = 0.78
+maximum_active_enemies = 38
+
+[sub_resource type="Resource" id="Segment_climax"]
+script = ExtResource("2")
+starts_at_ratio = 0.7
+budget_multiplier = 2.0
+spawn_interval_multiplier = 0.65
+maximum_active_enemies = 50
+
+[resource]
+script = ExtResource("1")
+id = &"dead_factory"
+name_key = &"LEVEL_DEAD_FACTORY_NAME"
+description_key = &"LEVEL_DEAD_FACTORY_DESC"
+duration = 450.0
+objective = ExtResource("7")
+enemy_pool = [ExtResource("4"), ExtResource("3"), ExtResource("5")]
+elite_pool = [ExtResource("6")]
+boss = ExtResource("8")
+next_levels = Array[StringName]([&"white_forest"])
+difficulty = 1.35
+spawn_segments = [SubResource("Segment_intro"), SubResource("Segment_pressure"), SubResource("Segment_climax")]

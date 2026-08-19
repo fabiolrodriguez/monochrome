@@ -26,6 +26,9 @@ var _spawn_bag: Array[EnemyData] = []
 var _budget_multiplier := 1.0
 var _base_spawn_interval: float
 var _next_elite_at: float
+var _objective_pressure_multiplier := 1.0
+var _segment_interval_multiplier := 1.0
+var _hive_pressure_multiplier := 1.0
 
 
 func _ready() -> void:
@@ -42,7 +45,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_elapsed_time += delta
 	# Pressure grows smoothly; objective modifiers can alter this rate later.
-	_available_budget += budget_per_second * _budget_multiplier * (1.0 + _elapsed_time / 180.0) * delta
+	_available_budget += budget_per_second * _budget_multiplier * _objective_pressure_multiplier * _hive_pressure_multiplier * (1.0 + _elapsed_time / 180.0) * delta
 	if _elapsed_time >= _next_elite_at and _active_enemies < maximum_active_enemies and not elite_pool.is_empty():
 		_spawn_enemy(elite_pool.pick_random())
 		_next_elite_at += elite_interval
@@ -77,8 +80,26 @@ func configure_pool(new_pool: Array[EnemyData], new_elite_pool: Array[EnemyData]
 
 func set_pressure(budget_multiplier: float, interval_multiplier: float, active_limit: int) -> void:
 	_budget_multiplier = maxf(budget_multiplier, 0.0)
-	spawn_timer.wait_time = maxf(_base_spawn_interval * interval_multiplier, 0.1)
+	_segment_interval_multiplier = interval_multiplier
+	_refresh_spawn_interval()
 	maximum_active_enemies = maxi(active_limit, 1)
+
+
+func set_objective_pressure(active: bool) -> void:
+	_objective_pressure_multiplier = 1.75 if active else 1.0
+	_refresh_spawn_interval()
+
+
+func set_hive_sources(active_sources: int, total_sources: int) -> void:
+	var ratio := float(active_sources) / maxf(float(total_sources), 1.0)
+	_hive_pressure_multiplier = 1.0 + ratio * 0.8
+	_refresh_spawn_interval()
+
+
+func _refresh_spawn_interval() -> void:
+	var objective_interval := 0.65 if _objective_pressure_multiplier > 1.0 else 1.0
+	var hive_interval := 1.0 / _hive_pressure_multiplier
+	spawn_timer.wait_time = maxf(_base_spawn_interval * _segment_interval_multiplier * objective_interval * hive_interval, 0.1)
 
 
 func stop_spawning() -> void:
@@ -86,18 +107,31 @@ func stop_spawning() -> void:
 	set_process(false)
 
 
+func spawn_objective_enemy(data: EnemyData, world_position: Vector2) -> Enemy:
+	var enemy := _create_enemy(data)
+	if enemy != null:
+		enemy.global_position = world_position
+	return enemy
+
+
 func _spawn_enemy(data: EnemyData) -> void:
+	var enemy := _create_enemy(data)
+	if enemy != null:
+		enemy.global_position = _choose_spawn_position()
+
+
+func _create_enemy(data: EnemyData) -> Enemy:
 	var enemy := enemy_scene.instantiate() as Enemy
 	if enemy == null or not is_instance_valid(_player):
-		return
+		return null
 	enemy.data = data
 	var enemy_container := get_tree().get_first_node_in_group("enemy_container")
 	if enemy_container == null:
 		enemy_container = get_tree().current_scene
 	enemy_container.add_child(enemy)
-	enemy.global_position = _choose_spawn_position()
 	enemy.defeated.connect(_on_enemy_defeated)
 	_active_enemies += 1
+	return enemy
 
 
 func _choose_spawn_position() -> Vector2:

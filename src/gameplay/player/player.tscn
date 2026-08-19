@@ -1,23 +1,88 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://src/gameplay/weapons/weapon.gd" id="2_weapon"]
 [ext_resource type="PackedScene" path="res://src/gameplay/projectiles/player_projectile.tscn" id="3_projectile"]
 [ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="4_health"]
 [ext_resource type="Script" path="res://src/gameplay/components/experience_component.gd" id="5_experience"]
+[ext_resource type="Texture2D" path="res://assets/art/mage_hero.png" id="6_idle"]
+[ext_resource type="Texture2D" path="res://assets/art/mage_hero_2.png" id="7_walk_mid"]
+[ext_resource type="Texture2D" path="res://assets/art/mage_hero_3.png" id="8_walk_step"]
+[ext_resource type="Texture2D" path="res://assets/art/mage_hero_dash_side.png" id="9_dash_side"]
+[ext_resource type="Texture2D" path="res://assets/art/magic_hero_dash_down.png" id="10_dash_down"]
+[ext_resource type="Texture2D" path="res://assets/art/magic_hero_dash_up.png" id="11_dash_up"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_player"]
 radius = 5.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_player"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_dash_down")
+}],
+"loop": true,
+"name": &"dash_down",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_dash_side")
+}],
+"loop": true,
+"name": &"dash_side",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_dash_up")
+}],
+"loop": true,
+"name": &"dash_up",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_idle")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_idle")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_walk_mid")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_walk_step")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_walk_mid")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 7.0
+}]
 
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
 collision_mask = 1
 script = ExtResource("1_player")
 
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -6)
+sprite_frames = SubResource("SpriteFrames_player")
+animation = &"idle"
+autoplay = "idle"
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape_player")
 
 [node name="Weapon" type="Node2D" parent="."]
+position = Vector2(0, -5)
 script = ExtResource("2_weapon")
 projectile_scene = ExtResource("3_projectile")
 

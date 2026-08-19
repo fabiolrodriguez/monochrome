@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/bosses/boss_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/bosses/the_machine.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"the_machine"
+name_key = &"BOSS_MACHINE_NAME"
+description_key = &"BOSS_MACHINE_DESC"
+scene = ExtResource("2")
+maximum_health = 1650.0
+movement_speed = 15.0
+contact_damage = 24.0
+projectile_speed = 82.0
+projectile_damage = 11.0
+phase_thresholds = Array[float]([0.7, 0.3])
+coin_reward = 40
+experience_reward = 180.0
+healing_reward = 50.0

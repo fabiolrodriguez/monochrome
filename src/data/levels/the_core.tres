@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://src/data/levels/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://src/data/levels/spawn_segment_data.gd" id="2"]
+[ext_resource type="Resource" path="res://src/data/enemies/chaser.tres" id="3"]
+[ext_resource type="Resource" path="res://src/data/enemies/shooter.tres" id="4"]
+[ext_resource type="Resource" path="res://src/data/enemies/tank.tres" id="5"]
+[ext_resource type="Resource" path="res://src/data/enemies/hive_drone.tres" id="6"]
+[ext_resource type="Resource" path="res://src/data/enemies/elite_hunter.tres" id="7"]
+[ext_resource type="Resource" path="res://src/data/objectives/complete_the_core.tres" id="8"]
+[ext_resource type="Resource" path="res://src/data/bosses/the_heart.tres" id="9"]
+
+[sub_resource type="Resource" id="Segment_breach"]
+script = ExtResource("2")
+starts_at_ratio = 0.0
+budget_multiplier = 1.35
+spawn_interval_multiplier = 0.88
+maximum_active_enemies = 38
+
+[sub_resource type="Resource" id="Segment_convergence"]
+script = ExtResource("2")
+starts_at_ratio = 0.38
+budget_multiplier = 1.7
+spawn_interval_multiplier = 0.76
+maximum_active_enemies = 48
+
+[sub_resource type="Resource" id="Segment_rupture"]
+script = ExtResource("2")
+starts_at_ratio = 0.74
+budget_multiplier = 2.05
+spawn_interval_multiplier = 0.66
+maximum_active_enemies = 58
+
+[resource]
+script = ExtResource("1")
+id = &"the_core"
+name_key = &"LEVEL_CORE_NAME"
+description_key = &"LEVEL_CORE_DESC"
+duration = 540.0
+objective = ExtResource("8")
+enemy_pool = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")]
+elite_pool = [ExtResource("7")]
+boss = ExtResource("9")
+next_levels = Array[StringName]([])
+difficulty = 2.2
+spawn_segments = [SubResource("Segment_breach"), SubResource("Segment_convergence"), SubResource("Segment_rupture")]

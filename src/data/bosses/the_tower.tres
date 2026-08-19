@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="BossData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/bosses/boss_data.gd" id="1"]
+[ext_resource type="PackedScene" path="res://src/gameplay/bosses/the_tower.tscn" id="2"]
+
+[resource]
+script = ExtResource("1")
+id = &"the_tower"
+name_key = &"BOSS_TOWER_NAME"
+description_key = &"BOSS_TOWER_DESC"
+scene = ExtResource("2")
+maximum_health = 2700.0
+movement_speed = 0.0
+contact_damage = 32.0
+projectile_speed = 82.0
+projectile_damage = 13.0
+phase_thresholds = Array[float]([0.7, 0.3])
+coin_reward = 90
+experience_reward = 340.0
+healing_reward = 70.0

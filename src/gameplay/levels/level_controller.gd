@@ -6,6 +6,7 @@ signal segment_changed(index: int)
 signal level_time_reached
 
 @export var data: LevelData
+@export var level_catalog: Array[LevelData] = []
 @export var threat_director_path: NodePath
 
 var elapsed_time := 0.0
@@ -15,12 +16,21 @@ var _director: ThreatDirector
 
 
 func _ready() -> void:
+	for candidate: LevelData in level_catalog:
+		if candidate != null and candidate.id == ProgressionManager.selected_level_id:
+			data = candidate
+			break
 	assert(data != null, "LevelController requires LevelData.")
 	_director = get_node(threat_director_path) as ThreatDirector
 	assert(_director != null, "LevelController requires a ThreatDirector.")
 	_director.configure_pool(data.enemy_pool, data.elite_pool)
 	_update_segment(true)
 	time_changed.emit(elapsed_time, data.duration)
+
+
+func begin_boss_encounter() -> void:
+	_completed = true
+	_director.stop_spawning()
 
 
 func _process(delta: float) -> void:

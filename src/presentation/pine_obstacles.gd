@@ -2,8 +2,8 @@ class_name PineObstacles
 extends TileMapLayer
 
 const TILE_SIZE := Vector2i(16, 16)
-const ATLAS_COORDINATES := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)]
-const PINE_ATLAS := preload("res://assets/tilesets/void_pines.svg")
+const ATLAS_COORDINATES := [Vector2i(8, 13), Vector2i(9, 13), Vector2i(10, 13), Vector2i(11, 13)]
+const PINE_ATLAS := preload("res://assets/art/dungeon_bw/dungeon_16x16_bw.png")
 const PLAYER_START_CELL := Vector2i(10, 5)
 
 @export var generation_seed: int = 8803

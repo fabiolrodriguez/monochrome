@@ -37,9 +37,9 @@ horizontal_alignment = 1
 
 [node name="Panel" type="PanelContainer" parent="."]
 offset_left = 90.0
-offset_top = 68.0
+offset_top = 64.0
 offset_right = 230.0
-offset_bottom = 170.0
+offset_bottom = 176.0
 
 [node name="Layout" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
@@ -62,9 +62,130 @@ text = "UI_PROGRESSION"
 layout_mode = 2
 text = "UI_CONTROLS"
 
+[node name="Settings" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_SETTINGS"
+
 [node name="Quit" type="Button" parent="Panel/Layout"]
 layout_mode = 2
 text = "UI_QUIT"
+
+[node name="Settings" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="PanelContainer" parent="Settings"]
+layout_mode = 0
+offset_left = 62.0
+offset_top = 6.0
+offset_right = 258.0
+offset_bottom = 174.0
+
+[node name="Layout" type="VBoxContainer" parent="Settings/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Settings/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "UI_SETTINGS"
+horizontal_alignment = 1
+
+[node name="VolumeHeader" type="HBoxContainer" parent="Settings/Panel/Layout"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Settings/Panel/Layout/VolumeHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UI_MASTER_VOLUME"
+
+[node name="Value" type="Label" parent="Settings/Panel/Layout/VolumeHeader"]
+layout_mode = 2
+text = "80%"
+horizontal_alignment = 2
+
+[node name="Volume" type="HSlider" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+max_value = 100.0
+step = 5.0
+value = 80.0
+
+[node name="Fullscreen" type="CheckButton" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "UI_FULLSCREEN"
+
+[node name="LanguageLabel" type="Label" parent="Settings/Panel/Layout"]
+layout_mode = 2
+text = "UI_LANGUAGE"
+
+[node name="Language" type="OptionButton" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "English"
+popup/item_0/id = 0
+popup/item_0/metadata = &"en"
+popup/item_1/text = "Português"
+popup/item_1/id = 1
+popup/item_1/metadata = &"pt_BR"
+popup/item_2/text = "Español"
+popup/item_2/id = 2
+popup/item_2/metadata = &"es"
+
+[node name="PlaytestTitle" type="Label" parent="Settings/Panel/Layout"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.3, 1)
+text = "UI_PLAYTEST_TOOLS"
+
+[node name="UnlockAll" type="Button" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_UNLOCK_ALL_LEVELS"
+
+[node name="ResetSave" type="Button" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_RESET_SAVE"
+
+[node name="Back" type="Button" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "UI_BACK"
+
+[node name="ResetConfirmation" type="ConfirmationDialog" parent="."]
+theme = ExtResource("4_theme")
+title = "UI_RESET_SAVE"
+dialog_text = "UI_RESET_SAVE_CONFIRM"
+ok_button_text = "UI_CONFIRM"
+cancel_button_text = "UI_CANCEL"
+
+[node name="Version" type="Label" parent="."]
+offset_left = 232.0
+offset_top = 168.0
+offset_right = 316.0
+offset_bottom = 178.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.36, 0.37, 0.41, 1)
+theme_override_font_sizes/font_size = 5
+text = "v0.1.0-playtest"
+horizontal_alignment = 2
 
 [node name="SkillTree" type="Control" parent="."]
 layout_mode = 1
@@ -259,6 +380,100 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Back" type="Button" parent="Controls/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "UI_BACK"
+
+[node name="LevelSelect" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="LevelSelect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="PanelContainer" parent="LevelSelect"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 4.0
+offset_right = 296.0
+offset_bottom = 176.0
+
+[node name="Layout" type="VBoxContainer" parent="LevelSelect/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="LevelSelect/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "UI_SELECT_LEVEL"
+horizontal_alignment = 1
+
+[node name="VoidGarden" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "THE VOID GARDEN\n6 MIN · SURVIVE"
+
+[node name="DeadFactory" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 6
+text = "DEAD FACTORY\nLOCKED"
+
+[node name="WhiteForest" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 6
+text = "WHITE FOREST\nLOCKED"
+
+[node name="TheHive" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 6
+text = "THE HIVE\nLOCKED"
+
+[node name="BlackLake" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 6
+text = "BLACK LAKE\nLOCKED"
+
+[node name="BrokenCity" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 5
+text = "BROKEN CITY\nLOCKED"
+
+[node name="TheCore" type="Button" parent="LevelSelect/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+focus_mode = 0
+disabled = true
+theme_override_font_sizes/font_size = 5
+text = "THE CORE\nLOCKED"
+
+[node name="Back" type="Button" parent="LevelSelect/Panel/Layout"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 theme_override_font_sizes/font_size = 7

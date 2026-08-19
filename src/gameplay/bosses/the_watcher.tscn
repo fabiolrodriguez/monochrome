@@ -1,17 +1,67 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/bosses/the_watcher.gd" id="1_boss"]
 [ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="2_health"]
 [ext_resource type="PackedScene" path="res://src/gameplay/projectiles/enemy_projectile.tscn" id="3_projectile"]
+[ext_resource type="Texture2D" path="res://assets/art/watcher.png" id="4_open"]
+[ext_resource type="Texture2D" path="res://assets/art/watcher2.png" id="5_half"]
+[ext_resource type="Texture2D" path="res://assets/art/watcher3.png" id="6_closed"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_boss"]
 radius = 18.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_watcher"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_closed")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_half")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_half")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_open")
+}],
+"loop": true,
+"name": &"phase_1",
+"speed": 3.5
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_closed")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_half")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_open")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_half")
+}],
+"loop": true,
+"name": &"phase_2",
+"speed": 7.0
+}]
 
 [node name="TheWatcher" type="CharacterBody2D" groups=["enemies"]]
 collision_layer = 4
 collision_mask = 2
 script = ExtResource("1_boss")
 projectile_scene = ExtResource("3_projectile")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_watcher")
+animation = &"idle"
+autoplay = "idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape_boss")

@@ -14,3 +14,5 @@ threat_cost = 12.0
 coin_drop_chance = 1.0
 coin_value = 5
 is_elite = true
+healing_drop_chance = 0.5
+healing_value = 20.0

@@ -6,25 +6,32 @@ signal boss_health_changed(current: float, maximum: float)
 signal boss_defeated
 
 @export var level_controller_path: NodePath
+@export var objective_manager_path: NodePath
 @export var boss_scene: PackedScene
 @export var spawn_bounds := Rect2(-580.0, -580.0, 1160.0, 1160.0)
 
 var active_boss: TheWatcher
 var _level_controller: LevelController
 var _player: Player
+var _objective_manager: ObjectiveManager
 
 
 func _ready() -> void:
 	_level_controller = get_node(level_controller_path) as LevelController
+	_objective_manager = get_node(objective_manager_path) as ObjectiveManager
 	_player = get_tree().get_first_node_in_group("player") as Player
-	assert(_level_controller != null and boss_scene != null)
-	_level_controller.level_time_reached.connect(_spawn_boss)
+	assert(_level_controller != null and _objective_manager != null)
+	_objective_manager.objective_completed.connect(func(_data: ObjectiveData) -> void: _spawn_boss())
 
 
 func _spawn_boss() -> void:
 	if active_boss != null or not is_instance_valid(_player):
 		return
-	active_boss = boss_scene.instantiate() as TheWatcher
+	var selected_scene: PackedScene = _level_controller.data.boss.scene if _level_controller.data.boss.scene != null else boss_scene
+	if selected_scene == null:
+		return
+	_level_controller.begin_boss_encounter()
+	active_boss = selected_scene.instantiate() as TheWatcher
 	if active_boss == null:
 		return
 	active_boss.data = _level_controller.data.boss

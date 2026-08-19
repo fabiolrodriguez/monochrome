@@ -9,6 +9,13 @@ extends CanvasLayer
 @onready var resume_button: Button = $Overlay/Panel/Layout/Resume
 @onready var restart_button: Button = $Overlay/Panel/Layout/Restart
 @onready var main_menu_button: Button = $Overlay/Panel/Layout/MainMenu
+@onready var settings_button: Button = $Overlay/Panel/Layout/Settings
+@onready var settings_panel: PanelContainer = $Overlay/SettingsPanel
+@onready var volume_slider: HSlider = $Overlay/SettingsPanel/Layout/Volume
+@onready var volume_value: Label = $Overlay/SettingsPanel/Layout/VolumeHeader/Value
+@onready var fullscreen_toggle: CheckButton = $Overlay/SettingsPanel/Layout/Fullscreen
+@onready var language_select: OptionButton = $Overlay/SettingsPanel/Layout/Language
+@onready var settings_back_button: Button = $Overlay/SettingsPanel/Layout/Back
 
 var _level_up_panel: Control
 var _run_result_panel: Control
@@ -23,13 +30,21 @@ func _ready() -> void:
 	resume_button.pressed.connect(resume)
 	restart_button.pressed.connect(_restart_run)
 	main_menu_button.pressed.connect(_return_to_main_menu)
+	settings_button.pressed.connect(_open_settings)
+	settings_back_button.pressed.connect(_close_settings)
+	volume_slider.value_changed.connect(_on_volume_changed)
+	fullscreen_toggle.toggled.connect(SettingsManager.set_fullscreen)
+	language_select.item_selected.connect(_on_language_selected)
+	settings_panel.hide()
 	overlay.hide()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("pause") or event.is_echo():
 		return
-	if is_open():
+	if settings_panel.visible:
+		_close_settings()
+	elif is_open():
 		resume()
 	elif not _has_blocking_modal():
 		pause()
@@ -37,6 +52,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func pause() -> void:
+	settings_panel.hide()
+	$Overlay/Panel.show()
 	overlay.show()
 	get_tree().paused = true
 	resume_button.grab_focus()
@@ -45,6 +62,32 @@ func pause() -> void:
 func resume() -> void:
 	overlay.hide()
 	get_tree().paused = false
+
+
+func _open_settings() -> void:
+	volume_slider.set_value_no_signal(SettingsManager.master_volume * 100.0)
+	volume_value.text = "%d%%" % roundi(SettingsManager.master_volume * 100.0)
+	fullscreen_toggle.set_pressed_no_signal(SettingsManager.fullscreen)
+	language_select.select(maxi(SettingsManager.SUPPORTED_LOCALES.find(SettingsManager.locale), 0))
+	$Overlay/Panel.hide()
+	settings_panel.show()
+	volume_slider.grab_focus()
+
+
+func _close_settings() -> void:
+	settings_panel.hide()
+	$Overlay/Panel.show()
+	settings_button.grab_focus()
+
+
+func _on_volume_changed(value: float) -> void:
+	volume_value.text = "%d%%" % roundi(value)
+	SettingsManager.set_master_volume(value / 100.0)
+
+
+func _on_language_selected(index: int) -> void:
+	if index >= 0 and index < SettingsManager.SUPPORTED_LOCALES.size():
+		SettingsManager.set_locale(SettingsManager.SUPPORTED_LOCALES[index])
 
 
 func is_open() -> bool:

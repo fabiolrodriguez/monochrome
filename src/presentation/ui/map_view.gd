@@ -21,6 +21,11 @@ func _ready() -> void:
 	queue_redraw()
 
 
+func _process(_delta: float) -> void:
+	if visible:
+		queue_redraw()
+
+
 func _draw() -> void:
 	if _tracker == null or _player == null:
 		return
@@ -34,6 +39,7 @@ func _draw() -> void:
 		var map_position := center + relative_position / _tracker.sector_world_size * sector_draw_size
 		draw_rect(Rect2(map_position - Vector2.ONE * sector_draw_size * 0.5, Vector2.ONE * (sector_draw_size - 1.0)), Color("202329"))
 	_draw_discovered_obstacles(center)
+	_draw_objective_target(center)
 	draw_circle(center, 2.5, Color.WHITE)
 	draw_circle(center, 1.0, Color("101216"))
 
@@ -49,3 +55,19 @@ func _draw_discovered_obstacles(center: Vector2) -> void:
 			var relative_world := world_position - _player.global_position
 			var map_position := center + relative_world / _tracker.sector_world_size * sector_draw_size
 			draw_rect(Rect2(map_position - Vector2.ONE * tile_pixel_size * 0.5, Vector2.ONE * tile_pixel_size), Color("b7b9bd"))
+
+
+func _draw_objective_target(center: Vector2) -> void:
+	var targets := get_tree().get_nodes_in_group("objective_target")
+	if targets.is_empty():
+		return
+	for candidate: Node in targets:
+		var target := candidate as Node2D
+		if target == null:
+			continue
+		var relative_world := target.global_position - _player.global_position
+		var map_position := center + relative_world / _tracker.sector_world_size * sector_draw_size
+		map_position.x = clampf(map_position.x, 5.0, size.x - 5.0)
+		map_position.y = clampf(map_position.y, 5.0, size.y - 5.0)
+		var diamond := PackedVector2Array([map_position + Vector2(0, -3), map_position + Vector2(3, 0), map_position + Vector2(0, 3), map_position + Vector2(-3, 0)])
+		draw_colored_polygon(diamond, Color("ffd84a"))

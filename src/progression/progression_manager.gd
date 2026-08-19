@@ -3,11 +3,14 @@ extends Node
 signal coins_changed(total: int)
 signal progression_changed
 
+const ALL_LEVELS: Array[StringName] = [&"void_garden", &"dead_factory", &"white_forest", &"the_hive", &"black_lake", &"broken_city", &"the_core"]
+
 var coins := 0
 var unlocked_levels: Array[StringName] = []
 var completed_levels: Array[StringName] = []
 var unlocked_skill_nodes: Array[StringName] = []
 var permanent_stats: Dictionary[StringName, float] = {}
+var selected_level_id: StringName = &"void_garden"
 var _save_timer: Timer
 
 
@@ -68,6 +71,29 @@ func get_permanent_stat(stat_key: StringName) -> float:
 
 func is_node_unlocked(node_id: StringName) -> bool:
 	return unlocked_skill_nodes.has(node_id)
+
+
+func select_level(level_id: StringName) -> bool:
+	if not unlocked_levels.has(level_id):
+		return false
+	selected_level_id = level_id
+	return true
+
+
+func unlock_all_levels_for_playtest() -> void:
+	for level_id: StringName in ALL_LEVELS:
+		if not unlocked_levels.has(level_id):
+			unlocked_levels.append(level_id)
+	flush_save()
+	progression_changed.emit()
+
+
+func reset_progression() -> void:
+	if not SaveManager.reset_game():
+		return
+	_load_progression()
+	selected_level_id = &"void_garden"
+	progression_changed.emit()
 
 
 func flush_save() -> void:

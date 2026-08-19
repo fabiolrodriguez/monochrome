@@ -17,6 +17,7 @@ func _ready() -> void:
 	assert(_level_controller != null, "ObjectiveManager requires a LevelController.")
 	_create_objective(_level_controller.data.objective)
 	_level_controller.time_changed.connect(_on_level_time_changed)
+	_level_controller.level_time_reached.connect(_on_level_time_reached)
 	active_objective.begin()
 
 
@@ -25,7 +26,10 @@ func _create_objective(data: ObjectiveData) -> void:
 	active_objective = data.objective_scene.instantiate() as BaseObjective
 	assert(active_objective != null, "Objective scene must instantiate BaseObjective.")
 	add_child(active_objective)
-	active_objective.configure(data, {"level_duration": _level_controller.data.duration})
+	active_objective.configure(data, {
+		"level_duration": _level_controller.data.duration,
+		"threat_director": get_tree().get_first_node_in_group("threat_director"),
+	})
 	active_objective.started.connect(func() -> void: objective_started.emit(data))
 	active_objective.progress_changed.connect(func(current: float, required: float) -> void: objective_progress_changed.emit(data, current, required))
 	active_objective.completed.connect(func() -> void: objective_completed.emit(data))
@@ -34,3 +38,8 @@ func _create_objective(data: ObjectiveData) -> void:
 
 func _on_level_time_changed(elapsed: float, duration: float) -> void:
 	active_objective.update_level_time(elapsed, duration)
+
+
+func _on_level_time_reached() -> void:
+	if active_objective.data.can_fail and not active_objective.is_complete:
+		active_objective.fail()

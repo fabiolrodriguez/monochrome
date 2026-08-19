@@ -33,9 +33,4 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _draw() -> void:
-	var points := PackedVector2Array([
-		Vector2(0.0, -3.0), Vector2(3.0, 0.0),
-		Vector2(0.0, 3.0), Vector2(-3.0, 0.0)
-	])
-	draw_colored_polygon(points, Color.WHITE)
-	draw_polyline(PackedVector2Array([points[0], points[1], points[2], points[3], points[0]]), Color("777b82"), 1.0)
+	return

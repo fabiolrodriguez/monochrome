@@ -2,8 +2,10 @@ class_name TiledFloor
 extends TileMapLayer
 
 const TILE_SIZE := Vector2i(16, 16)
-const ATLAS_COORDINATES := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)]
-const FLOOR_ATLAS := preload("res://assets/tilesets/monochrome_floor.svg")
+# The first tile is intentionally empty; details remain sparse to avoid the
+# repeated high-contrast grid that caused discomfort in the first floor pass.
+const ATLAS_COORDINATES := [Vector2i(10, 4), Vector2i(0, 4), Vector2i(1, 4), Vector2i(2, 4), Vector2i(3, 4), Vector2i(4, 4), Vector2i(5, 4)]
+const FLOOR_ATLAS := preload("res://assets/art/dungeon_bw/dungeon_16x16_bw.png")
 
 @export_range(8, 128, 1) var radius_in_tiles: int = 40
 @export var generation_seed: int = 1977
@@ -36,4 +38,3 @@ func _paint_floor() -> void:
 			if random.randf() < 0.12:
 				variant = random.randi_range(1, ATLAS_COORDINATES.size() - 1)
 			set_cell(Vector2i(x, y), 0, ATLAS_COORDINATES[variant])
-

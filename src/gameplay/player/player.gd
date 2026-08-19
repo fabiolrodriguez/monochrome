@@ -15,10 +15,13 @@ signal auto_fire_changed(enabled: bool)
 @onready var health: HealthComponent = $Health
 @onready var experience: ExperienceComponent = $Experience
 @onready var damage_cooldown: Timer = $DamageCooldown
+@onready var sprite: AnimatedSprite2D = $Sprite2D
 
 var aim_direction := Vector2.RIGHT
 var _base_movement_speed: float
 var _movement_multiplier := 1.0
+var _external_movement_multiplier := 1.0
+var _movement_modifiers: Dictionary[StringName, float] = {}
 var _is_dead := false
 var _auto_fire_enabled := false
 var _dash_remaining := 0.0
@@ -47,7 +50,11 @@ func take_damage(amount: float) -> void:
 		AudioManager.play_sfx(&"confirm", -14.0)
 		queue_redraw()
 		return
-	health.damage(amount * (1.0 - armor_reduction))
+	var applied_damage := minf(amount * (1.0 - armor_reduction), health.current_health)
+	health.damage(applied_damage)
+	var telemetry := get_tree().get_first_node_in_group("run_telemetry") as RunTelemetry
+	if telemetry != null:
+		telemetry.record_damage_received(applied_damage)
 	AudioManager.play_sfx(&"player_hit", -10.0, 0.1)
 	damage_cooldown.start()
 
@@ -70,7 +77,9 @@ func _physics_process(delta: float) -> void:
 		velocity = movement_input * movement_speed
 	move_and_slide()
 	_update_aim()
+	_update_player_animation(movement_input)
 	weapon.set_trigger_pressed(_auto_fire_enabled or Input.is_action_pressed("shoot"))
+	sprite.modulate = Color("55575c") if _is_dead else (Color("ff8585") if not damage_cooldown.is_stopped() else Color.WHITE)
 	queue_redraw()
 
 
@@ -91,7 +100,7 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 			weapon.refresh_fire_rate()
 		UpgradeData.Stat.MOVEMENT_SPEED:
 			_movement_multiplier += upgrade.amount_per_level
-			movement_speed = _base_movement_speed * _movement_multiplier
+			_refresh_movement_speed()
 		UpgradeData.Stat.MAX_HEALTH:
 			health.increase_maximum(upgrade.amount_per_level)
 		UpgradeData.Stat.PROJECTILE_SPEED:
@@ -117,12 +126,31 @@ func _apply_permanent_progression() -> void:
 	if health_bonus > 0.0:
 		health.increase_maximum(health_bonus)
 	_movement_multiplier += ProgressionManager.get_permanent_stat(&"movement_speed")
-	movement_speed = _base_movement_speed * _movement_multiplier
+	_refresh_movement_speed()
 	weapon.damage_multiplier += ProgressionManager.get_permanent_stat(&"damage")
 	weapon.fire_rate_multiplier += ProgressionManager.get_permanent_stat(&"fire_rate")
 	weapon.projectile_speed_multiplier += ProgressionManager.get_permanent_stat(&"projectile_speed")
 	weapon.refresh_fire_rate()
 	pickup_radius += ProgressionManager.get_permanent_stat(&"pickup_radius")
+
+
+func set_external_movement_multiplier(multiplier: float) -> void:
+	set_movement_modifier(&"external", multiplier)
+
+
+func set_movement_modifier(key: StringName, multiplier: float) -> void:
+	if is_equal_approx(multiplier, 1.0):
+		_movement_modifiers.erase(key)
+	else:
+		_movement_modifiers[key] = clampf(multiplier, 0.25, 2.0)
+	_external_movement_multiplier = 1.0
+	for value: Variant in _movement_modifiers.values():
+		_external_movement_multiplier *= float(value)
+	_refresh_movement_speed()
+
+
+func _refresh_movement_speed() -> void:
+	movement_speed = _base_movement_speed * _movement_multiplier * _external_movement_multiplier
 
 
 func _on_health_depleted() -> void:
@@ -131,6 +159,7 @@ func _on_health_depleted() -> void:
 	velocity = Vector2.ZERO
 	weapon.set_trigger_pressed(false)
 	set_physics_process(false)
+	sprite.modulate = Color("55575c")
 	$CollisionShape2D.set_deferred("disabled", true)
 	died.emit()
 	queue_redraw()
@@ -147,6 +176,22 @@ func _update_aim() -> void:
 	weapon.aim_at(aim_direction)
 
 
+func _update_player_animation(movement_input: Vector2) -> void:
+	var target_animation: StringName
+	if _dash_remaining > 0.0:
+		if absf(_dash_direction.y) > absf(_dash_direction.x):
+			target_animation = &"dash_up" if _dash_direction.y < 0.0 else &"dash_down"
+			sprite.flip_h = false
+		else:
+			target_animation = &"dash_side"
+			sprite.flip_h = _dash_direction.x < 0.0
+	else:
+		target_animation = &"walk" if not movement_input.is_zero_approx() else &"idle"
+		sprite.flip_h = aim_direction.x < 0.0
+	if sprite.animation != target_animation:
+		sprite.play(target_animation)
+
+
 func _update_defenses(delta: float) -> void:
 	if regeneration_per_second > 0.0 and health.current_health < health.maximum_health:
 		_regeneration_accumulator += delta
@@ -161,10 +206,8 @@ func _update_defenses(delta: float) -> void:
 
 
 func _draw() -> void:
-	# Logic and collision remain independent from this replaceable placeholder art.
-	var body_color := Color("55575c") if _is_dead else (Color("ff8585") if not damage_cooldown.is_stopped() else Color.WHITE)
-	draw_circle(Vector2.ZERO, 6.0, body_color)
-	draw_circle(Vector2.ZERO, 3.0, Color(0.04, 0.04, 0.05, 1.0))
-	draw_line(Vector2.ZERO, aim_direction * 10.0, Color.WHITE, 2.0)
+	# Aim and barrier remain procedural because they communicate gameplay state.
+	var shoulder := Vector2(0, -5)
+	draw_line(shoulder, shoulder + aim_direction * 10.0, Color.WHITE, 2.0)
 	if _barrier_ready:
 		draw_arc(Vector2.ZERO, 8.0, 0.0, TAU, 20, Color("70c8ff"), 1.0)

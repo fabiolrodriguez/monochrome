@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://src/data/levels/level_data.gd" id="1"]
+[ext_resource type="Script" path="res://src/data/levels/spawn_segment_data.gd" id="2"]
+[ext_resource type="Resource" path="res://src/data/enemies/hive_drone.tres" id="3"]
+[ext_resource type="Resource" path="res://src/data/enemies/chaser.tres" id="4"]
+[ext_resource type="Resource" path="res://src/data/enemies/shooter.tres" id="5"]
+[ext_resource type="Resource" path="res://src/data/enemies/tank.tres" id="6"]
+[ext_resource type="Resource" path="res://src/data/objectives/destroy_hive_nests.tres" id="7"]
+[ext_resource type="Resource" path="res://src/data/bosses/the_mother.tres" id="8"]
+
+[sub_resource type="Resource" id="Segment_growth"]
+script = ExtResource("2")
+starts_at_ratio = 0.0
+budget_multiplier = 1.15
+spawn_interval_multiplier = 0.9
+maximum_active_enemies = 34
+
+[sub_resource type="Resource" id="Segment_swarm"]
+script = ExtResource("2")
+starts_at_ratio = 0.4
+budget_multiplier = 1.55
+spawn_interval_multiplier = 0.76
+maximum_active_enemies = 48
+
+[sub_resource type="Resource" id="Segment_overrun"]
+script = ExtResource("2")
+starts_at_ratio = 0.75
+budget_multiplier = 2.0
+spawn_interval_multiplier = 0.64
+maximum_active_enemies = 64
+
+[resource]
+script = ExtResource("1")
+id = &"the_hive"
+name_key = &"LEVEL_HIVE_NAME"
+description_key = &"LEVEL_HIVE_DESC"
+duration = 480.0
+objective = ExtResource("7")
+enemy_pool = [ExtResource("3"), ExtResource("4"), ExtResource("5"), ExtResource("6")]
+boss = ExtResource("8")
+next_levels = Array[StringName]([&"black_lake"])
+difficulty = 1.7
+spawn_segments = [SubResource("Segment_growth"), SubResource("Segment_swarm"), SubResource("Segment_overrun")]

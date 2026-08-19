@@ -2,8 +2,12 @@ class_name ForestWalls
 extends TileMapLayer
 
 const TILE_SIZE := Vector2i(16, 16)
-const ATLAS_COORDINATES := [Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(3, 0)]
-const WALL_ATLAS := preload("res://assets/tilesets/void_forest_walls.svg")
+const ATLAS_COORDINATES := [
+	Vector2i(0, 8), Vector2i(1, 8), Vector2i(4, 8), Vector2i(6, 8),
+	Vector2i(0, 9), Vector2i(1, 9), Vector2i(4, 9), Vector2i(6, 9),
+	Vector2i(0, 10), Vector2i(1, 10), Vector2i(4, 10), Vector2i(6, 10),
+]
+const WALL_ATLAS := preload("res://assets/art/dungeon_bw/dungeon_16x16_bw.png")
 const MAP_BOUNDARY_IN_TILES := 40
 
 @export var generation_seed: int = 3108

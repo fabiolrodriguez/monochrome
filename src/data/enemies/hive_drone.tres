@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/data/enemies/enemy_data.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+id = &"hive_drone"
+behavior = 0
+maximum_health = 18.0
+movement_speed = 55.0
+contact_damage = 7.0
+experience_value = 3.0
+threat_cost = 0.6
+coin_drop_chance = 0.03
+healing_drop_chance = 0.01

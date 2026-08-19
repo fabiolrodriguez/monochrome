@@ -16,3 +16,5 @@ enum Behavior { CHASER, SHOOTER, TANK }
 @export_range(0.0, 1.0, 0.01) var coin_drop_chance: float = 0.08
 @export_range(1, 1000, 1) var coin_value: int = 1
 @export var is_elite := false
+@export_range(0.0, 1.0, 0.01) var healing_drop_chance := 0.025
+@export_range(1.0, 1000.0, 1.0) var healing_value := 12.0

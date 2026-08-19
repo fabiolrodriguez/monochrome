@@ -32,5 +32,4 @@ func _on_body_entered(body: Node2D) -> void:
 
 
 func _draw() -> void:
-	draw_circle(Vector2.ZERO, 3.0, Color("ffd84a"))
-	draw_circle(Vector2.ZERO, 1.0, Color("6d5814"))
+	return
