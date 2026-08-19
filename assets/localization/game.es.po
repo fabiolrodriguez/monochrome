@@ -120,7 +120,7 @@ msgstr "WASD mover  |  Ratón apuntar  |  LMB disparar  |  RMB disparo automáti
 msgid "UI_CONTROLS_GAMEPAD"
 msgstr "MANDO"
 msgid "UI_CONTROLS_GAMEPAD_DESC"
-msgstr "Stick izquierdo mover  |  Derecho apuntar  |  RT disparar  |  Y disparo automático  |  A dash  |  X interactuar  |  Select mapa  |  Start pausa"
+msgstr "Stick izquierdo mover  |  Derecho apuntar  |  RT disparar  |  Y disparo automático  |  A dash / confirmar  |  X interactuar  |  Select mapa  |  Start pausa"
 msgid "UI_SKILL_TREE"
 msgstr "ÁRBOL PERMANENTE"
 msgid "UI_BACK"

@@ -120,7 +120,7 @@ msgstr "WASD move  |  Mouse aim  |  LMB fire  |  RMB auto-fire  |  Space dash  |
 msgid "UI_CONTROLS_GAMEPAD"
 msgstr "GAMEPAD"
 msgid "UI_CONTROLS_GAMEPAD_DESC"
-msgstr "Left stick move  |  Right stick aim  |  RT fire  |  Y auto-fire  |  A dash  |  X interact  |  Select map  |  Start pause"
+msgstr "Left stick move  |  Right stick aim  |  RT fire  |  Y auto-fire  |  A dash / confirm  |  X interact  |  Select map  |  Start pause"
 msgid "UI_SKILL_TREE"
 msgstr "PERMANENT TREE"
 msgid "UI_BACK"

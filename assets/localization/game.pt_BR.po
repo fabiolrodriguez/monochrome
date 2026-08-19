@@ -120,7 +120,7 @@ msgstr "WASD mover  |  Mouse mirar  |  LMB atirar  |  RMB tiro automático  |  E
 msgid "UI_CONTROLS_GAMEPAD"
 msgstr "CONTROLE"
 msgid "UI_CONTROLS_GAMEPAD_DESC"
-msgstr "Analógico esquerdo mover  |  Direito mirar  |  RT atirar  |  Y tiro automático  |  A dash  |  X interagir  |  Select mapa  |  Start pausa"
+msgstr "Analógico esquerdo mover  |  Direito mirar  |  RT atirar  |  Y tiro automático  |  A dash / confirmar  |  X interagir  |  Select mapa  |  Start pausa"
 msgid "UI_SKILL_TREE"
 msgstr "ÁRVORE PERMANENTE"
 msgid "UI_BACK"
