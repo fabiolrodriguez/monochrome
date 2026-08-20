@@ -58,6 +58,8 @@ Expansão da vertical slice após os milestones principais:
 - três upgrades defensivos funcionais: Armadura, Regeneração e Barreira;
 - Elite Hunter periódico, com silhueta dourada, vida elevada e recompensa garantida;
 - flash de impacto em inimigos e player;
+- intensidade de flashes configurável entre desligada, reduzida e completa;
+- tremor de tela opcional para dano recebido, explosões e transições de bosses;
 - variações 16×16 de alvenaria aplicadas proceduralmente sobre paredes existentes;
 - cards de level up com fundo preto sólido e foco dourado;
 - recompensa do Watcher com XP, moedas, cura e resumo no painel de conclusão;
@@ -98,7 +100,7 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 
 ## Próximo milestone
 
-Próximo: acessibilidade e feedback audiovisual, incluindo intensidade de flashes, tremor de tela e leitura dos impactos.
+Próximo: raridade de upgrades e golpes críticos, ampliando a expressão das builds sem aumentar a complexidade inicial.
 
 ## Build de playtest no Windows
 

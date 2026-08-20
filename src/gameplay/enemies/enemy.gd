@@ -42,7 +42,8 @@ func _physics_process(delta: float) -> void:
 			_shot_windup_active = false
 			_shoot(_pending_shot_direction)
 			queue_redraw()
-	sprite.modulate = Color("9fcfff") if _hit_flash_remaining > 0.0 else (Color("ff9a9a") if _shot_windup_active else Color.WHITE)
+	var hit_color := Color.WHITE.lerp(Color("9fcfff"), SettingsManager.flash_intensity)
+	sprite.modulate = hit_color if _hit_flash_remaining > 0.0 else (Color("ff9a9a") if _shot_windup_active else Color.WHITE)
 	if absf(velocity.x) > 0.1:
 		sprite.flip_h = velocity.x < 0.0
 	if not is_instance_valid(_target):

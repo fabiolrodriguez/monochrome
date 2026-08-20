@@ -21,7 +21,13 @@ func configure(objective_data: ObjectiveData, context: Dictionary) -> void:
 	_core.director = _director
 	add_child(_core)
 	_core.position = _transport_data.energy_start_position
+	_core.carrying_changed.connect(_on_carrying_changed)
 	_spawn_next_station()
+
+
+func begin() -> void:
+	super.begin()
+	set_instruction(&"OBJECTIVE_ENERGY_FIND")
 
 
 func _spawn_next_station() -> void:
@@ -52,3 +58,7 @@ func _on_station_body_entered(body: Node) -> void:
 		complete()
 	else:
 		call_deferred("_spawn_next_station")
+
+
+func _on_carrying_changed(carried: bool) -> void:
+	set_instruction(&"OBJECTIVE_ENERGY_CARRY" if carried else &"OBJECTIVE_ENERGY_FIND")

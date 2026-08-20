@@ -35,4 +35,7 @@ func _build_tileset() -> void:
 func _stamp_room(origin: Vector2i, atlas_origin: Vector2i) -> void:
 	for y: int in 3:
 		for x: int in 3:
+			# The center glyph reads as a collectible; keep only the reusable room shell.
+			if x == 1 and y == 1:
+				continue
 			set_cell(origin + Vector2i(x, y), 0, atlas_origin + Vector2i(x, y))

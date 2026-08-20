@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/pickups/upgrade_chest.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://assets/art/kenney_1bit/monochrome_tilemap.png" id="2_atlas"]
+
+[sub_resource type="AtlasTexture" id="Atlas_chest"]
+atlas = ExtResource("2_atlas")
+region = Rect2(144, 304, 16, 16)
+
+[sub_resource type="CircleShape2D" id="Circle_chest"]
+radius = 8.0
+
+[node name="UpgradeChest" type="Area2D" groups=["map_pickup", "map_upgrade"]]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("Atlas_chest")
+scale = Vector2(1.25, 1.25)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("Circle_chest")

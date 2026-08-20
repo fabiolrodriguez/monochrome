@@ -31,6 +31,8 @@ extends Control
 @onready var volume_slider: HSlider = $Settings/Panel/Layout/Volume
 @onready var volume_value: Label = $Settings/Panel/Layout/VolumeHeader/Value
 @onready var fullscreen_toggle: CheckButton = $Settings/Panel/Layout/Fullscreen
+@onready var flash_intensity_select: OptionButton = $Settings/Panel/Layout/FlashIntensity
+@onready var screen_shake_toggle: CheckButton = $Settings/Panel/Layout/ScreenShake
 @onready var language_select: OptionButton = $Settings/Panel/Layout/Language
 @onready var settings_back_button: Button = $Settings/Panel/Layout/Back
 @onready var unlock_all_button: Button = $Settings/Panel/Layout/UnlockAll
@@ -57,6 +59,8 @@ func _ready() -> void:
 	reset_confirmation.confirmed.connect(_confirm_reset_save)
 	volume_slider.value_changed.connect(_on_volume_changed)
 	fullscreen_toggle.toggled.connect(_on_fullscreen_toggled)
+	flash_intensity_select.item_selected.connect(_on_flash_intensity_selected)
+	screen_shake_toggle.toggled.connect(SettingsManager.set_screen_shake)
 	language_select.item_selected.connect(_on_language_selected)
 	void_garden_button.pressed.connect(_start_level.bind(&"void_garden"))
 	dead_factory_button.pressed.connect(_start_level.bind(&"dead_factory"))
@@ -74,6 +78,7 @@ func _ready() -> void:
 	ProgressionManager.progression_changed.connect(_refresh_skill_tree)
 	_update_coins(ProgressionManager.coins)
 	_build_skill_tree()
+	_configure_menu_focus()
 	_change_zoom(0.0)
 	tree_overlay.hide()
 	controls_overlay.hide()
@@ -125,6 +130,7 @@ func _refresh_level_select() -> void:
 	core_button.text = "%s\n%s" % [tr("LEVEL_CORE_NAME"), tr("UI_CORE_SUMMARY") if core_unlocked else tr("UI_LEVEL_LOCKED")]
 	core_button.disabled = not core_unlocked
 	core_button.focus_mode = Control.FOCUS_ALL if core_unlocked else Control.FOCUS_NONE
+	_configure_level_select_focus()
 
 
 func _start_level(level_id: StringName) -> void:
@@ -175,6 +181,8 @@ func _refresh_settings() -> void:
 	volume_slider.set_value_no_signal(SettingsManager.master_volume * 100.0)
 	volume_value.text = "%d%%" % roundi(SettingsManager.master_volume * 100.0)
 	fullscreen_toggle.set_pressed_no_signal(SettingsManager.fullscreen)
+	flash_intensity_select.select(clampi(roundi(SettingsManager.flash_intensity * 2.0), 0, 2))
+	screen_shake_toggle.set_pressed_no_signal(SettingsManager.screen_shake)
 	var locale_index := SettingsManager.SUPPORTED_LOCALES.find(SettingsManager.locale)
 	language_select.select(maxi(locale_index, 0))
 
@@ -186,6 +194,10 @@ func _on_volume_changed(value: float) -> void:
 
 func _on_fullscreen_toggled(enabled: bool) -> void:
 	SettingsManager.set_fullscreen(enabled)
+
+
+func _on_flash_intensity_selected(index: int) -> void:
+	SettingsManager.set_flash_intensity(clampf(float(index) * 0.5, 0.0, 1.0))
 
 
 func _on_language_selected(index: int) -> void:
@@ -220,7 +232,47 @@ func _build_skill_tree() -> void:
 		tree_canvas.add_child(button)
 		tree_canvas.register_node(node, button)
 		_node_buttons[node.id] = button
+	_configure_skill_tree_focus()
 	_refresh_skill_tree()
+
+
+func _configure_menu_focus() -> void:
+	play_button.focus_neighbor_top = play_button.get_path_to(quit_button)
+	quit_button.focus_neighbor_bottom = quit_button.get_path_to(play_button)
+	volume_slider.focus_neighbor_top = volume_slider.get_path_to(settings_back_button)
+	settings_back_button.focus_neighbor_bottom = settings_back_button.get_path_to(volume_slider)
+	settings_back_button.focus_neighbor_top = settings_back_button.get_path_to(reset_save_button)
+
+
+func _configure_level_select_focus() -> void:
+	var enabled_buttons: Array[Button] = [void_garden_button]
+	for button: Button in [dead_factory_button, white_forest_button, hive_button, black_lake_button, broken_city_button, core_button]:
+		if not button.disabled:
+			enabled_buttons.append(button)
+	var last_button: Button = enabled_buttons.back()
+	void_garden_button.focus_neighbor_top = void_garden_button.get_path_to(level_select_back_button)
+	last_button.focus_neighbor_bottom = last_button.get_path_to(level_select_back_button)
+	level_select_back_button.focus_neighbor_top = level_select_back_button.get_path_to(last_button)
+	level_select_back_button.focus_neighbor_bottom = level_select_back_button.get_path_to(void_garden_button)
+
+
+func _configure_skill_tree_focus() -> void:
+	var fallback: Button = null
+	var lowest_y := -INF
+	for node: SkillNodeData in skill_tree.nodes:
+		var button := _node_buttons[node.id] as Button
+		if node.tree_position.y > lowest_y:
+			lowest_y = node.tree_position.y
+			fallback = button
+		var has_child := false
+		for candidate: SkillNodeData in skill_tree.nodes:
+			if candidate.prerequisites.has(node.id):
+				has_child = true
+				break
+		if not has_child:
+			button.focus_neighbor_bottom = button.get_path_to(tree_back_button)
+	if fallback != null:
+		tree_back_button.focus_neighbor_top = tree_back_button.get_path_to(fallback)
 
 
 func _refresh_skill_tree() -> void:

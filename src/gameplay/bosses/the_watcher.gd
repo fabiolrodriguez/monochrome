@@ -24,6 +24,8 @@ var _stag_dash_direction := Vector2.ZERO
 var _drowned_shield_remaining := 0.0
 var _tower_reflect_remaining := 0.0
 var _tower_reflect_cooldown := 0.0
+var _hit_flash_remaining := 0.0
+var _hit_was_reduced := false
 
 
 func _ready() -> void:
@@ -41,6 +43,12 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var hit_was_active := _hit_flash_remaining > 0.0
+	_hit_flash_remaining = maxf(_hit_flash_remaining - delta, 0.0)
+	var raw_hit_color := Color("63dcff") if _hit_was_reduced else Color("ffd84a")
+	sprite.modulate = Color.WHITE.lerp(raw_hit_color, SettingsManager.flash_intensity) if _hit_flash_remaining > 0.0 else Color.WHITE
+	if hit_was_active:
+		queue_redraw()
 	var shield_was_active := _drowned_shield_remaining > 0.0
 	_drowned_shield_remaining = maxf(_drowned_shield_remaining - delta, 0.0)
 	var reflect_was_active := _tower_reflect_remaining > 0.0
@@ -88,10 +96,13 @@ func _update_stag_movement(delta: float) -> void:
 
 
 func take_damage(amount: float) -> void:
+	_hit_was_reduced = false
 	if data.id == &"the_drowned_one" and _drowned_shield_remaining > 0.0:
-		amount *= 0.2
+		amount *= 0.5
+		_hit_was_reduced = true
 	if data.id == &"the_tower" and _tower_reflect_remaining > 0.0:
 		amount *= 0.55
+		_hit_was_reduced = true
 		if _tower_reflect_cooldown <= 0.0 and is_instance_valid(_player):
 			_spawn_projectile(global_position.direction_to(_player.global_position))
 			_tower_reflect_cooldown = 0.28
@@ -100,6 +111,8 @@ func take_damage(amount: float) -> void:
 	var telemetry := get_tree().get_first_node_in_group("run_telemetry") as RunTelemetry
 	if telemetry != null:
 		telemetry.record_damage_dealt(applied_damage)
+	_hit_flash_remaining = 0.11
+	queue_redraw()
 
 
 func _attack() -> void:
@@ -125,10 +138,10 @@ func _attack() -> void:
 		_rotation_offset += 0.17
 		return
 	if data.id == &"the_drowned_one":
-		_fire_aimed_spread(3 + _phase * 2, 0.18)
-		if _pattern_step % 3 == 0:
-			_drowned_shield_remaining = 2.4 + _phase * 0.5
-			_fire_radial(7 + _phase * 3, _rotation_offset)
+		_fire_aimed_spread(3 + _phase, 0.2)
+		if _pattern_step % 4 == 0:
+			_drowned_shield_remaining = 1.4 + _phase * 0.25
+			_fire_radial(6 + _phase * 2, _rotation_offset)
 			queue_redraw()
 		_rotation_offset += 0.11
 		return
@@ -220,12 +233,17 @@ func _on_health_changed(current: float, maximum: float) -> void:
 		attack_timer.wait_time = [1.6, 1.15, 0.8][_phase]
 		if data.id == &"the_mother":
 			attack_timer.wait_time = [1.7, 1.4, 1.1][_phase]
+		elif data.id == &"the_drowned_one":
+			attack_timer.wait_time = [1.75, 1.4, 1.1][_phase]
 		elif data.id == &"the_tower":
 			attack_timer.wait_time = [1.35, 1.05, 0.82][_phase]
 		elif data.id == &"the_heart":
 			attack_timer.wait_time = [1.55, 1.2, 0.92][_phase]
 		sprite.play([&"idle", &"phase_1", &"phase_2"][_phase])
 		phase_changed.emit(_phase)
+		var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
+		if shake != null:
+			shake.add_trauma(0.24)
 		queue_redraw()
 
 
@@ -269,7 +287,11 @@ func _draw() -> void:
 			draw_arc(Vector2.ZERO, 28.0, 0.0, TAU, 36, Color("ff7a4d"), 2.0)
 	if data != null and data.id == &"the_heart":
 		accent = Color("ff426d")
-		draw_polyline(PackedVector2Array([Vector2(0, 16), Vector2(-15, 1), Vector2(-12, -10), Vector2(0, -4), Vector2(12, -10), Vector2(15, 1), Vector2(0, 16)]), accent, 2.0)
-	draw_circle(Vector2.ZERO, 2.0, accent)
-	if _phase == 2:
+	if data == null or data.id != &"the_heart":
+		draw_circle(Vector2.ZERO, 2.0, accent)
+	if _hit_flash_remaining > 0.0:
+		var hit_color := Color("63dcff") if _hit_was_reduced else Color("ffd84a")
+		hit_color.a = SettingsManager.flash_intensity
+		draw_arc(Vector2.ZERO, 22.0, 0.0, TAU, 28, hit_color, 2.0)
+	if _phase == 2 and (data == null or data.id != &"the_heart"):
 		draw_arc(Vector2.ZERO, 18.0, 0.0, TAU, 24, accent, 1.0)

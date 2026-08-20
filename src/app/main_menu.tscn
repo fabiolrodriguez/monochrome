@@ -90,9 +90,9 @@ color = Color(0.01, 0.011, 0.014, 0.98)
 [node name="Panel" type="PanelContainer" parent="Settings"]
 layout_mode = 0
 offset_left = 62.0
-offset_top = 6.0
+offset_top = 1.0
 offset_right = 258.0
-offset_bottom = 174.0
+offset_bottom = 179.0
 
 [node name="Layout" type="VBoxContainer" parent="Settings/Panel"]
 layout_mode = 2
@@ -128,6 +128,22 @@ value = 80.0
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "UI_FULLSCREEN"
+
+[node name="FlashIntensity" type="OptionButton" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "UI_FLASH_OFF"
+popup/item_0/id = 0
+popup/item_1/text = "UI_FLASH_REDUCED"
+popup/item_1/id = 1
+popup/item_2/text = "UI_FLASH_FULL"
+popup/item_2/id = 2
+
+[node name="ScreenShake" type="CheckButton" parent="Settings/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "UI_SCREEN_SHAKE"
 
 [node name="LanguageLabel" type="Label" parent="Settings/Panel/Layout"]
 layout_mode = 2

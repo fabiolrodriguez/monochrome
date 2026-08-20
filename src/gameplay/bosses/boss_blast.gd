@@ -27,13 +27,16 @@ func _explode() -> void:
 	if is_instance_valid(player) and player.global_position.distance_to(global_position) <= radius:
 		player.take_damage(damage)
 	AudioManager.play_sfx(&"boss_spawn", -18.0)
+	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
+	if shake != null:
+		shake.add_trauma(0.42)
 	await get_tree().create_timer(0.15).timeout
 	queue_free()
 
 
 func _draw() -> void:
 	if _exploded:
-		draw_circle(Vector2.ZERO, radius, Color(0.61, 0.36, 1.0, 0.28))
+		draw_circle(Vector2.ZERO, radius, Color(0.61, 0.36, 1.0, 0.08 + SettingsManager.flash_intensity * 0.2))
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, Color("9b5cff"), 3.0)
 		return
 	var progress := 1.0 - maxf(_remaining, 0.0) / delay

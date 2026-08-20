@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3]
+[gd_scene load_steps=51 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/gameplay/player/player.tscn" id="2_player"]
@@ -46,6 +46,8 @@
 [ext_resource type="PackedScene" path="res://src/presentation/one_bit_dungeon_details.tscn" id="46_dungeon_details"]
 [ext_resource type="Script" path="res://src/presentation/ui/health_segments.gd" id="47_health_segments"]
 [ext_resource type="Script" path="res://src/gameplay/run/run_telemetry.gd" id="48_telemetry"]
+[ext_resource type="Script" path="res://src/gameplay/pickups/world_upgrade_chests.gd" id="49_chests"]
+[ext_resource type="Script" path="res://src/presentation/screen_shake.gd" id="50_shake"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_upgrade_card"]
 bg_color = Color(0, 0, 0, 1)
@@ -99,6 +101,9 @@ projectile_scene = ExtResource("29_player_projectile")
 
 [node name="Pickups" type="Node2D" parent="." groups=["pickup_container"]]
 
+[node name="WorldUpgradeChests" type="Node" parent="."]
+script = ExtResource("49_chests")
+
 [node name="Enemies" type="Node2D" parent="." groups=["enemy_container"]]
 y_sort_enabled = true
 
@@ -145,7 +150,8 @@ player_path = NodePath("../Player")
 level_up_ui_path = NodePath("../LevelUpUI")
 pool = [ExtResource("10_damage"), ExtResource("11_fire_rate"), ExtResource("12_move"), ExtResource("13_health"), ExtResource("14_projectile_speed"), ExtResource("30_multishot"), ExtResource("31_piercing"), ExtResource("32_ricochet"), ExtResource("33_armor"), ExtResource("34_regeneration"), ExtResource("35_barrier")]
 
-[node name="Camera2D" type="Camera2D" parent="Player"]
+[node name="Camera2D" type="Camera2D" parent="Player" groups=["screen_shake"]]
+script = ExtResource("50_shake")
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 limit_left = -648
@@ -210,9 +216,9 @@ horizontal_alignment = 2
 [node name="BossName" type="Label" parent="HUD"]
 theme = ExtResource("27_theme")
 offset_left = 95.0
-offset_top = 24.0
+offset_top = 148.0
 offset_right = 225.0
-offset_bottom = 34.0
+offset_bottom = 158.0
 theme_override_font_sizes/font_size = 6
 text = "BOSS_WATCHER_NAME"
 horizontal_alignment = 1
@@ -220,9 +226,9 @@ horizontal_alignment = 1
 [node name="BossHealth" type="ProgressBar" parent="HUD"]
 theme = ExtResource("27_theme")
 offset_left = 80.0
-offset_top = 35.0
+offset_top = 160.0
 offset_right = 240.0
-offset_bottom = 39.0
+offset_bottom = 165.0
 mouse_filter = 2
 value = 100.0
 show_percentage = false
@@ -426,9 +432,9 @@ text = "UI_MAIN_MENU"
 [node name="SettingsPanel" type="PanelContainer" parent="PauseMenu/Overlay"]
 layout_mode = 0
 offset_left = 62.0
-offset_top = 24.0
+offset_top = 8.0
 offset_right = 258.0
-offset_bottom = 156.0
+offset_bottom = 172.0
 
 [node name="Layout" type="VBoxContainer" parent="PauseMenu/Overlay/SettingsPanel"]
 layout_mode = 2
@@ -463,6 +469,22 @@ value = 80.0
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 text = "UI_FULLSCREEN"
+
+[node name="FlashIntensity" type="OptionButton" parent="PauseMenu/Overlay/SettingsPanel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "UI_FLASH_OFF"
+popup/item_0/id = 0
+popup/item_1/text = "UI_FLASH_REDUCED"
+popup/item_1/id = 1
+popup/item_2/text = "UI_FLASH_FULL"
+popup/item_2/id = 2
+
+[node name="ScreenShake" type="CheckButton" parent="PauseMenu/Overlay/SettingsPanel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+text = "UI_SCREEN_SHAKE"
 
 [node name="LanguageLabel" type="Label" parent="PauseMenu/Overlay/SettingsPanel/Layout"]
 layout_mode = 2
@@ -527,22 +549,23 @@ text = "UI_MAP"
 
 [node name="Hint" type="Label" parent="MapMenu/Overlay"]
 layout_mode = 0
-offset_left = 160.0
+offset_left = 72.0
 offset_top = 7.0
 offset_right = 304.0
 offset_bottom = 18.0
 theme_override_colors/font_color = Color(0.55, 0.56, 0.59, 1)
-theme_override_font_sizes/font_size = 7
-text = "UI_MAP_CLOSE_HINT"
+theme_override_font_sizes/font_size = 5
+text = "UI_MAP_NAV_HINT"
 horizontal_alignment = 2
 
 [node name="MapView" type="Control" parent="MapMenu/Overlay"]
+process_mode = 3
 layout_mode = 0
 offset_left = 13.0
 offset_top = 21.0
 offset_right = 307.0
 offset_bottom = 161.0
-mouse_filter = 2
+mouse_filter = 0
 script = ExtResource("23_map_view")
 tracker_path = NodePath("../../../ExplorationTracker")
 player_path = NodePath("../../../Player")

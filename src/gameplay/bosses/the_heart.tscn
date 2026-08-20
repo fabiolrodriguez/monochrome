@@ -1,19 +1,47 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/bosses/the_watcher.gd" id="1"]
 [ext_resource type="Script" path="res://src/gameplay/components/health_component.gd" id="2"]
 [ext_resource type="PackedScene" path="res://src/gameplay/projectiles/enemy_projectile.tscn" id="3"]
-[ext_resource type="Texture2D" path="res://assets/art/kenney_1bit/monochrome_tilemap.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/art/one_bit_dungeon/drowned_eye.png" id="4"]
 
-[sub_resource type="AtlasTexture" id="Atlas_heart"]
+[sub_resource type="AtlasTexture" id="Eye_0"]
 atlas = ExtResource("4")
-region = Rect2(144, 304, 16, 16)
+region = Rect2(0, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_1"]
+atlas = ExtResource("4")
+region = Rect2(37, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_2"]
+atlas = ExtResource("4")
+region = Rect2(74, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_3"]
+atlas = ExtResource("4")
+region = Rect2(111, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_4"]
+atlas = ExtResource("4")
+region = Rect2(148, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_5"]
+atlas = ExtResource("4")
+region = Rect2(185, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_6"]
+atlas = ExtResource("4")
+region = Rect2(222, 74, 37, 37)
+
+[sub_resource type="AtlasTexture" id="Eye_7"]
+atlas = ExtResource("4")
+region = Rect2(259, 74, 37, 37)
 
 [sub_resource type="SpriteFrames" id="Frames_heart"]
-animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_heart")}], "loop": true, "name": &"idle", "speed": 2.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_heart")}], "loop": true, "name": &"phase_1", "speed": 4.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Atlas_heart")}], "loop": true, "name": &"phase_2", "speed": 7.0}]
+animations = [{"frames": [{"duration": 1.0, "texture": SubResource("Eye_0")}, {"duration": 1.0, "texture": SubResource("Eye_1")}, {"duration": 1.0, "texture": SubResource("Eye_2")}, {"duration": 1.0, "texture": SubResource("Eye_3")}, {"duration": 1.0, "texture": SubResource("Eye_4")}, {"duration": 1.0, "texture": SubResource("Eye_5")}, {"duration": 1.0, "texture": SubResource("Eye_6")}, {"duration": 1.0, "texture": SubResource("Eye_7")}], "loop": true, "name": &"idle", "speed": 5.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Eye_0")}, {"duration": 1.0, "texture": SubResource("Eye_1")}, {"duration": 1.0, "texture": SubResource("Eye_2")}, {"duration": 1.0, "texture": SubResource("Eye_3")}, {"duration": 1.0, "texture": SubResource("Eye_4")}, {"duration": 1.0, "texture": SubResource("Eye_5")}, {"duration": 1.0, "texture": SubResource("Eye_6")}, {"duration": 1.0, "texture": SubResource("Eye_7")}], "loop": true, "name": &"phase_1", "speed": 7.0}, {"frames": [{"duration": 1.0, "texture": SubResource("Eye_0")}, {"duration": 1.0, "texture": SubResource("Eye_1")}, {"duration": 1.0, "texture": SubResource("Eye_2")}, {"duration": 1.0, "texture": SubResource("Eye_3")}, {"duration": 1.0, "texture": SubResource("Eye_4")}, {"duration": 1.0, "texture": SubResource("Eye_5")}, {"duration": 1.0, "texture": SubResource("Eye_6")}, {"duration": 1.0, "texture": SubResource("Eye_7")}], "loop": true, "name": &"phase_2", "speed": 9.0}]
 
 [sub_resource type="CircleShape2D" id="Circle_heart"]
-radius = 20.0
+radius = 27.0
 
 [node name="TheHeart" type="CharacterBody2D" groups=["enemies"]]
 collision_layer = 4
@@ -25,7 +53,7 @@ projectile_scene = ExtResource("3")
 sprite_frames = SubResource("Frames_heart")
 animation = &"idle"
 autoplay = "idle"
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.55, 1.55)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("Circle_heart")

@@ -5,6 +5,7 @@ signal objective_started(data: ObjectiveData)
 signal objective_progress_changed(data: ObjectiveData, current: float, required: float)
 signal objective_completed(data: ObjectiveData)
 signal objective_failed(data: ObjectiveData)
+signal objective_instruction_changed(data: ObjectiveData, text_key: StringName)
 
 @export var level_controller_path: NodePath
 
@@ -34,6 +35,7 @@ func _create_objective(data: ObjectiveData) -> void:
 	active_objective.progress_changed.connect(func(current: float, required: float) -> void: objective_progress_changed.emit(data, current, required))
 	active_objective.completed.connect(func() -> void: objective_completed.emit(data))
 	active_objective.failed.connect(func() -> void: objective_failed.emit(data))
+	active_objective.instruction_changed.connect(func(text_key: StringName) -> void: objective_instruction_changed.emit(data, text_key))
 
 
 func _on_level_time_changed(elapsed: float, duration: float) -> void:

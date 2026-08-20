@@ -1,6 +1,7 @@
 Source pack: 1bitDungeon
 Files supplied locally by the project owner on 2026-08-19.
-Original files used: Tiles/tilemap.png, Items/coin1.png, Items/potion1.png
+Original files used: Tiles/tilemap.png, Items/coin1.png, Items/potion1.png,
+Enemies/Eye_enemy/eye_enemy.png
 
 License terms supplied from the project's itch.io page by the project owner:
 
@@ -13,4 +14,4 @@ standalone asset pack. Before making this source repository public, confirm
 that keeping the source PNG files in the repository complies with the author's
 no-distribution condition or exclude them from the public repository.
 
-Enemy and player sheets were reviewed but are not currently incorporated.
+The remaining enemy and player sheets were reviewed but are not currently incorporated.

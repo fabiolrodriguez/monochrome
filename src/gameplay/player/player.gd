@@ -56,6 +56,9 @@ func take_damage(amount: float) -> void:
 	if telemetry != null:
 		telemetry.record_damage_received(applied_damage)
 	AudioManager.play_sfx(&"player_hit", -10.0, 0.1)
+	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
+	if shake != null:
+		shake.add_trauma(0.38)
 	damage_cooldown.start()
 
 
@@ -79,7 +82,8 @@ func _physics_process(delta: float) -> void:
 	_update_aim()
 	_update_player_animation(movement_input)
 	weapon.set_trigger_pressed(_auto_fire_enabled or Input.is_action_pressed("shoot"))
-	sprite.modulate = Color("55575c") if _is_dead else (Color("ff8585") if not damage_cooldown.is_stopped() else Color.WHITE)
+	var damage_color := Color.WHITE.lerp(Color("ff8585"), SettingsManager.flash_intensity)
+	sprite.modulate = Color("55575c") if _is_dead else (damage_color if not damage_cooldown.is_stopped() else Color.WHITE)
 	queue_redraw()
 
 

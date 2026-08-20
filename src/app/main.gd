@@ -20,6 +20,10 @@ extends Node2D
 @onready var coins_label: Label = $HUD/Coins
 @onready var main_menu_button: Button = $DeathUI/Panel/Layout/MainMenu
 @onready var reward_label: Label = $DeathUI/Panel/Layout/Reward
+
+var _objective_instruction_key: StringName = &""
+var _boss_previous_health := -1.0
+var _boss_health_tween: Tween
 @onready var upgrade_controller: UpgradeController = $UpgradeController
 @onready var telemetry: RunTelemetry = $RunTelemetry
 @onready var summary_label: Label = $DeathUI/Panel/Layout/Summary
@@ -47,6 +51,7 @@ func _ready() -> void:
 	objective_manager.objective_progress_changed.connect(_on_objective_progress_changed)
 	objective_manager.objective_completed.connect(_on_objective_completed)
 	objective_manager.objective_failed.connect(_on_objective_failed)
+	objective_manager.objective_instruction_changed.connect(_on_objective_instruction_changed)
 	boss_controller.boss_spawned.connect(_on_boss_spawned)
 	boss_controller.boss_health_changed.connect(_on_boss_health_changed)
 	boss_controller.boss_defeated.connect(_on_boss_defeated)
@@ -63,7 +68,8 @@ func _ready() -> void:
 	_on_experience_changed(player.experience.current_experience, player.experience.required_experience)
 	_on_level_changed(player.experience.level)
 	_on_level_time_changed(level_controller.elapsed_time, level_controller.data.duration)
-	objective_label.text = tr(level_controller.data.objective.title_key)
+	_objective_instruction_key = objective_manager.active_objective.instruction_key
+	objective_label.text = tr(_objective_instruction_key) if not _objective_instruction_key.is_empty() else tr(level_controller.data.objective.title_key)
 	_on_run_coins_changed(run_currency.current_run_coins)
 
 
@@ -94,6 +100,8 @@ func _refresh_localized_hud() -> void:
 	_on_run_coins_changed(run_currency.current_run_coins)
 	if objective_manager.active_objective.is_complete:
 		objective_label.text = tr("OBJECTIVE_DEFEAT_BOSS") % tr(level_controller.data.boss.name_key)
+	elif not _objective_instruction_key.is_empty():
+		objective_label.text = tr(_objective_instruction_key)
 	else:
 		objective_label.text = tr(level_controller.data.objective.title_key)
 	if boss_controller.active_boss != null:
@@ -124,7 +132,13 @@ func _on_objective_progress_changed(_data: ObjectiveData, current: float, requir
 	objective_progress.value = current
 
 
+func _on_objective_instruction_changed(_data: ObjectiveData, text_key: StringName) -> void:
+	_objective_instruction_key = text_key
+	objective_label.text = tr(text_key)
+
+
 func _on_objective_completed(_data: ObjectiveData) -> void:
+	_objective_instruction_key = &""
 	objective_label.text = tr("OBJECTIVE_DEFEAT_BOSS") % tr(level_controller.data.boss.name_key)
 	objective_progress.hide()
 
@@ -144,14 +158,28 @@ func _on_boss_spawned(boss: TheWatcher) -> void:
 	boss_name.text = tr(boss.data.name_key)
 	boss_name.show()
 	boss_health.show()
+	_boss_previous_health = boss.health.current_health
+	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
+	if shake != null:
+		shake.add_trauma(0.5)
 
 
 func _on_boss_health_changed(current: float, maximum: float) -> void:
 	boss_health.max_value = maximum
 	boss_health.value = current
+	if _boss_previous_health >= 0.0 and current < _boss_previous_health:
+		if _boss_health_tween != null and _boss_health_tween.is_valid():
+			_boss_health_tween.kill()
+		boss_health.modulate = Color.WHITE.lerp(Color("ffd84a"), SettingsManager.flash_intensity)
+		_boss_health_tween = create_tween()
+		_boss_health_tween.tween_property(boss_health, "modulate", Color.WHITE, 0.12)
+	_boss_previous_health = current
 
 
 func _on_boss_defeated() -> void:
+	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
+	if shake != null:
+		shake.add_trauma(0.7)
 	upgrade_controller.finalize_run()
 	var boss_data := level_controller.data.boss
 	player.experience.add_experience(boss_data.experience_reward)

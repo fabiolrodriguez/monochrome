@@ -6,6 +6,7 @@ extends CanvasLayer
 @export var run_result_panel_path: NodePath
 
 @onready var overlay: Control = $Overlay
+@onready var map_view: MapView = $Overlay/MapView
 
 var _pause_overlay: Control
 var _level_up_panel: Control
@@ -21,6 +22,10 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if overlay.visible and event.is_action_pressed("ui_cancel"):
+		close()
+		get_viewport().set_input_as_handled()
+		return
 	if not _is_map_input(event):
 		return
 	if overlay.visible:
@@ -39,7 +44,7 @@ func _is_map_input(event: InputEvent) -> bool:
 
 func open() -> void:
 	overlay.show()
-	$Overlay/MapView.queue_redraw()
+	map_view.reset_view()
 	get_tree().paused = true
 
 
