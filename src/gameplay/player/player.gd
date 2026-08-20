@@ -123,6 +123,10 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 			barrier_cooldown_seconds = 9.0 if barrier_cooldown_seconds <= 0.0 else maxf(barrier_cooldown_seconds - upgrade.amount_per_level, 3.0)
 			_barrier_ready = true
 			queue_redraw()
+		UpgradeData.Stat.CRITICAL_CHANCE:
+			weapon.critical_chance = minf(weapon.critical_chance + upgrade.amount_per_level, 0.75)
+		UpgradeData.Stat.CRITICAL_DAMAGE:
+			weapon.critical_damage_multiplier += upgrade.amount_per_level
 
 
 func _apply_permanent_progression() -> void:

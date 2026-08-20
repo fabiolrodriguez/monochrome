@@ -12,6 +12,8 @@ var projectile_speed_multiplier := 1.0
 var projectile_count := 1
 var piercing_hits := 0
 var ricochet_count := 0
+var critical_chance := 0.05
+var critical_damage_multiplier := 1.5
 
 const SPREAD_ANGLE := deg_to_rad(9.0)
 
@@ -27,6 +29,8 @@ func _ready() -> void:
 	projectile_count = 1
 	piercing_hits = 0
 	ricochet_count = 0
+	critical_chance = 0.05
+	critical_damage_multiplier = 1.5
 	fire_cooldown.wait_time = base_fire_interval
 
 
@@ -60,14 +64,16 @@ func _fire() -> void:
 	for index: int in projectile_count:
 		var spread_offset := (float(index) - float(projectile_count - 1) * 0.5) * SPREAD_ANGLE
 		var shot_transform := muzzle.global_transform.rotated_local(spread_offset)
+		var is_critical := randf() < critical_chance
+		var shot_damage_multiplier := damage_multiplier * (critical_damage_multiplier if is_critical else 1.0)
 		var projectile: PlayerProjectile
 		if pool != null:
-			projectile = pool.acquire(shot_transform, damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count)
+			projectile = pool.acquire(shot_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count, is_critical)
 		else:
 			projectile = projectile_scene.instantiate() as PlayerProjectile
 			if projectile != null:
 				projectile_container.add_child(projectile)
-				projectile.activate(shot_transform, damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count)
+				projectile.activate(shot_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count, is_critical)
 		if projectile != null:
 			fired.emit(projectile)
 	fire_cooldown.start()

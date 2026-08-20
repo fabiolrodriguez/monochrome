@@ -14,6 +14,7 @@ var _remaining_lifetime := 0.0
 var _piercing_hits := 0
 var _ricochets := 0
 var _active := false
+var _is_critical := false
 
 
 func _ready() -> void:
@@ -24,16 +25,18 @@ func _ready() -> void:
 	_deactivate(false)
 
 
-func activate(spawn_transform: Transform2D, damage_scale: float, speed_scale: float, piercing: int, ricochets: int) -> void:
+func activate(spawn_transform: Transform2D, damage_scale: float, speed_scale: float, piercing: int, ricochets: int, is_critical: bool = false) -> void:
 	global_transform = spawn_transform
 	_direction = Vector2.RIGHT.rotated(global_rotation)
 	damage = _base_damage * damage_scale
 	speed = _base_speed * speed_scale
 	_piercing_hits = piercing
 	_ricochets = ricochets
+	_is_critical = is_critical
 	_remaining_lifetime = lifetime
 	_active = true
 	show()
+	queue_redraw()
 	set_physics_process(true)
 	set_deferred("monitoring", true)
 	$CollisionShape2D.set_deferred("disabled", false)
@@ -93,5 +96,7 @@ func _deactivate(notify_pool := true) -> void:
 
 func _draw() -> void:
 	# Blue identifies the initial kinetic projectile family.
-	draw_circle(Vector2.ZERO, 2.0, Color("4aa3ff"))
-	draw_line(Vector2(-4.0, 0.0), Vector2.ZERO, Color("b9dcff"), 1.0)
+	var core_color := Color("ffd84a") if _is_critical else Color("4aa3ff")
+	var trail_color := Color("fff0a6") if _is_critical else Color("b9dcff")
+	draw_circle(Vector2.ZERO, 3.0 if _is_critical else 2.0, core_color)
+	draw_line(Vector2(-5.0 if _is_critical else -4.0, 0.0), Vector2.ZERO, trail_color, 1.0)

@@ -51,6 +51,8 @@ Expansão da vertical slice após os milestones principais:
 - upgrades bloqueados ficam fora do pool até a compra do respectivo nó;
 - Multishot com dispersão simétrica, Piercing com hits adicionais e Ricochet buscando o próximo alvo;
 - pool pré-aquecido e limitado para projéteis do jogador, preparado para maior densidade de tiros;
+- raridade de upgrades legível nos cards por nome e borda, mantendo o foco dourado do controle;
+- chance e dano crítico como linhas de build, com projéteis críticos maiores e dourados;
 - áudio ambiente distinto no menu e em Void Garden;
 - feedback sonoro para UI, disparo, impacto, coleta, dash, mortes e boss;
 - ícones monocromáticos 16×16 incorporados aos cards de upgrade;
@@ -100,7 +102,7 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 
 ## Próximo milestone
 
-Próximo: raridade de upgrades e golpes críticos, ampliando a expressão das builds sem aumentar a complexidade inicial.
+Próximo: revisar os resultados do playtest completo com controle e priorizar correções de navegação, balanceamento e legibilidade antes de expandir o conteúdo.
 
 ## Build de playtest no Windows
 
