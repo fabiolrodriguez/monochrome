@@ -46,6 +46,7 @@ Expansão da vertical slice após os milestones principais:
 - árvore permanente espacial com mais de trinta nós conectados, custos e pré-requisitos;
 - nós compactos por ícone, painel de inspeção por hover/foco e zoom de 65% a 150%;
 - árvore permanente inteiramente baseada em ícones pixelados, sem símbolos geométricos gerados nos nós atuais;
+- árvore diferencia claramente caminhos bloqueados, disponíveis, sem moedas e adquiridos, com destaque dourado por hover ou foco;
 - bônus permanentes aplicados a cada nova run e persistidos no save v2;
 - nó de sistema que desbloqueia um reroll funcional por run;
 - nós permanentes de unlock para Perfuração, Tiro múltiplo e Ricochete;
@@ -72,7 +73,11 @@ Expansão da vertical slice após os milestones principais:
 - intensidade de flashes configurável entre desligada, reduzida e completa;
 - tremor de tela opcional para dano recebido, explosões e transições de bosses;
 - estatísticas permanentes de runs, vitórias, derrotas, inimigos, dano, moedas, nível e tempo jogado;
+- Códice permanente de inimigos e chefes, com silhuetas desconhecidas e dados liberados no primeiro encontro;
+- oito feitos permanentes retroativos, com progresso no Códice e recompensas automáticas em moedas;
+- achievements desacoplados da plataforma e preparados para sincronização opcional com Steamworks/GodotSteam;
 - variações 16×16 de alvenaria aplicadas proceduralmente sobre paredes existentes;
+- placas direcionais do atlas deixaram de ser props aleatórios e apontam para objetivos ativos e bosses;
 - cards de level up com fundo preto sólido e foco dourado;
 - recompensa do Watcher com XP, moedas, cura e resumo no painel de conclusão;
 - seleção de fases no menu, exibindo rotas bloqueadas e desbloqueadas pelo progresso;
@@ -112,7 +117,7 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 
 ## Próximo milestone
 
-Próximo: observar o balanceamento das armas passivas e evoluções em runs completas antes de expandir o catálogo de receitas.
+Próximo: observar o balanceamento das armas passivas, evoluções e recompensas dos feitos em runs completas antes de expandir o catálogo.
 
 ## Build de playtest no Windows
 

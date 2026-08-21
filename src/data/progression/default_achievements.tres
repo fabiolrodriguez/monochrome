@@ -1,0 +1,100 @@
+[gd_resource type="Resource" script_class="AchievementCatalog" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://src/data/progression/achievement_catalog.gd" id="1_catalog"]
+[ext_resource type="Script" path="res://src/data/progression/achievement_data.gd" id="2_data"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/power.png" id="3_power"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/core.png" id="4_core"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/unlock.png" id="5_unlock"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/fortune.png" id="6_fortune"]
+
+[sub_resource type="Resource" id="Achievement_first_victory"]
+script = ExtResource("2_data")
+id = &"first_victory"
+steam_api_name = &"ACH_FIRST_VICTORY"
+title_key = &"ACH_FIRST_VICTORY_NAME"
+description_key = &"ACH_FIRST_VICTORY_DESC"
+icon = ExtResource("4_core")
+stat_key = &"victories"
+target_value = 1.0
+coin_reward = 10
+
+[sub_resource type="Resource" id="Achievement_hunter_1"]
+script = ExtResource("2_data")
+id = &"hunter_1"
+steam_api_name = &"ACH_VOID_HUNTER_1"
+title_key = &"ACH_HUNTER_1_NAME"
+description_key = &"ACH_HUNTER_1_DESC"
+icon = ExtResource("3_power")
+stat_key = &"enemies_defeated"
+target_value = 250.0
+coin_reward = 10
+
+[sub_resource type="Resource" id="Achievement_hunter_2"]
+script = ExtResource("2_data")
+id = &"hunter_2"
+steam_api_name = &"ACH_VOID_HUNTER_2"
+title_key = &"ACH_HUNTER_2_NAME"
+description_key = &"ACH_HUNTER_2_DESC"
+icon = ExtResource("3_power")
+stat_key = &"enemies_defeated"
+target_value = 1000.0
+coin_reward = 25
+
+[sub_resource type="Resource" id="Achievement_route_1"]
+script = ExtResource("2_data")
+id = &"route_1"
+steam_api_name = &"ACH_PATHFINDER"
+title_key = &"ACH_ROUTE_1_NAME"
+description_key = &"ACH_ROUTE_1_DESC"
+icon = ExtResource("5_unlock")
+condition_type = 1
+target_value = 3.0
+coin_reward = 20
+
+[sub_resource type="Resource" id="Achievement_route_2"]
+script = ExtResource("2_data")
+id = &"route_2"
+steam_api_name = &"ACH_MONOCHROME"
+title_key = &"ACH_ROUTE_2_NAME"
+description_key = &"ACH_ROUTE_2_DESC"
+icon = ExtResource("5_unlock")
+condition_type = 1
+target_value = 7.0
+coin_reward = 50
+
+[sub_resource type="Resource" id="Achievement_bosses"]
+script = ExtResource("2_data")
+id = &"boss_scholar"
+steam_api_name = &"ACH_SCHOLAR_OF_RUIN"
+title_key = &"ACH_BOSS_SCHOLAR_NAME"
+description_key = &"ACH_BOSS_SCHOLAR_DESC"
+icon = ExtResource("4_core")
+condition_type = 2
+target_value = 7.0
+coin_reward = 35
+
+[sub_resource type="Resource" id="Achievement_tree_1"]
+script = ExtResource("2_data")
+id = &"tree_1"
+steam_api_name = &"ACH_FIRST_BRANCHES"
+title_key = &"ACH_TREE_1_NAME"
+description_key = &"ACH_TREE_1_DESC"
+icon = ExtResource("6_fortune")
+condition_type = 3
+target_value = 8.0
+coin_reward = 15
+
+[sub_resource type="Resource" id="Achievement_tree_2"]
+script = ExtResource("2_data")
+id = &"tree_2"
+steam_api_name = &"ACH_DEEP_ROOTS"
+title_key = &"ACH_TREE_2_NAME"
+description_key = &"ACH_TREE_2_DESC"
+icon = ExtResource("6_fortune")
+condition_type = 3
+target_value = 20.0
+coin_reward = 40
+
+[resource]
+script = ExtResource("1_catalog")
+achievements = Array[ExtResource("2_data")]([SubResource("Achievement_first_victory"), SubResource("Achievement_hunter_1"), SubResource("Achievement_hunter_2"), SubResource("Achievement_route_1"), SubResource("Achievement_route_2"), SubResource("Achievement_bosses"), SubResource("Achievement_tree_1"), SubResource("Achievement_tree_2")])

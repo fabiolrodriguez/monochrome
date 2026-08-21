@@ -30,6 +30,7 @@ var _hit_was_reduced := false
 
 func _ready() -> void:
 	assert(data != null, "TheWatcher requires BossData.")
+	ProgressionManager.discover_boss(data.id)
 	_player = get_tree().get_first_node_in_group("player") as Player
 	health.maximum_health = data.maximum_health
 	health.current_health = data.maximum_health

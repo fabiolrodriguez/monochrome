@@ -41,6 +41,7 @@ func _spawn_boss() -> void:
 	if container == null:
 		container = get_tree().current_scene
 	container.add_child(active_boss)
+	active_boss.add_to_group("objective_target")
 	active_boss.global_position = _choose_clear_spawn_position()
 	boss_spawned.emit(active_boss)
 

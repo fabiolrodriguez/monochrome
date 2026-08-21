@@ -1,4 +1,4 @@
-[gd_scene load_steps=57 format=3]
+[gd_scene load_steps=58 format=3]
 
 [ext_resource type="Script" path="res://src/app/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://src/gameplay/player/player.tscn" id="2_player"]
@@ -54,6 +54,7 @@
 [ext_resource type="Resource" path="res://src/data/upgrades/radial_pulse.tres" id="54_radial"]
 [ext_resource type="Resource" path="res://src/data/upgrades/seeker.tres" id="55_seeker"]
 [ext_resource type="Resource" path="res://src/data/upgrades/orbital_ward.tres" id="56_orbital"]
+[ext_resource type="Script" path="res://src/presentation/objective_signposts.gd" id="57_signposts"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_upgrade_card"]
 bg_color = Color(0, 0, 0, 1)
@@ -95,6 +96,9 @@ script = ExtResource("3_floor")
 [node name="BlackLakeTerrain" parent="." instance=ExtResource("42_lake_terrain")]
 
 [node name="KenneyWorldDetails" parent="." instance=ExtResource("43_kenney_details")]
+
+[node name="ObjectiveSignposts" type="Node2D" parent="."]
+script = ExtResource("57_signposts")
 
 [node name="OneBitDungeonDetails" parent="." instance=ExtResource("46_dungeon_details")]
 

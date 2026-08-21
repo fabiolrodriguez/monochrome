@@ -20,6 +20,7 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 SettingsManager="*res://src/settings/settings_manager.gd"
 SaveManager="*res://src/persistence/save_manager.gd"
 ProgressionManager="*res://src/progression/progression_manager.gd"
+PlatformAchievements="*res://src/platform/platform_achievements.gd"
 AudioManager="*res://src/presentation/audio/audio_manager.gd"
 
 [display]

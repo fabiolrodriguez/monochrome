@@ -1,10 +1,30 @@
 extends Control
 
+const ENEMY_ATLAS := preload("res://assets/art/dungeon_bw/dungeon_16x16_bw.png")
+const ENEMY_CODEX := [
+	preload("res://src/data/enemies/chaser.tres"),
+	preload("res://src/data/enemies/shooter.tres"),
+	preload("res://src/data/enemies/tank.tres"),
+	preload("res://src/data/enemies/hive_drone.tres"),
+	preload("res://src/data/enemies/elite_hunter.tres"),
+]
+const BOSS_CODEX := [
+	preload("res://src/data/bosses/the_watcher.tres"),
+	preload("res://src/data/bosses/the_machine.tres"),
+	preload("res://src/data/bosses/the_stag.tres"),
+	preload("res://src/data/bosses/the_mother.tres"),
+	preload("res://src/data/bosses/the_drowned_one.tres"),
+	preload("res://src/data/bosses/the_tower.tres"),
+	preload("res://src/data/bosses/the_heart.tres"),
+]
+const ACHIEVEMENT_CATALOG: AchievementCatalog = preload("res://src/data/progression/default_achievements.tres")
+
 @export var skill_tree: SkillTreeCatalog
 
 @onready var coins_label: Label = $Panel/Layout/Coins
 @onready var play_button: Button = $Panel/Layout/Play
 @onready var progression_button: Button = $Panel/Layout/Progression
+@onready var codex_button: Button = $Panel/Layout/Codex
 @onready var statistics_button: Button = $Panel/Layout/Statistics
 @onready var controls_button: Button = $Panel/Layout/Controls
 @onready var settings_button: Button = $Panel/Layout/Settings
@@ -14,6 +34,16 @@ extends Control
 @onready var statistics_overlay: Control = $Statistics
 @onready var statistics_summary: Label = $Statistics/Panel/Layout/Summary
 @onready var statistics_back_button: Button = $Statistics/Panel/Layout/Back
+@onready var codex_overlay: Control = $Codex
+@onready var codex_enemies_button: Button = $Codex/Panel/Layout/Categories/Enemies
+@onready var codex_bosses_button: Button = $Codex/Panel/Layout/Categories/Bosses
+@onready var codex_achievements_button: Button = $Codex/Panel/Layout/Categories/Achievements
+@onready var codex_entries: VBoxContainer = $Codex/Panel/Layout/Body/Entries
+@onready var codex_portrait: TextureRect = $Codex/Panel/Layout/Body/Details/Portrait
+@onready var codex_name: Label = $Codex/Panel/Layout/Body/Details/Name
+@onready var codex_description: Label = $Codex/Panel/Layout/Body/Details/Description
+@onready var codex_stats: Label = $Codex/Panel/Layout/Body/Details/Stats
+@onready var codex_back_button: Button = $Codex/Panel/Layout/Back
 @onready var level_select_overlay: Control = $LevelSelect
 @onready var void_garden_button: Button = $LevelSelect/Panel/Layout/VoidGarden
 @onready var dead_factory_button: Button = $LevelSelect/Panel/Layout/DeadFactory
@@ -53,12 +83,17 @@ func _ready() -> void:
 	AudioManager.play_ambience(&"menu")
 	play_button.pressed.connect(_open_level_select)
 	progression_button.pressed.connect(_open_skill_tree)
+	codex_button.pressed.connect(_open_codex)
 	statistics_button.pressed.connect(_open_statistics)
 	controls_button.pressed.connect(_open_controls)
 	settings_button.pressed.connect(_open_settings)
 	quit_button.pressed.connect(_quit_game)
 	controls_back_button.pressed.connect(_close_controls)
 	statistics_back_button.pressed.connect(_close_statistics)
+	codex_enemies_button.pressed.connect(_show_codex_category.bind(0))
+	codex_bosses_button.pressed.connect(_show_codex_category.bind(1))
+	codex_achievements_button.pressed.connect(_show_codex_category.bind(2))
+	codex_back_button.pressed.connect(_close_codex)
 	settings_back_button.pressed.connect(_close_settings)
 	unlock_all_button.pressed.connect(_unlock_all_levels)
 	reset_save_button.pressed.connect(_request_reset_save)
@@ -82,6 +117,8 @@ func _ready() -> void:
 	tree_canvas.zoom_changed.connect(_update_zoom_label)
 	ProgressionManager.coins_changed.connect(_update_coins)
 	ProgressionManager.progression_changed.connect(_refresh_skill_tree)
+	ProgressionManager.evaluate_achievements(ACHIEVEMENT_CATALOG.achievements)
+	_sync_platform_achievements()
 	_update_coins(ProgressionManager.coins)
 	_build_skill_tree()
 	_configure_menu_focus()
@@ -89,6 +126,7 @@ func _ready() -> void:
 	tree_overlay.hide()
 	controls_overlay.hide()
 	statistics_overlay.hide()
+	codex_overlay.hide()
 	level_select_overlay.hide()
 	settings_overlay.hide()
 	version_label.text = "v%s" % str(ProjectSettings.get_setting("application/config/version", "dev"))
@@ -195,6 +233,122 @@ func _open_statistics() -> void:
 func _close_statistics() -> void:
 	statistics_overlay.hide()
 	statistics_button.grab_focus()
+
+
+func _open_codex() -> void:
+	ProgressionManager.evaluate_achievements(ACHIEVEMENT_CATALOG.achievements)
+	_sync_platform_achievements()
+	codex_overlay.show()
+	_show_codex_category(0)
+
+
+func _close_codex() -> void:
+	codex_overlay.hide()
+	codex_button.grab_focus()
+
+
+func _show_codex_category(category: int) -> void:
+	for child: Node in codex_entries.get_children():
+		child.free()
+	var catalog: Array = ENEMY_CODEX
+	if category == 1:
+		catalog = BOSS_CODEX
+	elif category == 2:
+		catalog = ACHIEVEMENT_CATALOG.achievements
+	var first_button: Button
+	for entry: Resource in catalog:
+		var entry_id := StringName(str(entry.get("id")))
+		var name_key := StringName(str(entry.get("name_key")))
+		if category == 2:
+			name_key = StringName(str(entry.get("title_key")))
+		var discovered := ProgressionManager.discovered_enemies.has(entry_id)
+		if category == 1:
+			discovered = ProgressionManager.discovered_bosses.has(entry_id)
+		elif category == 2:
+			discovered = ProgressionManager.unlocked_achievements.has(entry_id)
+		var button := Button.new()
+		button.custom_minimum_size = Vector2(104.0, 12.0)
+		button.add_theme_font_size_override("font_size", 5)
+		button.text = tr(name_key) if discovered or category == 2 else tr("UI_CODEX_UNKNOWN")
+		if category == 2 and discovered:
+			button.text = "[X] %s" % button.text
+		button.pressed.connect(_show_codex_entry.bind(entry, category))
+		button.focus_entered.connect(_show_codex_entry.bind(entry, category))
+		codex_entries.add_child(button)
+		if first_button == null:
+			first_button = button
+	codex_enemies_button.disabled = category == 0
+	codex_bosses_button.disabled = category == 1
+	codex_achievements_button.disabled = category == 2
+	if first_button != null:
+		_show_codex_entry(catalog.front(), category)
+		first_button.grab_focus()
+
+
+func _show_codex_entry(entry: Resource, category: int) -> void:
+	var entry_id := StringName(str(entry.get("id")))
+	var name_key := StringName(str(entry.get("name_key")))
+	var description_key := StringName(str(entry.get("description_key")))
+	if category == 2:
+		_show_achievement_entry(entry as AchievementData)
+		return
+	var is_boss := category == 1
+	var discovered := ProgressionManager.discovered_bosses.has(entry_id) if is_boss else ProgressionManager.discovered_enemies.has(entry_id)
+	codex_portrait.texture = _boss_texture(entry as BossData) if is_boss else _enemy_texture(entry as EnemyData)
+	codex_portrait.modulate = Color.WHITE if discovered else Color(0.09, 0.1, 0.12, 1.0)
+	codex_name.text = tr(name_key) if discovered else tr("UI_CODEX_UNKNOWN")
+	if not discovered:
+		codex_description.text = tr("UI_CODEX_UNKNOWN_DESC")
+		codex_stats.text = ""
+		return
+	codex_description.text = tr(description_key)
+	if is_boss:
+		var boss := entry as BossData
+		codex_stats.text = tr("UI_CODEX_BOSS_STATS") % [roundi(boss.maximum_health), roundi(boss.contact_damage), boss.coin_reward]
+	else:
+		var enemy := entry as EnemyData
+		codex_stats.text = tr("UI_CODEX_ENEMY_STATS") % [roundi(enemy.maximum_health), roundi(enemy.movement_speed), roundi(enemy.contact_damage)]
+
+
+func _show_achievement_entry(achievement: AchievementData) -> void:
+	var progress := minf(ProgressionManager.get_achievement_progress(achievement), achievement.target_value)
+	var completed := ProgressionManager.unlocked_achievements.has(achievement.id)
+	codex_portrait.texture = achievement.icon
+	codex_portrait.modulate = Color("ffd84a") if completed else Color(0.55, 0.56, 0.6, 1.0)
+	codex_name.text = tr(achievement.title_key)
+	codex_description.text = tr(achievement.description_key)
+	if completed:
+		codex_stats.text = "%s\n%s" % [tr("UI_ACHIEVEMENT_COMPLETED"), tr("UI_ACHIEVEMENT_REWARD") % achievement.coin_reward]
+	else:
+		codex_stats.text = "%s\n%s" % [tr("UI_ACHIEVEMENT_PROGRESS") % [roundi(progress), roundi(achievement.target_value)], tr("UI_ACHIEVEMENT_REWARD") % achievement.coin_reward]
+
+
+func _enemy_texture(enemy: EnemyData) -> Texture2D:
+	var coordinate := Vector2i(9, 18)
+	if enemy.is_elite:
+		coordinate = Vector2i(11, 18)
+	else:
+		match enemy.behavior:
+			EnemyData.Behavior.SHOOTER:
+				coordinate = Vector2i(14, 18)
+			EnemyData.Behavior.TANK:
+				coordinate = Vector2i(12, 18)
+	var texture := AtlasTexture.new()
+	texture.atlas = ENEMY_ATLAS
+	texture.region = Rect2(Vector2(coordinate * 16), Vector2(16, 16))
+	return texture
+
+
+func _boss_texture(boss: BossData) -> Texture2D:
+	if boss == null or boss.scene == null:
+		return null
+	var preview := boss.scene.instantiate()
+	var animated_sprite := preview.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	var texture: Texture2D
+	if animated_sprite != null and animated_sprite.sprite_frames != null:
+		texture = animated_sprite.sprite_frames.get_frame_texture(&"idle", 0)
+	preview.free()
+	return texture
 
 
 func _open_settings() -> void:
@@ -318,11 +472,12 @@ func _refresh_skill_tree() -> void:
 		for prerequisite: StringName in node.prerequisites:
 			if not ProgressionManager.unlocked_skill_nodes.has(prerequisite):
 				prerequisites_met = false
-		var status := tr("UI_SKILL_OWNED") if is_owned else "%s: %d" % [tr("UI_COST"), node.cost]
+		var affordable := ProgressionManager.coins >= node.cost
+		var status := tr("UI_SKILL_OWNED") if is_owned else "%s · %s: %d" % [tr("UI_SKILL_AVAILABLE") if affordable else tr("UI_SKILL_NEED_COINS"), tr("UI_COST"), node.cost]
 		if not is_owned and not prerequisites_met:
 			status = tr("UI_SKILL_LOCKED")
 		var hint := "%s\n%s\n%s" % [tr(node.title_key), tr(node.description_key), status]
-		button.set_state(is_owned, prerequisites_met and ProgressionManager.coins >= node.cost, hint)
+		button.set_state(is_owned, prerequisites_met, affordable, hint)
 	tree_canvas.queue_redraw()
 	if _inspected_node != null:
 		_show_node_hint(_inspected_node)
@@ -331,7 +486,13 @@ func _refresh_skill_tree() -> void:
 func _purchase_node(node: SkillNodeData) -> void:
 	if not ProgressionManager.purchase_node(node):
 		AudioManager.play_sfx(&"ui_error", -18.0, 0.15)
+	ProgressionManager.evaluate_achievements(ACHIEVEMENT_CATALOG.achievements)
+	_sync_platform_achievements()
 	_show_node_hint(node)
+
+
+func _sync_platform_achievements() -> void:
+	PlatformAchievements.sync_catalog(ACHIEVEMENT_CATALOG, ProgressionManager.unlocked_achievements)
 
 
 func _show_node_hint(node: SkillNodeData) -> void:
@@ -341,7 +502,8 @@ func _show_node_hint(node: SkillNodeData) -> void:
 	for prerequisite: StringName in node.prerequisites:
 		if not ProgressionManager.is_node_unlocked(prerequisite):
 			prerequisites_met = false
-	var status := tr("UI_SKILL_OWNED") if is_owned else "%s: %d" % [tr("UI_COST"), node.cost]
+	var affordable := ProgressionManager.coins >= node.cost
+	var status := tr("UI_SKILL_OWNED") if is_owned else "%s · %s: %d" % [tr("UI_SKILL_AVAILABLE") if affordable else tr("UI_SKILL_NEED_COINS"), tr("UI_COST"), node.cost]
 	if not is_owned and not prerequisites_met:
 		status = tr("UI_SKILL_LOCKED")
 	hint_label.text = "%s — %s  [%s]" % [tr(node.title_key), tr(node.description_key), status]
@@ -364,6 +526,9 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif statistics_overlay.visible and event.is_action_pressed("ui_cancel"):
 		_close_statistics()
+		get_viewport().set_input_as_handled()
+	elif codex_overlay.visible and event.is_action_pressed("ui_cancel"):
+		_close_codex()
 		get_viewport().set_input_as_handled()
 	elif level_select_overlay.visible and event.is_action_pressed("ui_cancel"):
 		_close_level_select()

@@ -108,6 +108,13 @@ func _draw() -> void:
 			var source := node_buttons.get(prerequisite_id) as Button
 			if source == null:
 				continue
-			var owned := ProgressionManager.is_node_unlocked(prerequisite_id) and ProgressionManager.is_node_unlocked(node.id)
-			var color := Color("777b82") if owned else Color("30343a")
-			draw_line(source.position + source.size * 0.5, target.position + target.size * 0.5, color, 1.5)
+			var source_owned := ProgressionManager.is_node_unlocked(prerequisite_id)
+			var target_owned := ProgressionManager.is_node_unlocked(node.id)
+			var path_unlocked := true
+			for required_id: StringName in node.prerequisites:
+				if not ProgressionManager.is_node_unlocked(required_id):
+					path_unlocked = false
+					break
+			var color := Color("f0f1f3") if source_owned and target_owned else (Color("858a94") if path_unlocked else Color("25282e"))
+			var width := 2.0 if source_owned and target_owned else 1.5
+			draw_line(source.position + source.size * 0.5, target.position + target.size * 0.5, color, width)

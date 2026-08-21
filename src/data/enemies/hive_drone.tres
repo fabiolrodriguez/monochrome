@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = &"hive_drone"
+name_key = &"ENEMY_HIVE_DRONE_NAME"
+description_key = &"ENEMY_HIVE_DRONE_DESC"
 behavior = 0
 maximum_health = 18.0
 movement_speed = 55.0

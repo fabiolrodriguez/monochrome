@@ -5,8 +5,9 @@
 [resource]
 script = ExtResource("1_data")
 id = &"chaser"
+name_key = &"ENEMY_CHASER_NAME"
+description_key = &"ENEMY_CHASER_DESC"
 behavior = 0
 maximum_health = 25.0
 movement_speed = 42.0
 contact_damage = 10.0
-

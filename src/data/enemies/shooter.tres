@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1_data")
 id = &"shooter"
+name_key = &"ENEMY_SHOOTER_NAME"
+description_key = &"ENEMY_SHOOTER_DESC"
 behavior = 1
 maximum_health = 35.0
 movement_speed = 25.0

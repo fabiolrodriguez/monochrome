@@ -13,6 +13,7 @@ var _active := false
 
 
 func _ready() -> void:
+	add_to_group("objective_target")
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	queue_redraw()
@@ -25,6 +26,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 	if _progress >= activation_duration:
 		_active = true
+		remove_from_group("objective_target")
 		modulate = Color("ffd84a")
 		activated.emit()
 

@@ -2,6 +2,8 @@ extends Node
 
 signal coins_changed(total: int)
 signal progression_changed
+signal codex_changed
+signal achievements_changed
 
 const ALL_LEVELS: Array[StringName] = [&"void_garden", &"dead_factory", &"white_forest", &"the_hive", &"black_lake", &"broken_city", &"the_core"]
 
@@ -11,6 +13,9 @@ var completed_levels: Array[StringName] = []
 var unlocked_skill_nodes: Array[StringName] = []
 var permanent_stats: Dictionary[StringName, float] = {}
 var career_stats: Dictionary[StringName, float] = {}
+var discovered_enemies: Array[StringName] = []
+var discovered_bosses: Array[StringName] = []
+var unlocked_achievements: Array[StringName] = []
 var selected_level_id: StringName = &"void_garden"
 var _save_timer: Timer
 
@@ -84,6 +89,58 @@ func get_career_stat(stat_key: StringName) -> float:
 	return career_stats.get(stat_key, 0.0)
 
 
+func discover_enemy(enemy_id: StringName) -> void:
+	if enemy_id == &"" or discovered_enemies.has(enemy_id):
+		return
+	discovered_enemies.append(enemy_id)
+	flush_save()
+	codex_changed.emit()
+
+
+func discover_boss(boss_id: StringName) -> void:
+	if boss_id == &"" or discovered_bosses.has(boss_id):
+		return
+	discovered_bosses.append(boss_id)
+	flush_save()
+	codex_changed.emit()
+
+
+func get_achievement_progress(achievement: AchievementData) -> float:
+	match achievement.condition_type:
+		AchievementData.ConditionType.COMPLETED_LEVELS:
+			return float(completed_levels.size())
+		AchievementData.ConditionType.DISCOVERED_BOSSES:
+			return float(discovered_bosses.size())
+		AchievementData.ConditionType.SKILL_NODES:
+			return float(maxi(unlocked_skill_nodes.size() - 1, 0))
+		_:
+			return get_career_stat(achievement.stat_key)
+
+
+func evaluate_achievements(achievements: Array) -> int:
+	var unlocked_count := 0
+	var reward_total := 0
+	for resource: Resource in achievements:
+		var achievement := resource as AchievementData
+		if achievement == null:
+			continue
+		if unlocked_achievements.has(achievement.id):
+			continue
+		if get_achievement_progress(achievement) < achievement.target_value:
+			continue
+		unlocked_achievements.append(achievement.id)
+		reward_total += achievement.coin_reward
+		unlocked_count += 1
+	if unlocked_count == 0:
+		return 0
+	coins += reward_total
+	flush_save()
+	coins_changed.emit(coins)
+	achievements_changed.emit()
+	progression_changed.emit()
+	return unlocked_count
+
+
 func is_node_unlocked(node_id: StringName) -> bool:
 	return unlocked_skill_nodes.has(node_id)
 
@@ -145,6 +202,15 @@ func _load_progression() -> void:
 	var saved_career_stats: Dictionary = data.get("career_stats", {})
 	for stat_key: Variant in saved_career_stats:
 		career_stats[StringName(str(stat_key))] = maxf(float(saved_career_stats[stat_key]), 0.0)
+	discovered_enemies.clear()
+	for enemy_id: Variant in data.get("discovered_enemies", []):
+		discovered_enemies.append(StringName(str(enemy_id)))
+	discovered_bosses.clear()
+	for boss_id: Variant in data.get("discovered_bosses", []):
+		discovered_bosses.append(StringName(str(boss_id)))
+	unlocked_achievements.clear()
+	for achievement_id: Variant in data.get("unlocked_achievements", []):
+		unlocked_achievements.append(StringName(str(achievement_id)))
 	coins_changed.emit(coins)
 
 
@@ -156,6 +222,9 @@ func _save_progression() -> void:
 		"unlocked_skill_nodes": _to_string_array(unlocked_skill_nodes),
 		"permanent_stats": _serialize_stats(),
 		"career_stats": _serialize_career_stats(),
+		"discovered_enemies": _to_string_array(discovered_enemies),
+		"discovered_bosses": _to_string_array(discovered_bosses),
+		"unlocked_achievements": _to_string_array(unlocked_achievements),
 	})
 
 

@@ -38,6 +38,8 @@ func _spawn_next_station() -> void:
 	add_child(_station)
 	_station.position = _transport_data.destination_positions[index] if index < _transport_data.destination_positions.size() else Vector2.RIGHT.rotated(TAU * index / required_progress) * 420.0
 	_station.body_entered.connect(_on_station_body_entered)
+	if not _core.is_carried:
+		_station.remove_from_group("objective_target")
 
 
 func _on_station_body_entered(body: Node) -> void:
@@ -62,3 +64,8 @@ func _on_station_body_entered(body: Node) -> void:
 
 func _on_carrying_changed(carried: bool) -> void:
 	set_instruction(&"OBJECTIVE_ENERGY_CARRY" if carried else &"OBJECTIVE_ENERGY_FIND")
+	if is_instance_valid(_station):
+		if carried:
+			_station.add_to_group("objective_target")
+		else:
+			_station.remove_from_group("objective_target")

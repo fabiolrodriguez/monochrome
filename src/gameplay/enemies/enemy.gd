@@ -22,6 +22,7 @@ var _pending_shot_direction := Vector2.RIGHT
 
 func _ready() -> void:
 	assert(data != null, "Enemy requires an EnemyData resource.")
+	ProgressionManager.discover_enemy(data.id)
 	_target = get_tree().get_first_node_in_group("player") as Player
 	health.depleted.connect(_on_depleted)
 	health.maximum_health = data.maximum_health

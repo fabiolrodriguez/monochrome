@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1_data")
 id = &"tank"
+name_key = &"ENEMY_TANK_NAME"
+description_key = &"ENEMY_TANK_DESC"
 behavior = 2
 maximum_health = 100.0
 movement_speed = 18.0

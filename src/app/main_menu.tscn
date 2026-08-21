@@ -18,18 +18,18 @@ skill_tree = ExtResource("2_tree")
 
 [node name="Title" type="Label" parent="."]
 offset_left = 52.0
-offset_top = 22.0
+offset_top = 12.0
 offset_right = 268.0
-offset_bottom = 50.0
+offset_bottom = 40.0
 theme_override_font_sizes/font_size = 13
 text = "PROJECT MONOCHROME"
 horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="."]
 offset_left = 76.0
-offset_top = 51.0
+offset_top = 40.0
 offset_right = 244.0
-offset_bottom = 65.0
+offset_bottom = 52.0
 theme_override_colors/font_color = Color(0.55, 0.56, 0.59, 1)
 theme_override_font_sizes/font_size = 8
 text = "UI_MENU_SUBTITLE"
@@ -37,13 +37,13 @@ horizontal_alignment = 1
 
 [node name="Panel" type="PanelContainer" parent="."]
 offset_left = 90.0
-offset_top = 56.0
+offset_top = 52.0
 offset_right = 230.0
 offset_bottom = 178.0
 
 [node name="Layout" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 1
 
 [node name="Coins" type="Label" parent="Panel/Layout"]
 layout_mode = 2
@@ -52,26 +52,37 @@ horizontal_alignment = 1
 
 [node name="Play" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_PLAY"
 
 [node name="Progression" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_PROGRESSION"
+
+[node name="Codex" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 6
+text = "UI_CODEX"
 
 [node name="Statistics" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_STATISTICS"
 
 [node name="Controls" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_CONTROLS"
 
 [node name="Settings" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_SETTINGS"
 
 [node name="Quit" type="Button" parent="Panel/Layout"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 6
 text = "UI_QUIT"
 
 [node name="Settings" type="Control" parent="."]
@@ -543,6 +554,116 @@ text = "THE CORE\nLOCKED"
 
 [node name="Back" type="Button" parent="LevelSelect/Panel/Layout"]
 custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "UI_BACK"
+
+[node name="Codex" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Codex"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="PanelContainer" parent="Codex"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 5.0
+offset_right = 312.0
+offset_bottom = 175.0
+
+[node name="Layout" type="VBoxContainer" parent="Codex/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Codex/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "UI_CODEX"
+horizontal_alignment = 1
+
+[node name="Categories" type="HBoxContainer" parent="Codex/Panel/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Enemies" type="Button" parent="Codex/Panel/Layout/Categories"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 6
+text = "UI_CODEX_ENEMIES"
+
+[node name="Bosses" type="Button" parent="Codex/Panel/Layout/Categories"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 6
+text = "UI_CODEX_BOSSES"
+
+[node name="Achievements" type="Button" parent="Codex/Panel/Layout/Categories"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 6
+text = "UI_ACHIEVEMENTS"
+
+[node name="Body" type="HBoxContainer" parent="Codex/Panel/Layout"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+
+[node name="Entries" type="VBoxContainer" parent="Codex/Panel/Layout/Body"]
+custom_minimum_size = Vector2(104, 0)
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Details" type="VBoxContainer" parent="Codex/Panel/Layout/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="Portrait" type="TextureRect" parent="Codex/Panel/Layout/Body/Details"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+texture_filter = 1
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Name" type="Label" parent="Codex/Panel/Layout/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.82, 0.3, 1)
+theme_override_font_sizes/font_size = 8
+text = "???"
+horizontal_alignment = 1
+
+[node name="Description" type="Label" parent="Codex/Panel/Layout/Body/Details"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 5
+text = "UI_CODEX_UNKNOWN_DESC"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Stats" type="Label" parent="Codex/Panel/Layout/Body/Details"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.72, 0.76, 1)
+theme_override_font_sizes/font_size = 5
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="Codex/Panel/Layout"]
+custom_minimum_size = Vector2(0, 14)
 layout_mode = 2
 theme_override_font_sizes/font_size = 7
 text = "UI_BACK"

@@ -4,6 +4,8 @@ extends Resource
 enum Behavior { CHASER, SHOOTER, TANK }
 
 @export var id: StringName
+@export var name_key: StringName
+@export var description_key: StringName
 @export var behavior := Behavior.CHASER
 @export_range(1.0, 10000.0, 1.0) var maximum_health: float = 25.0
 @export_range(1.0, 300.0, 1.0) var movement_speed: float = 40.0

@@ -5,6 +5,8 @@
 [resource]
 script = ExtResource("1")
 id = &"elite_hunter"
+name_key = &"ENEMY_ELITE_HUNTER_NAME"
+description_key = &"ENEMY_ELITE_HUNTER_DESC"
 behavior = 0
 maximum_health = 160.0
 movement_speed = 48.0

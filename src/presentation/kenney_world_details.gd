@@ -10,7 +10,6 @@ const DEAD_FACTORY_PROPS := [
 	[Vector2i(-24, -17), Vector2i(4, 1)], [Vector2i(-21, -17), Vector2i(5, 1)],
 	[Vector2i(26, -11), Vector2i(6, 1)], [Vector2i(29, -11), Vector2i(7, 1)],
 	[Vector2i(2, 28), Vector2i(0, 4)], [Vector2i(3, 28), Vector2i(1, 4)],
-	[Vector2i(-31, 8), Vector2i(12, 3)], [Vector2i(31, 5), Vector2i(13, 3)],
 ]
 const WHITE_FOREST_PROPS := [
 	[Vector2i(-30, -18), Vector2i(14, 0)], [Vector2i(-18, 27), Vector2i(15, 0)],
@@ -28,13 +27,11 @@ const BLACK_LAKE_PROPS := [
 const BROKEN_CITY_PROPS := [
 	[Vector2i(-28, -20), Vector2i(4, 1)], [Vector2i(-25, -20), Vector2i(5, 1)],
 	[Vector2i(-20, 25), Vector2i(0, 4)], [Vector2i(-19, 25), Vector2i(1, 4)],
-	[Vector2i(22, 27), Vector2i(12, 3)], [Vector2i(27, 21), Vector2i(13, 3)],
 	[Vector2i(-5, -28), Vector2i(17, 10)], [Vector2i(8, 29), Vector2i(18, 10)],
 ]
 const CORE_PROPS := [
 	[Vector2i(-27, -22), Vector2i(4, 1)], [Vector2i(-24, -22), Vector2i(5, 1)],
 	[Vector2i(-25, 23), Vector2i(0, 4)], [Vector2i(-24, 23), Vector2i(1, 4)],
-	[Vector2i(23, 25), Vector2i(12, 3)], [Vector2i(27, 21), Vector2i(13, 3)],
 	[Vector2i(-8, -29), Vector2i(17, 10)], [Vector2i(10, 29), Vector2i(18, 10)],
 ]
 
