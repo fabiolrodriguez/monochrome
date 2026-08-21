@@ -1,0 +1,24 @@
+Source pack: Game Sound FX by Marvin Z
+Official page: https://marvinz.itch.io/game-sound-fx
+Downloaded archive: Sound FX_(ogg).zip
+
+Original files used:
+- SFX_Hit03.ogg
+- SFX_Slash08.ogg
+- SFX_1up05.ogg
+- SFX_Coin09.ogg
+- SFX_Boom08.ogg
+- SFX_Lose08.ogg
+- SFX_Error08.ogg
+- SFX_Coin08.ogg
+- SFX_Hurt04.ogg
+- SFX_Blip04.ogg
+
+License information verified on the official itch.io page on 2026-08-21:
+- The package is described as royalty-free.
+- The author explicitly confirms that the sounds may be used in commercial
+  and non-commercial projects.
+- The author confirms they may be used with game engines other than Construct 2.
+
+The page does not state an attribution requirement. Preserve this source note
+and do not redistribute the original sound pack as a standalone download.

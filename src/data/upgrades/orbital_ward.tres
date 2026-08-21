@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/upgrades/upgrade_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/vitality.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1")
+id = &"orbital_ward"
+name_key = &"UPGRADE_ORBITAL_WARD_NAME"
+description_key = &"UPGRADE_ORBITAL_WARD_DESC"
+icon = ExtResource("2_icon")
+rarity = 2
+category = 1
+max_level = 4
+weight = 3.5
+tags = Array[StringName]([&"DEFENSE", &"PASSIVE_WEAPON", &"SHIELD"])
+stat = 16
+amount_per_level = 1.0
+unlock_requirement = &"unlock_orbital_ward"

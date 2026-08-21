@@ -43,25 +43,35 @@ Expansão da vertical slice após os milestones principais:
 - moedas coletadas e recompensa do boss salvas automaticamente;
 - save JSON versionado para moeda, fases desbloqueadas e concluídas;
 - retorno ao menu principal pelo pause e encerramento de run;
-- árvore permanente espacial com quinze nós conectados, custos e pré-requisitos;
+- árvore permanente espacial com mais de trinta nós conectados, custos e pré-requisitos;
 - nós compactos por ícone, painel de inspeção por hover/foco e zoom de 65% a 150%;
+- árvore permanente inteiramente baseada em ícones pixelados, sem símbolos geométricos gerados nos nós atuais;
 - bônus permanentes aplicados a cada nova run e persistidos no save v2;
 - nó de sistema que desbloqueia um reroll funcional por run;
 - nós permanentes de unlock para Perfuração, Tiro múltiplo e Ricochete;
 - upgrades bloqueados ficam fora do pool até a compra do respectivo nó;
 - Multishot com dispersão simétrica, Piercing com hits adicionais e Ricochet buscando o próximo alvo;
+- primeiros desbloqueios de Multishot e Ricochet antecipados e barateados, com três níveis durante a run;
+- arsenal passivo bullet-heaven com pulso radial, disparos buscadores e guardas orbitais;
+- guardas orbitais causam dano de contato e interceptam projéteis inimigos, combinando ataque e proteção;
+- armas passivas herdam dano, crítico, perfuração, ricochete e velocidade da build principal;
+- três evoluções obtidas em baús: Tempestade do Vazio, Fogo-fátuo Encadeado e Égide Orbital;
+- tela de build no menu de pausa mostra níveis, receitas, progresso e evoluções prontas;
 - pool pré-aquecido e limitado para projéteis do jogador, preparado para maior densidade de tiros;
 - raridade de upgrades legível nos cards por nome e borda, mantendo o foco dourado do controle;
 - chance e dano crítico como linhas de build, com projéteis críticos maiores e dourados;
+- sorte como atributo de run, favorecendo ofertas raras e aumentando drops de moedas e cura;
 - áudio ambiente distinto no menu e em Void Garden;
 - feedback sonoro para UI, disparo, impacto, coleta, dash, mortes e boss;
 - ícones monocromáticos 16×16 incorporados aos cards de upgrade;
 - dash com cooldown e invulnerabilidade curta;
+- dash atravessa corpos inimigos durante a investida, preservando colisão com o cenário;
 - três upgrades defensivos funcionais: Armadura, Regeneração e Barreira;
 - Elite Hunter periódico, com silhueta dourada, vida elevada e recompensa garantida;
 - flash de impacto em inimigos e player;
 - intensidade de flashes configurável entre desligada, reduzida e completa;
 - tremor de tela opcional para dano recebido, explosões e transições de bosses;
+- estatísticas permanentes de runs, vitórias, derrotas, inimigos, dano, moedas, nível e tempo jogado;
 - variações 16×16 de alvenaria aplicadas proceduralmente sobre paredes existentes;
 - cards de level up com fundo preto sólido e foco dourado;
 - recompensa do Watcher com XP, moedas, cura e resumo no painel de conclusão;
@@ -102,7 +112,7 @@ Não há autoloads no primeiro milestone: estado global ainda não é necessári
 
 ## Próximo milestone
 
-Próximo: revisar os resultados do playtest completo com controle e priorizar correções de navegação, balanceamento e legibilidade antes de expandir o conteúdo.
+Próximo: observar o balanceamento das armas passivas e evoluções em runs completas antes de expandir o catálogo de receitas.
 
 ## Build de playtest no Windows
 
@@ -124,3 +134,5 @@ No menu de opções da build de playtest é possível liberar todas as fases ou 
 - Monochrome Caves: folha modular 16×16 fornecida localmente. O download não incluía autoria/licença; origem e restrição provisória a protótipo documentadas em `assets/licenses/monochrome_caves_source.txt`. O mapa-exemplo estático não foi incorporado.
 - Kenney 1-Bit Platformer Pack 1.1, CC0. O atlas transparente é usado apenas para props compatíveis com visão top-down; licença incluída em `assets/licenses/kenney_1bit_platformer_license.txt`.
 - 1bitDungeon: tiles top-down e ícones de moeda/poção. Permitido em projetos comerciais e não comerciais, com edição e crédito opcional; redistribuição dos assets é proibida. Termos e cuidado para repositório público documentados em `assets/licenses/one_bit_dungeon_source.txt`.
+- Game Sound FX, por Marvin Z: dez efeitos retro royalty-free incorporados para impactos, crítico, level up, baú, moedas, explosões, derrota e UI; uso comercial e não comercial confirmado pelo autor. Fonte e termos em `assets/licenses/retro_sound_fx_source.txt`.
+- SunGraphica Flat Game UI e Minimal Game Icons: uso comercial e modificação permitidos, sem revenda ou redistribuição dos arquivos. Crédito preservado como SunGraphica. Silhuetas de chave e moeda foram adaptadas para 16×16 na árvore; detalhes em `assets/licenses/sungraphica_free_icons_source.txt`.

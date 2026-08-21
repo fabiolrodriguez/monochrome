@@ -9,6 +9,16 @@ const SFX: Dictionary[StringName, AudioStream] = {
 	&"pickup": preload("res://assets/audio/sfx/pickup.ogg"),
 	&"boss_spawn": preload("res://assets/audio/sfx/boss_spawn.ogg"),
 	&"dash": preload("res://assets/audio/sfx/dash.ogg"),
+	&"impact_hit": preload("res://assets/audio/sfx/retro_pack/impact_hit.ogg"),
+	&"critical_hit": preload("res://assets/audio/sfx/retro_pack/critical_hit.ogg"),
+	&"enemy_defeat_retro": preload("res://assets/audio/sfx/retro_pack/enemy_defeat.ogg"),
+	&"upgrade_reveal": preload("res://assets/audio/sfx/retro_pack/upgrade_reveal.ogg"),
+	&"level_up": preload("res://assets/audio/sfx/retro_pack/level_up.ogg"),
+	&"chest_open": preload("res://assets/audio/sfx/retro_pack/chest_open.ogg"),
+	&"boss_explosion": preload("res://assets/audio/sfx/retro_pack/boss_explosion.ogg"),
+	&"run_failed": preload("res://assets/audio/sfx/retro_pack/run_failed.ogg"),
+	&"ui_error": preload("res://assets/audio/sfx/retro_pack/ui_error.ogg"),
+	&"coin_collect": preload("res://assets/audio/sfx/retro_pack/coin_collect.ogg"),
 }
 const AMBIENCE: Dictionary[StringName, AudioStream] = {
 	&"menu": preload("res://assets/audio/ambient/menu_drone.ogg"),

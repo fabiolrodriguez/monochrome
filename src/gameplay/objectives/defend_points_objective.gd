@@ -23,6 +23,7 @@ func _spawn_next_point() -> void:
 		return
 	_active_point = POINT_SCENE.instantiate() as DefensePoint
 	_active_point.required_duration = _defense_data.duration_per_point
+	_active_point.defense_radius = _defense_data.defense_radius
 	add_child(_active_point)
 	_active_point.position = _defense_data.point_positions[_completed_points] if _completed_points < _defense_data.point_positions.size() else Vector2.RIGHT.rotated(TAU * _completed_points / _defense_data.point_count) * 400.0
 	_active_point.defense_started.connect(_on_defense_started)

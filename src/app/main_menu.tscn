@@ -37,9 +37,9 @@ horizontal_alignment = 1
 
 [node name="Panel" type="PanelContainer" parent="."]
 offset_left = 90.0
-offset_top = 64.0
+offset_top = 56.0
 offset_right = 230.0
-offset_bottom = 176.0
+offset_bottom = 178.0
 
 [node name="Layout" type="VBoxContainer" parent="Panel"]
 layout_mode = 2
@@ -57,6 +57,10 @@ text = "UI_PLAY"
 [node name="Progression" type="Button" parent="Panel/Layout"]
 layout_mode = 2
 text = "UI_PROGRESSION"
+
+[node name="Statistics" type="Button" parent="Panel/Layout"]
+layout_mode = 2
+text = "UI_STATISTICS"
 
 [node name="Controls" type="Button" parent="Panel/Layout"]
 layout_mode = 2
@@ -396,6 +400,54 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Back" type="Button" parent="Controls/Panel/Layout"]
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+theme_override_font_sizes/font_size = 7
+text = "UI_BACK"
+
+[node name="Statistics" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="Statistics"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.011, 0.014, 0.98)
+
+[node name="Panel" type="PanelContainer" parent="Statistics"]
+layout_mode = 0
+offset_left = 58.0
+offset_top = 18.0
+offset_right = 262.0
+offset_bottom = 162.0
+
+[node name="Layout" type="VBoxContainer" parent="Statistics/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Title" type="Label" parent="Statistics/Panel/Layout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "UI_STATISTICS"
+horizontal_alignment = 1
+
+[node name="Summary" type="Label" parent="Statistics/Panel/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 6
+text = "UI_STATISTICS_SUMMARY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Back" type="Button" parent="Statistics/Panel/Layout"]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 theme_override_font_sizes/font_size = 7

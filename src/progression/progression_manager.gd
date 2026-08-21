@@ -10,6 +10,7 @@ var unlocked_levels: Array[StringName] = []
 var completed_levels: Array[StringName] = []
 var unlocked_skill_nodes: Array[StringName] = []
 var permanent_stats: Dictionary[StringName, float] = {}
+var career_stats: Dictionary[StringName, float] = {}
 var selected_level_id: StringName = &"void_garden"
 var _save_timer: Timer
 
@@ -69,6 +70,20 @@ func get_permanent_stat(stat_key: StringName) -> float:
 	return permanent_stats.get(stat_key, 0.0)
 
 
+func record_run(stats: Dictionary) -> void:
+	for key: Variant in stats:
+		var stat_key := StringName(str(key))
+		if stat_key == &"highest_level":
+			continue
+		career_stats[stat_key] = career_stats.get(stat_key, 0.0) + float(stats[key])
+	career_stats[&"highest_level"] = maxf(career_stats.get(&"highest_level", 1.0), float(stats.get("highest_level", 1)))
+	flush_save()
+
+
+func get_career_stat(stat_key: StringName) -> float:
+	return career_stats.get(stat_key, 0.0)
+
+
 func is_node_unlocked(node_id: StringName) -> bool:
 	return unlocked_skill_nodes.has(node_id)
 
@@ -126,6 +141,10 @@ func _load_progression() -> void:
 		if migrated_key == &"fragment_gain":
 			migrated_key = &"coin_gain"
 		permanent_stats[migrated_key] = float(saved_stats[stat_key])
+	career_stats.clear()
+	var saved_career_stats: Dictionary = data.get("career_stats", {})
+	for stat_key: Variant in saved_career_stats:
+		career_stats[StringName(str(stat_key))] = maxf(float(saved_career_stats[stat_key]), 0.0)
 	coins_changed.emit(coins)
 
 
@@ -136,6 +155,7 @@ func _save_progression() -> void:
 		"completed_levels": _to_string_array(completed_levels),
 		"unlocked_skill_nodes": _to_string_array(unlocked_skill_nodes),
 		"permanent_stats": _serialize_stats(),
+		"career_stats": _serialize_career_stats(),
 	})
 
 
@@ -150,4 +170,11 @@ func _serialize_stats() -> Dictionary:
 	var serialized := {}
 	for stat_key: StringName in permanent_stats:
 		serialized[str(stat_key)] = permanent_stats[stat_key]
+	return serialized
+
+
+func _serialize_career_stats() -> Dictionary:
+	var serialized := {}
+	for stat_key: StringName in career_stats:
+		serialized[str(stat_key)] = career_stats[stat_key]
 	return serialized

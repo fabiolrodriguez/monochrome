@@ -12,4 +12,5 @@ objective_scene = ExtResource("2")
 can_fail = true
 point_count = 3
 duration_per_point = 45.0
+defense_radius = 56.0
 point_positions = Array[Vector2]([Vector2(-390, -300), Vector2(420, -180), Vector2(-40, 420)])

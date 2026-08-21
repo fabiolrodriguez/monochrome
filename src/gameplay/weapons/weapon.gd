@@ -52,6 +52,13 @@ func refresh_fire_rate() -> void:
 	fire_cooldown.wait_time = base_fire_interval / fire_rate_multiplier
 
 
+func fire_passive(direction: Vector2, damage_factor: float, projectile_color: Color, extra_ricochets := 0) -> void:
+	if direction.is_zero_approx() or projectile_scene == null:
+		return
+	var spawn_transform := Transform2D(direction.angle(), global_position + direction.normalized() * 8.0)
+	_spawn_projectile(spawn_transform, damage_factor, projectile_color, null, null, extra_ricochets)
+
+
 func _fire() -> void:
 	if projectile_scene == null:
 		push_warning("Weapon has no projectile scene configured.")
@@ -64,16 +71,28 @@ func _fire() -> void:
 	for index: int in projectile_count:
 		var spread_offset := (float(index) - float(projectile_count - 1) * 0.5) * SPREAD_ANGLE
 		var shot_transform := muzzle.global_transform.rotated_local(spread_offset)
-		var is_critical := randf() < critical_chance
-		var shot_damage_multiplier := damage_multiplier * (critical_damage_multiplier if is_critical else 1.0)
-		var projectile: PlayerProjectile
-		if pool != null:
-			projectile = pool.acquire(shot_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count, is_critical)
-		else:
-			projectile = projectile_scene.instantiate() as PlayerProjectile
-			if projectile != null:
-				projectile_container.add_child(projectile)
-				projectile.activate(shot_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count, is_critical)
-		if projectile != null:
-			fired.emit(projectile)
+		_spawn_projectile(shot_transform, 1.0, Color("4aa3ff"), pool, projectile_container)
 	fire_cooldown.start()
+
+
+func _spawn_projectile(spawn_transform: Transform2D, damage_factor: float, projectile_color: Color, existing_pool: PlayerProjectilePool = null, existing_container: Node = null, extra_ricochets := 0) -> void:
+	var projectile_container := existing_container
+	if projectile_container == null:
+		projectile_container = get_tree().get_first_node_in_group("projectile_container")
+		if projectile_container == null:
+			projectile_container = get_tree().current_scene
+	var pool := existing_pool
+	if pool == null:
+		pool = get_tree().get_first_node_in_group("player_projectile_pool") as PlayerProjectilePool
+	var is_critical := randf() < critical_chance
+	var shot_damage_multiplier := damage_multiplier * damage_factor * (critical_damage_multiplier if is_critical else 1.0)
+	var projectile: PlayerProjectile
+	if pool != null:
+		projectile = pool.acquire(spawn_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count + extra_ricochets, is_critical, projectile_color)
+	else:
+		projectile = projectile_scene.instantiate() as PlayerProjectile
+		if projectile != null:
+			projectile_container.add_child(projectile)
+			projectile.activate(spawn_transform, shot_damage_multiplier, projectile_speed_multiplier, piercing_hits, ricochet_count + extra_ricochets, is_critical, projectile_color)
+	if projectile != null:
+		fired.emit(projectile)

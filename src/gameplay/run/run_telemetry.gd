@@ -46,6 +46,16 @@ func finish(reason: StringName, level_id: StringName) -> void:
 	if _finished:
 		return
 	_finished = true
+	ProgressionManager.record_run({
+		"runs": 1,
+		"victories": 1 if reason == &"stage_complete" else 0,
+		"failed_runs": 0 if reason == &"stage_complete" else 1,
+		"enemies_defeated": enemies_defeated,
+		"damage_dealt": damage_dealt,
+		"coins_collected": coins_collected,
+		"play_time": active_time,
+		"highest_level": highest_level,
+	})
 	var file: FileAccess
 	if FileAccess.file_exists(HISTORY_PATH):
 		file = FileAccess.open(HISTORY_PATH, FileAccess.READ_WRITE)

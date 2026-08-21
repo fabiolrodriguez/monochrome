@@ -16,6 +16,11 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	global_position += _direction * speed * delta
+	var viewport := get_viewport()
+	var screen_rect := Rect2(Vector2.ZERO, viewport.get_visible_rect().size).grow(8.0)
+	var screen_position := viewport.get_canvas_transform() * global_position
+	if not screen_rect.has_point(screen_position):
+		queue_free()
 
 
 func set_direction(direction: Vector2) -> void:
@@ -32,4 +37,3 @@ func _on_body_entered(body: Node2D) -> void:
 func _draw() -> void:
 	draw_circle(Vector2.ZERO, 3.0, Color("ff4b4b"))
 	draw_circle(Vector2.ZERO, 1.0, Color("ffd0d0"))
-

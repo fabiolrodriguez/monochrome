@@ -1,13 +1,24 @@
-[gd_resource type="Resource" script_class="SkillTreeCatalog" load_steps=21 format=3]
+[gd_resource type="Resource" script_class="SkillTreeCatalog" load_steps=46 format=3]
 
 [ext_resource type="Script" path="res://src/data/progression/skill_tree_catalog.gd" id="1_catalog"]
 [ext_resource type="Script" path="res://src/data/progression/skill_node_data.gd" id="2_node"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/power.png" id="3_damage"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/cadence.png" id="4_cadence"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/core.png" id="5_core"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/vitality.png" id="6_vitality"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/velocity.png" id="7_velocity"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/unlock.png" id="8_unlock"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/magnet.png" id="9_magnet"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/reroll.png" id="10_reroll"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/mobility.png" id="11_mobility"]
+[ext_resource type="Texture2D" path="res://assets/icons/skill_tree_1bit/fortune.png" id="12_fortune"]
 
 [sub_resource type="Resource" id="Node_core"]
 script = ExtResource("2_node")
 id = &"core"
 title_key = &"SKILL_CORE_NAME"
 description_key = &"SKILL_CORE_DESC"
+icon = ExtResource("5_core")
 cost = 0
 tree_position = Vector2(240, 110)
 
@@ -16,6 +27,7 @@ script = ExtResource("2_node")
 id = &"vitality_1"
 title_key = &"SKILL_VITALITY_1_NAME"
 description_key = &"SKILL_VITALITY_1_DESC"
+icon = ExtResource("6_vitality")
 cost = 5
 prerequisites = Array[StringName]([&"core"])
 stat_key = &"max_health"
@@ -27,6 +39,7 @@ script = ExtResource("2_node")
 id = &"vitality_2"
 title_key = &"SKILL_VITALITY_2_NAME"
 description_key = &"SKILL_VITALITY_2_DESC"
+icon = ExtResource("6_vitality")
 cost = 30
 prerequisites = Array[StringName]([&"vitality_1"])
 stat_key = &"max_health"
@@ -38,6 +51,7 @@ script = ExtResource("2_node")
 id = &"vitality_3"
 title_key = &"SKILL_VITALITY_3_NAME"
 description_key = &"SKILL_VITALITY_3_DESC"
+icon = ExtResource("6_vitality")
 cost = 120
 prerequisites = Array[StringName]([&"vitality_2"])
 stat_key = &"max_health"
@@ -49,6 +63,7 @@ script = ExtResource("2_node")
 id = &"power_1"
 title_key = &"SKILL_POWER_1_NAME"
 description_key = &"SKILL_POWER_1_DESC"
+icon = ExtResource("3_damage")
 cost = 5
 prerequisites = Array[StringName]([&"core"])
 stat_key = &"damage"
@@ -60,6 +75,7 @@ script = ExtResource("2_node")
 id = &"power_2"
 title_key = &"SKILL_POWER_2_NAME"
 description_key = &"SKILL_POWER_2_DESC"
+icon = ExtResource("3_damage")
 cost = 30
 prerequisites = Array[StringName]([&"power_1"])
 stat_key = &"damage"
@@ -71,6 +87,7 @@ script = ExtResource("2_node")
 id = &"power_3"
 title_key = &"SKILL_POWER_3_NAME"
 description_key = &"SKILL_POWER_3_DESC"
+icon = ExtResource("3_damage")
 cost = 120
 prerequisites = Array[StringName]([&"power_2"])
 stat_key = &"damage"
@@ -82,6 +99,7 @@ script = ExtResource("2_node")
 id = &"mobility_1"
 title_key = &"SKILL_MOBILITY_1_NAME"
 description_key = &"SKILL_MOBILITY_1_DESC"
+icon = ExtResource("11_mobility")
 cost = 5
 prerequisites = Array[StringName]([&"core"])
 stat_key = &"movement_speed"
@@ -93,6 +111,7 @@ script = ExtResource("2_node")
 id = &"mobility_2"
 title_key = &"SKILL_MOBILITY_2_NAME"
 description_key = &"SKILL_MOBILITY_2_DESC"
+icon = ExtResource("11_mobility")
 cost = 30
 prerequisites = Array[StringName]([&"mobility_1"])
 stat_key = &"movement_speed"
@@ -104,6 +123,7 @@ script = ExtResource("2_node")
 id = &"mobility_3"
 title_key = &"SKILL_MOBILITY_3_NAME"
 description_key = &"SKILL_MOBILITY_3_DESC"
+icon = ExtResource("11_mobility")
 cost = 120
 prerequisites = Array[StringName]([&"mobility_2"])
 stat_key = &"movement_speed"
@@ -115,6 +135,7 @@ script = ExtResource("2_node")
 id = &"cadence"
 title_key = &"SKILL_CADENCE_NAME"
 description_key = &"SKILL_CADENCE_DESC"
+icon = ExtResource("4_cadence")
 cost = 75
 prerequisites = Array[StringName]([&"power_2"])
 stat_key = &"fire_rate"
@@ -126,6 +147,7 @@ script = ExtResource("2_node")
 id = &"velocity"
 title_key = &"SKILL_VELOCITY_NAME"
 description_key = &"SKILL_VELOCITY_DESC"
+icon = ExtResource("7_velocity")
 cost = 75
 prerequisites = Array[StringName]([&"power_2"])
 stat_key = &"projectile_speed"
@@ -137,6 +159,7 @@ script = ExtResource("2_node")
 id = &"magnet"
 title_key = &"SKILL_MAGNET_NAME"
 description_key = &"SKILL_MAGNET_DESC"
+icon = ExtResource("9_magnet")
 cost = 75
 prerequisites = Array[StringName]([&"mobility_2"])
 stat_key = &"pickup_radius"
@@ -148,6 +171,7 @@ script = ExtResource("2_node")
 id = &"fortune"
 title_key = &"SKILL_FORTUNE_NAME"
 description_key = &"SKILL_FORTUNE_DESC"
+icon = ExtResource("12_fortune")
 cost = 100
 prerequisites = Array[StringName]([&"vitality_2", &"power_2"])
 stat_key = &"coin_gain"
@@ -159,6 +183,7 @@ script = ExtResource("2_node")
 id = &"reroll"
 title_key = &"SKILL_REROLL_NAME"
 description_key = &"SKILL_REROLL_DESC"
+icon = ExtResource("10_reroll")
 node_type = 1
 cost = 250
 prerequisites = Array[StringName]([&"cadence", &"magnet"])
@@ -170,6 +195,7 @@ script = ExtResource("2_node")
 id = &"unlock_piercing"
 title_key = &"SKILL_UNLOCK_PIERCING_NAME"
 description_key = &"SKILL_UNLOCK_PIERCING_DESC"
+icon = ExtResource("7_velocity")
 node_type = 2
 cost = 180
 prerequisites = Array[StringName]([&"power_3"])
@@ -181,9 +207,10 @@ script = ExtResource("2_node")
 id = &"unlock_multishot"
 title_key = &"SKILL_UNLOCK_MULTISHOT_NAME"
 description_key = &"SKILL_UNLOCK_MULTISHOT_DESC"
+icon = ExtResource("4_cadence")
 node_type = 2
-cost = 420
-prerequisites = Array[StringName]([&"unlock_piercing"])
+cost = 120
+prerequisites = Array[StringName]([&"power_2"])
 unlock_id = &"multishot"
 tree_position = Vector2(-20, 20)
 
@@ -192,12 +219,193 @@ script = ExtResource("2_node")
 id = &"unlock_ricochet"
 title_key = &"SKILL_UNLOCK_RICOCHET_NAME"
 description_key = &"SKILL_UNLOCK_RICOCHET_DESC"
+icon = ExtResource("9_magnet")
 node_type = 2
-cost = 500
-prerequisites = Array[StringName]([&"unlock_piercing"])
+cost = 160
+prerequisites = Array[StringName]([&"power_3"])
 unlock_id = &"ricochet"
 tree_position = Vector2(80, 20)
 
+[sub_resource type="Resource" id="Node_power_4"]
+script = ExtResource("2_node")
+id = &"power_4"
+title_key = &"SKILL_POWER_4_NAME"
+description_key = &"SKILL_POWER_4_DESC"
+icon = ExtResource("3_damage")
+cost = 400
+prerequisites = Array[StringName]([&"power_3"])
+stat_key = &"damage"
+stat_value = 0.08
+tree_position = Vector2(-90, 110)
+
+[sub_resource type="Resource" id="Node_cadence_2"]
+script = ExtResource("2_node")
+id = &"cadence_2"
+title_key = &"SKILL_CADENCE_2_NAME"
+description_key = &"SKILL_CADENCE_2_DESC"
+icon = ExtResource("4_cadence")
+cost = 220
+prerequisites = Array[StringName]([&"cadence"])
+stat_key = &"fire_rate"
+stat_value = 0.03
+tree_position = Vector2(100, 245)
+
+[sub_resource type="Resource" id="Node_velocity_2"]
+script = ExtResource("2_node")
+id = &"velocity_2"
+title_key = &"SKILL_VELOCITY_2_NAME"
+description_key = &"SKILL_VELOCITY_2_DESC"
+icon = ExtResource("7_velocity")
+cost = 220
+prerequisites = Array[StringName]([&"velocity"])
+stat_key = &"projectile_speed"
+stat_value = 0.05
+tree_position = Vector2(180, 270)
+
+[sub_resource type="Resource" id="Node_critical_1"]
+script = ExtResource("2_node")
+id = &"critical_1"
+title_key = &"SKILL_CRITICAL_1_NAME"
+description_key = &"SKILL_CRITICAL_1_DESC"
+icon = ExtResource("9_magnet")
+cost = 100
+prerequisites = Array[StringName]([&"power_2"])
+stat_key = &"critical_chance"
+stat_value = 0.02
+tree_position = Vector2(30, 170)
+
+[sub_resource type="Resource" id="Node_critical_2"]
+script = ExtResource("2_node")
+id = &"critical_2"
+title_key = &"SKILL_CRITICAL_2_NAME"
+description_key = &"SKILL_CRITICAL_2_DESC"
+icon = ExtResource("9_magnet")
+cost = 280
+prerequisites = Array[StringName]([&"critical_1"])
+stat_key = &"critical_chance"
+stat_value = 0.03
+tree_position = Vector2(-40, 205)
+
+[sub_resource type="Resource" id="Node_armor_1"]
+script = ExtResource("2_node")
+id = &"armor_1"
+title_key = &"SKILL_ARMOR_1_NAME"
+description_key = &"SKILL_ARMOR_1_DESC"
+icon = ExtResource("6_vitality")
+cost = 80
+prerequisites = Array[StringName]([&"vitality_1"])
+stat_key = &"armor"
+stat_value = 0.03
+tree_position = Vector2(310, 65)
+
+[sub_resource type="Resource" id="Node_armor_2"]
+script = ExtResource("2_node")
+id = &"armor_2"
+title_key = &"SKILL_ARMOR_2_NAME"
+description_key = &"SKILL_ARMOR_2_DESC"
+icon = ExtResource("6_vitality")
+cost = 180
+prerequisites = Array[StringName]([&"armor_1"])
+stat_key = &"armor"
+stat_value = 0.04
+tree_position = Vector2(380, 45)
+
+[sub_resource type="Resource" id="Node_regeneration"]
+script = ExtResource("2_node")
+id = &"permanent_regeneration"
+title_key = &"SKILL_REGEN_NAME"
+description_key = &"SKILL_REGEN_DESC"
+icon = ExtResource("12_fortune")
+cost = 320
+prerequisites = Array[StringName]([&"armor_2"])
+stat_key = &"regeneration"
+stat_value = 0.25
+tree_position = Vector2(450, 20)
+
+[sub_resource type="Resource" id="Node_mobility_4"]
+script = ExtResource("2_node")
+id = &"mobility_4"
+title_key = &"SKILL_MOBILITY_4_NAME"
+description_key = &"SKILL_MOBILITY_4_DESC"
+icon = ExtResource("11_mobility")
+cost = 400
+prerequisites = Array[StringName]([&"mobility_3"])
+stat_key = &"movement_speed"
+stat_value = 0.08
+tree_position = Vector2(520, 110)
+
+[sub_resource type="Resource" id="Node_magnet_2"]
+script = ExtResource("2_node")
+id = &"magnet_2"
+title_key = &"SKILL_MAGNET_2_NAME"
+description_key = &"SKILL_MAGNET_2_DESC"
+icon = ExtResource("9_magnet")
+cost = 220
+prerequisites = Array[StringName]([&"magnet"])
+stat_key = &"pickup_radius"
+stat_value = 12.0
+tree_position = Vector2(450, 180)
+
+[sub_resource type="Resource" id="Node_fortune_2"]
+script = ExtResource("2_node")
+id = &"fortune_2"
+title_key = &"SKILL_FORTUNE_2_NAME"
+description_key = &"SKILL_FORTUNE_2_DESC"
+icon = ExtResource("12_fortune")
+cost = 300
+prerequisites = Array[StringName]([&"fortune"])
+stat_key = &"coin_gain"
+stat_value = 0.15
+tree_position = Vector2(250, 245)
+
+[sub_resource type="Resource" id="Node_unlock_radial"]
+script = ExtResource("2_node")
+id = &"unlock_radial_pulse"
+title_key = &"SKILL_UNLOCK_RADIAL_NAME"
+description_key = &"SKILL_UNLOCK_RADIAL_DESC"
+icon = ExtResource("5_core")
+node_type = 2
+cost = 100
+prerequisites = Array[StringName]([&"cadence"])
+unlock_id = &"radial_pulse"
+tree_position = Vector2(30, 255)
+
+[sub_resource type="Resource" id="Node_unlock_seeker"]
+script = ExtResource("2_node")
+id = &"unlock_seeker"
+title_key = &"SKILL_UNLOCK_SEEKER_NAME"
+description_key = &"SKILL_UNLOCK_SEEKER_DESC"
+icon = ExtResource("9_magnet")
+node_type = 2
+cost = 180
+prerequisites = Array[StringName]([&"velocity_2", &"magnet"])
+unlock_id = &"seeker"
+tree_position = Vector2(260, 315)
+
+[sub_resource type="Resource" id="Node_unlock_orbital"]
+script = ExtResource("2_node")
+id = &"unlock_orbital_ward"
+title_key = &"SKILL_UNLOCK_ORBITAL_NAME"
+description_key = &"SKILL_UNLOCK_ORBITAL_DESC"
+icon = ExtResource("6_vitality")
+node_type = 2
+cost = 140
+prerequisites = Array[StringName]([&"armor_1"])
+unlock_id = &"orbital_ward"
+tree_position = Vector2(520, 45)
+
+[sub_resource type="Resource" id="Node_luck"]
+script = ExtResource("2_node")
+id = &"permanent_luck"
+title_key = &"SKILL_LUCK_NAME"
+description_key = &"SKILL_LUCK_DESC"
+icon = ExtResource("12_fortune")
+cost = 450
+prerequisites = Array[StringName]([&"fortune_2"])
+stat_key = &"luck"
+stat_value = 0.08
+tree_position = Vector2(330, 290)
+
 [resource]
 script = ExtResource("1_catalog")
-nodes = [SubResource("Node_core"), SubResource("Node_vitality_1"), SubResource("Node_power_1"), SubResource("Node_mobility_1"), SubResource("Node_vitality_2"), SubResource("Node_power_2"), SubResource("Node_mobility_2"), SubResource("Node_vitality_3"), SubResource("Node_power_3"), SubResource("Node_mobility_3"), SubResource("Node_cadence"), SubResource("Node_velocity"), SubResource("Node_magnet"), SubResource("Node_fortune"), SubResource("Node_reroll"), SubResource("Node_unlock_piercing"), SubResource("Node_unlock_multishot"), SubResource("Node_unlock_ricochet")]
+nodes = [SubResource("Node_core"), SubResource("Node_vitality_1"), SubResource("Node_power_1"), SubResource("Node_mobility_1"), SubResource("Node_vitality_2"), SubResource("Node_power_2"), SubResource("Node_mobility_2"), SubResource("Node_vitality_3"), SubResource("Node_power_3"), SubResource("Node_mobility_3"), SubResource("Node_cadence"), SubResource("Node_velocity"), SubResource("Node_magnet"), SubResource("Node_fortune"), SubResource("Node_reroll"), SubResource("Node_unlock_piercing"), SubResource("Node_unlock_multishot"), SubResource("Node_unlock_ricochet"), SubResource("Node_power_4"), SubResource("Node_cadence_2"), SubResource("Node_velocity_2"), SubResource("Node_critical_1"), SubResource("Node_critical_2"), SubResource("Node_armor_1"), SubResource("Node_armor_2"), SubResource("Node_regeneration"), SubResource("Node_mobility_4"), SubResource("Node_magnet_2"), SubResource("Node_fortune_2"), SubResource("Node_unlock_radial"), SubResource("Node_unlock_seeker"), SubResource("Node_unlock_orbital"), SubResource("Node_luck")]

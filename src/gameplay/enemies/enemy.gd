@@ -36,12 +36,17 @@ func _physics_process(delta: float) -> void:
 		_hit_flash_remaining = maxf(_hit_flash_remaining - delta, 0.0)
 		queue_redraw()
 	if _shot_windup_active:
-		_shot_windup_remaining = maxf(_shot_windup_remaining - delta, 0.0)
-		queue_redraw()
-		if _shot_windup_remaining <= 0.0:
+		if not _can_shoot_target():
 			_shot_windup_active = false
-			_shoot(_pending_shot_direction)
+			_shot_windup_remaining = 0.0
 			queue_redraw()
+		else:
+			_shot_windup_remaining = maxf(_shot_windup_remaining - delta, 0.0)
+			queue_redraw()
+			if _shot_windup_remaining <= 0.0:
+				_shot_windup_active = false
+				_shoot(_pending_shot_direction)
+				queue_redraw()
 	var hit_color := Color.WHITE.lerp(Color("9fcfff"), SettingsManager.flash_intensity)
 	sprite.modulate = hit_color if _hit_flash_remaining > 0.0 else (Color("ff9a9a") if _shot_windup_active else Color.WHITE)
 	if absf(velocity.x) > 0.1:
@@ -55,7 +60,7 @@ func _physics_process(delta: float) -> void:
 			velocity = to_target.normalized() * data.movement_speed
 		EnemyData.Behavior.SHOOTER:
 			velocity = _shooter_velocity(to_target)
-			if shot_cooldown.is_stopped() and not _shot_windup_active:
+			if shot_cooldown.is_stopped() and not _shot_windup_active and _can_shoot_target():
 				_begin_shot(to_target.normalized())
 	move_and_slide()
 	_apply_contact_damage()
@@ -81,7 +86,7 @@ func _shooter_velocity(to_target: Vector2) -> Vector2:
 
 
 func _shoot(direction: Vector2) -> void:
-	if enemy_projectile_scene == null:
+	if enemy_projectile_scene == null or not _can_shoot_target():
 		return
 	var projectile := enemy_projectile_scene.instantiate() as EnemyProjectile
 	if projectile == null:
@@ -102,6 +107,17 @@ func _begin_shot(direction: Vector2) -> void:
 	queue_redraw()
 
 
+func _can_shoot_target() -> bool:
+	if not is_instance_valid(_target):
+		return false
+	var viewport := get_viewport()
+	var screen_rect := Rect2(Vector2.ZERO, viewport.get_visible_rect().size)
+	var canvas_transform := viewport.get_canvas_transform()
+	var enemy_screen_position := canvas_transform * global_position
+	var target_screen_position := canvas_transform * _target.global_position
+	return screen_rect.has_point(enemy_screen_position) and screen_rect.has_point(target_screen_position)
+
+
 func _apply_contact_damage() -> void:
 	for collision_index: int in get_slide_collision_count():
 		var collision := get_slide_collision(collision_index)
@@ -111,7 +127,7 @@ func _apply_contact_damage() -> void:
 
 
 func _on_depleted() -> void:
-	AudioManager.play_sfx(&"enemy_defeat", -20.0, 0.06)
+	AudioManager.play_sfx(&"enemy_defeat_retro", -22.0, 0.06)
 	_drop_experience()
 	_try_drop_coin()
 	_try_drop_healing()
@@ -137,7 +153,8 @@ func _drop_experience() -> void:
 
 
 func _try_drop_coin() -> void:
-	if coin_pickup_scene == null or randf() > data.coin_drop_chance:
+	var luck_multiplier := 1.0 + (_target.luck if is_instance_valid(_target) else 0.0)
+	if coin_pickup_scene == null or randf() > minf(data.coin_drop_chance * luck_multiplier, 1.0):
 		return
 	var coin := coin_pickup_scene.instantiate() as CoinPickup
 	if coin == null:
@@ -151,7 +168,8 @@ func _try_drop_coin() -> void:
 
 
 func _try_drop_healing() -> void:
-	if healing_pickup_scene == null or randf() > data.healing_drop_chance:
+	var luck_multiplier := 1.0 + (_target.luck if is_instance_valid(_target) else 0.0)
+	if healing_pickup_scene == null or randf() > minf(data.healing_drop_chance * luck_multiplier, 1.0):
 		return
 	var pickup := healing_pickup_scene.instantiate() as HealingPickup
 	if pickup == null:

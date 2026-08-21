@@ -16,6 +16,7 @@ signal auto_fire_changed(enabled: bool)
 @onready var experience: ExperienceComponent = $Experience
 @onready var damage_cooldown: Timer = $DamageCooldown
 @onready var sprite: AnimatedSprite2D = $Sprite2D
+@onready var passive_arsenal: BulletHeavenArsenal = $BulletHeavenArsenal
 
 var aim_direction := Vector2.RIGHT
 var _base_movement_speed: float
@@ -27,12 +28,14 @@ var _auto_fire_enabled := false
 var _dash_remaining := 0.0
 var _dash_cooldown_remaining := 0.0
 var _dash_direction := Vector2.ZERO
+var _dash_ghosting_enemies := false
 var armor_reduction := 0.0
 var regeneration_per_second := 0.0
 var barrier_cooldown_seconds := 0.0
 var _barrier_remaining := 0.0
 var _barrier_ready := false
 var _regeneration_accumulator := 0.0
+var luck := 0.0
 
 
 func _ready() -> void:
@@ -72,6 +75,7 @@ func _physics_process(delta: float) -> void:
 		_dash_direction = movement_input.normalized() if not movement_input.is_zero_approx() else aim_direction
 		_dash_remaining = dash_duration
 		_dash_cooldown_remaining = dash_cooldown
+		_set_dash_enemy_ghosting(true)
 		AudioManager.play_sfx(&"dash", -13.0)
 	if _dash_remaining > 0.0:
 		_dash_remaining = maxf(_dash_remaining - delta, 0.0)
@@ -79,6 +83,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity = movement_input * movement_speed
 	move_and_slide()
+	if _dash_ghosting_enemies and _dash_remaining <= 0.0:
+		_set_dash_enemy_ghosting(false)
 	_update_aim()
 	_update_player_animation(movement_input)
 	weapon.set_trigger_pressed(_auto_fire_enabled or Input.is_action_pressed("shoot"))
@@ -127,6 +133,28 @@ func apply_upgrade(upgrade: UpgradeData) -> void:
 			weapon.critical_chance = minf(weapon.critical_chance + upgrade.amount_per_level, 0.75)
 		UpgradeData.Stat.CRITICAL_DAMAGE:
 			weapon.critical_damage_multiplier += upgrade.amount_per_level
+		UpgradeData.Stat.LUCK:
+			luck = minf(luck + upgrade.amount_per_level, 1.0)
+		UpgradeData.Stat.RADIAL_PULSE:
+			passive_arsenal.add_radial_pulse_level()
+		UpgradeData.Stat.SEEKER:
+			passive_arsenal.add_seeker_level()
+		UpgradeData.Stat.ORBITAL_WARD:
+			passive_arsenal.add_orbital_level()
+
+
+func apply_evolution(evolution_id: StringName) -> void:
+	match evolution_id:
+		&"void_storm":
+			passive_arsenal.evolve_void_storm()
+		&"chain_wisp":
+			passive_arsenal.evolve_chain_wisp()
+		&"orbital_aegis":
+			passive_arsenal.evolve_orbital_aegis()
+			if barrier_cooldown_seconds > 0.0:
+				barrier_cooldown_seconds = maxf(barrier_cooldown_seconds - 2.0, 3.0)
+				_barrier_ready = true
+				queue_redraw()
 
 
 func _apply_permanent_progression() -> void:
@@ -138,6 +166,10 @@ func _apply_permanent_progression() -> void:
 	weapon.damage_multiplier += ProgressionManager.get_permanent_stat(&"damage")
 	weapon.fire_rate_multiplier += ProgressionManager.get_permanent_stat(&"fire_rate")
 	weapon.projectile_speed_multiplier += ProgressionManager.get_permanent_stat(&"projectile_speed")
+	weapon.critical_chance = minf(weapon.critical_chance + ProgressionManager.get_permanent_stat(&"critical_chance"), 0.75)
+	armor_reduction = minf(armor_reduction + ProgressionManager.get_permanent_stat(&"armor"), 0.6)
+	regeneration_per_second += ProgressionManager.get_permanent_stat(&"regeneration")
+	luck = minf(luck + ProgressionManager.get_permanent_stat(&"luck"), 1.0)
 	weapon.refresh_fire_rate()
 	pickup_radius += ProgressionManager.get_permanent_stat(&"pickup_radius")
 
@@ -159,6 +191,13 @@ func set_movement_modifier(key: StringName, multiplier: float) -> void:
 
 func _refresh_movement_speed() -> void:
 	movement_speed = _base_movement_speed * _movement_multiplier * _external_movement_multiplier
+
+
+func _set_dash_enemy_ghosting(enabled: bool) -> void:
+	_dash_ghosting_enemies = enabled
+	# Enemies detect the player through physics layer 2. Removing only this layer
+	# lets the dash cross hostile bodies while the player's mask still hits walls.
+	set_collision_layer_value(2, not enabled)
 
 
 func _on_health_depleted() -> void:

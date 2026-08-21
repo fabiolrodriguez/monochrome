@@ -27,6 +27,7 @@ var _boss_health_tween: Tween
 @onready var upgrade_controller: UpgradeController = $UpgradeController
 @onready var telemetry: RunTelemetry = $RunTelemetry
 @onready var summary_label: Label = $DeathUI/Panel/Layout/Summary
+@onready var evolution_banner: Label = $HUD/EvolutionBanner
 
 
 func _ready() -> void:
@@ -56,6 +57,7 @@ func _ready() -> void:
 	boss_controller.boss_health_changed.connect(_on_boss_health_changed)
 	boss_controller.boss_defeated.connect(_on_boss_defeated)
 	run_currency.coins_changed.connect(_on_run_coins_changed)
+	upgrade_controller.evolution_unlocked.connect(_on_evolution_unlocked)
 	SettingsManager.settings_changed.connect(_refresh_localized_hud)
 	restart_button.pressed.connect(_restart_run)
 	main_menu_button.pressed.connect(_return_to_main_menu)
@@ -64,6 +66,7 @@ func _ready() -> void:
 	boss_name.hide()
 	boss_health.hide()
 	auto_fire_label.hide()
+	evolution_banner.hide()
 	_on_player_health_changed(player.health.current_health, player.health.maximum_health)
 	_on_experience_changed(player.experience.current_experience, player.experience.required_experience)
 	_on_level_changed(player.experience.level)
@@ -96,6 +99,16 @@ func _on_run_coins_changed(current_run: int) -> void:
 	telemetry.set_coins(current_run)
 
 
+func _on_evolution_unlocked(name_key: StringName) -> void:
+	evolution_banner.text = tr("UI_EVOLUTION_UNLOCKED") % tr(name_key)
+	evolution_banner.modulate = Color.WHITE
+	evolution_banner.show()
+	var tween := create_tween()
+	tween.tween_interval(1.6)
+	tween.tween_property(evolution_banner, "modulate:a", 0.0, 0.45)
+	tween.tween_callback(evolution_banner.hide)
+
+
 func _refresh_localized_hud() -> void:
 	_on_run_coins_changed(run_currency.current_run_coins)
 	if objective_manager.active_objective.is_complete:
@@ -109,7 +122,7 @@ func _refresh_localized_hud() -> void:
 
 
 func _on_player_died() -> void:
-	AudioManager.play_sfx(&"enemy_defeat", -7.0)
+	AudioManager.play_sfx(&"run_failed", -9.0)
 	upgrade_controller.finalize_run()
 	ProgressionManager.flush_save()
 	result_title.text = tr("UI_RUN_ENDED")
@@ -177,6 +190,7 @@ func _on_boss_health_changed(current: float, maximum: float) -> void:
 
 
 func _on_boss_defeated() -> void:
+	AudioManager.play_sfx(&"boss_explosion", -9.0, 0.1)
 	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
 	if shake != null:
 		shake.add_trauma(0.7)

@@ -26,7 +26,7 @@ func _explode() -> void:
 	var player := get_tree().get_first_node_in_group("player") as Player
 	if is_instance_valid(player) and player.global_position.distance_to(global_position) <= radius:
 		player.take_damage(damage)
-	AudioManager.play_sfx(&"boss_spawn", -18.0)
+	AudioManager.play_sfx(&"boss_explosion", -15.0, 0.08)
 	var shake := get_tree().get_first_node_in_group("screen_shake") as ScreenShake
 	if shake != null:
 		shake.add_trauma(0.42)

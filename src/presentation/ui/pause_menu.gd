@@ -10,6 +10,7 @@ extends CanvasLayer
 @onready var restart_button: Button = $Overlay/Panel/Layout/Restart
 @onready var main_menu_button: Button = $Overlay/Panel/Layout/MainMenu
 @onready var settings_button: Button = $Overlay/Panel/Layout/Settings
+@onready var build_button: Button = $Overlay/Panel/Layout/Build
 @onready var settings_panel: PanelContainer = $Overlay/SettingsPanel
 @onready var volume_slider: HSlider = $Overlay/SettingsPanel/Layout/Volume
 @onready var volume_value: Label = $Overlay/SettingsPanel/Layout/VolumeHeader/Value
@@ -18,6 +19,9 @@ extends CanvasLayer
 @onready var screen_shake_toggle: CheckButton = $Overlay/SettingsPanel/Layout/ScreenShake
 @onready var language_select: OptionButton = $Overlay/SettingsPanel/Layout/Language
 @onready var settings_back_button: Button = $Overlay/SettingsPanel/Layout/Back
+@onready var build_panel: PanelContainer = $Overlay/BuildPanel
+@onready var build_summary: Label = $Overlay/BuildPanel/Layout/Summary
+@onready var build_back_button: Button = $Overlay/BuildPanel/Layout/Back
 
 var _level_up_panel: Control
 var _run_result_panel: Control
@@ -33,13 +37,16 @@ func _ready() -> void:
 	restart_button.pressed.connect(_restart_run)
 	main_menu_button.pressed.connect(_return_to_main_menu)
 	settings_button.pressed.connect(_open_settings)
+	build_button.pressed.connect(_open_build)
 	settings_back_button.pressed.connect(_close_settings)
+	build_back_button.pressed.connect(_close_build)
 	volume_slider.value_changed.connect(_on_volume_changed)
 	fullscreen_toggle.toggled.connect(SettingsManager.set_fullscreen)
 	flash_intensity_select.item_selected.connect(_on_flash_intensity_selected)
 	screen_shake_toggle.toggled.connect(SettingsManager.set_screen_shake)
 	language_select.item_selected.connect(_on_language_selected)
 	settings_panel.hide()
+	build_panel.hide()
 	overlay.hide()
 	_configure_focus()
 
@@ -56,6 +63,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if overlay.visible and event.is_action_pressed("ui_cancel"):
 		if settings_panel.visible:
 			_close_settings()
+		elif build_panel.visible:
+			_close_build()
 		else:
 			resume()
 		get_viewport().set_input_as_handled()
@@ -73,6 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func pause() -> void:
 	settings_panel.hide()
+	build_panel.hide()
 	$Overlay/Panel.show()
 	overlay.show()
 	get_tree().paused = true
@@ -100,6 +110,20 @@ func _close_settings() -> void:
 	settings_panel.hide()
 	$Overlay/Panel.show()
 	settings_button.grab_focus()
+
+
+func _open_build() -> void:
+	var controller := get_tree().get_first_node_in_group("upgrade_controller") as UpgradeController
+	build_summary.text = controller.get_build_summary() if controller != null else tr("UI_BUILD_EMPTY")
+	$Overlay/Panel.hide()
+	build_panel.show()
+	build_back_button.grab_focus()
+
+
+func _close_build() -> void:
+	build_panel.hide()
+	$Overlay/Panel.show()
+	build_button.grab_focus()
 
 
 func _on_volume_changed(value: float) -> void:

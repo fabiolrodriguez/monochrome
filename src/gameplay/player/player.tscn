@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://src/gameplay/player/player.gd" id="1_player"]
 [ext_resource type="Script" path="res://src/gameplay/weapons/weapon.gd" id="2_weapon"]
@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" path="res://assets/art/mage_hero_dash_side.png" id="9_dash_side"]
 [ext_resource type="Texture2D" path="res://assets/art/magic_hero_dash_down.png" id="10_dash_down"]
 [ext_resource type="Texture2D" path="res://assets/art/magic_hero_dash_up.png" id="11_dash_up"]
+[ext_resource type="Script" path="res://src/gameplay/weapons/bullet_heaven_arsenal.gd" id="12_arsenal"]
+[ext_resource type="PackedScene" path="res://src/gameplay/weapons/orbital_ward.tscn" id="13_orbital"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_player"]
 radius = 5.0
@@ -92,6 +94,11 @@ position = Vector2(9, 0)
 [node name="FireCooldown" type="Timer" parent="Weapon"]
 wait_time = 0.32
 one_shot = true
+
+[node name="BulletHeavenArsenal" type="Node2D" parent="."]
+script = ExtResource("12_arsenal")
+weapon_path = NodePath("../Weapon")
+orbital_scene = ExtResource("13_orbital")
 
 [node name="Health" type="Node" parent="."]
 script = ExtResource("4_health")

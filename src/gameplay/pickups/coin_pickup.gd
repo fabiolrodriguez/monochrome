@@ -28,6 +28,7 @@ func _on_body_entered(body: Node2D) -> void:
 	var run_currency := get_tree().get_first_node_in_group("run_currency") as RunCurrency
 	if run_currency != null:
 		run_currency.collect_coins(value)
+	AudioManager.play_sfx(&"coin_collect", -22.0, 0.06)
 	queue_free()
 
 

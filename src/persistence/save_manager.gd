@@ -1,7 +1,7 @@
 extends Node
 
 const SAVE_PATH := "user://savegame.json"
-const SAVE_VERSION := 3
+const SAVE_VERSION := 4
 
 
 func load_game() -> Dictionary:
@@ -42,6 +42,7 @@ func _default_data() -> Dictionary:
 		"completed_levels": [],
 		"unlocked_skill_nodes": ["core"],
 		"permanent_stats": {},
+		"career_stats": {},
 	}
 
 
@@ -53,4 +54,5 @@ func _migrate(data: Dictionary) -> Dictionary:
 	migrated["completed_levels"] = data.get("completed_levels", migrated["completed_levels"])
 	migrated["unlocked_skill_nodes"] = data.get("unlocked_skill_nodes", migrated["unlocked_skill_nodes"])
 	migrated["permanent_stats"] = data.get("permanent_stats", migrated["permanent_stats"])
+	migrated["career_stats"] = data.get("career_stats", migrated["career_stats"])
 	return migrated

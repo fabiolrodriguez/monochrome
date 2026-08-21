@@ -31,7 +31,7 @@ func present(options: Array[UpgradeData], levels: Dictionary[StringName, int]) -
 			button.icon = null
 			icons[index].texture = upgrade.icon
 			var rarity_key := _rarity_key(upgrade.rarity)
-			button.text = "[%s] %s\n%s\n%s %d/%d" % [tr(rarity_key), tr(upgrade.name_key), tr(upgrade.description_key), tr("UI_LEVEL"), next_level, upgrade.max_level]
+			button.text = "\n\n[%s]\n%s\n%s\n%s %d/%d" % [tr(rarity_key), tr(upgrade.name_key), tr(upgrade.description_key), tr("UI_LEVEL"), next_level, upgrade.max_level]
 			_apply_rarity_style(button, upgrade.rarity)
 	panel.show()
 	get_tree().paused = true

@@ -16,7 +16,7 @@ func _ready() -> void:
 			_available.append(projectile)
 
 
-func acquire(spawn_transform: Transform2D, damage_scale: float, speed_scale: float, piercing: int, ricochets: int, is_critical: bool) -> PlayerProjectile:
+func acquire(spawn_transform: Transform2D, damage_scale: float, speed_scale: float, piercing: int, ricochets: int, is_critical: bool, projectile_color: Color = Color("4aa3ff")) -> PlayerProjectile:
 	var projectile: PlayerProjectile
 	if not _available.is_empty():
 		projectile = _available.pop_back()
@@ -24,7 +24,7 @@ func acquire(spawn_transform: Transform2D, damage_scale: float, speed_scale: flo
 		projectile = _create_projectile()
 	if projectile == null:
 		return null
-	projectile.activate(spawn_transform, damage_scale, speed_scale, piercing, ricochets, is_critical)
+	projectile.activate(spawn_transform, damage_scale, speed_scale, piercing, ricochets, is_critical, projectile_color)
 	return projectile
 
 

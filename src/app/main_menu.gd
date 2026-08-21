@@ -5,11 +5,15 @@ extends Control
 @onready var coins_label: Label = $Panel/Layout/Coins
 @onready var play_button: Button = $Panel/Layout/Play
 @onready var progression_button: Button = $Panel/Layout/Progression
+@onready var statistics_button: Button = $Panel/Layout/Statistics
 @onready var controls_button: Button = $Panel/Layout/Controls
 @onready var settings_button: Button = $Panel/Layout/Settings
 @onready var quit_button: Button = $Panel/Layout/Quit
 @onready var controls_overlay: Control = $Controls
 @onready var controls_back_button: Button = $Controls/Panel/Layout/Back
+@onready var statistics_overlay: Control = $Statistics
+@onready var statistics_summary: Label = $Statistics/Panel/Layout/Summary
+@onready var statistics_back_button: Button = $Statistics/Panel/Layout/Back
 @onready var level_select_overlay: Control = $LevelSelect
 @onready var void_garden_button: Button = $LevelSelect/Panel/Layout/VoidGarden
 @onready var dead_factory_button: Button = $LevelSelect/Panel/Layout/DeadFactory
@@ -49,10 +53,12 @@ func _ready() -> void:
 	AudioManager.play_ambience(&"menu")
 	play_button.pressed.connect(_open_level_select)
 	progression_button.pressed.connect(_open_skill_tree)
+	statistics_button.pressed.connect(_open_statistics)
 	controls_button.pressed.connect(_open_controls)
 	settings_button.pressed.connect(_open_settings)
 	quit_button.pressed.connect(_quit_game)
 	controls_back_button.pressed.connect(_close_controls)
+	statistics_back_button.pressed.connect(_close_statistics)
 	settings_back_button.pressed.connect(_close_settings)
 	unlock_all_button.pressed.connect(_unlock_all_levels)
 	reset_save_button.pressed.connect(_request_reset_save)
@@ -82,6 +88,7 @@ func _ready() -> void:
 	_change_zoom(0.0)
 	tree_overlay.hide()
 	controls_overlay.hide()
+	statistics_overlay.hide()
 	level_select_overlay.hide()
 	settings_overlay.hide()
 	version_label.text = "v%s" % str(ProjectSettings.get_setting("application/config/version", "dev"))
@@ -164,6 +171,30 @@ func _open_controls() -> void:
 func _close_controls() -> void:
 	controls_overlay.hide()
 	controls_button.grab_focus()
+
+
+func _open_statistics() -> void:
+	var total_seconds := floori(ProgressionManager.get_career_stat(&"play_time"))
+	var hours := total_seconds / 3600
+	var minutes := (total_seconds % 3600) / 60
+	statistics_summary.text = tr("UI_STATISTICS_SUMMARY") % [
+		roundi(ProgressionManager.get_career_stat(&"runs")),
+		roundi(ProgressionManager.get_career_stat(&"victories")),
+		roundi(ProgressionManager.get_career_stat(&"failed_runs")),
+		roundi(ProgressionManager.get_career_stat(&"enemies_defeated")),
+		roundi(ProgressionManager.get_career_stat(&"damage_dealt")),
+		roundi(ProgressionManager.get_career_stat(&"coins_collected")),
+		roundi(ProgressionManager.get_career_stat(&"highest_level")),
+		hours,
+		minutes,
+	]
+	statistics_overlay.show()
+	statistics_back_button.grab_focus()
+
+
+func _close_statistics() -> void:
+	statistics_overlay.hide()
+	statistics_button.grab_focus()
 
 
 func _open_settings() -> void:
@@ -298,7 +329,8 @@ func _refresh_skill_tree() -> void:
 
 
 func _purchase_node(node: SkillNodeData) -> void:
-	ProgressionManager.purchase_node(node)
+	if not ProgressionManager.purchase_node(node):
+		AudioManager.play_sfx(&"ui_error", -18.0, 0.15)
 	_show_node_hint(node)
 
 
@@ -329,6 +361,9 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif controls_overlay.visible and event.is_action_pressed("ui_cancel"):
 		_close_controls()
+		get_viewport().set_input_as_handled()
+	elif statistics_overlay.visible and event.is_action_pressed("ui_cancel"):
+		_close_statistics()
 		get_viewport().set_input_as_handled()
 	elif level_select_overlay.visible and event.is_action_pressed("ui_cancel"):
 		_close_level_select()

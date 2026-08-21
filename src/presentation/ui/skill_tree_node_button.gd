@@ -34,7 +34,7 @@ func _inspect() -> void:
 
 func _draw() -> void:
 	var center := size * 0.5
-	var radius := minf(size.x, size.y) * 0.36
+	var radius := minf(size.x, size.y) * 0.43
 	var fill := Color("17191e")
 	var outline := Color("4a4e56")
 	if is_owned:
@@ -47,7 +47,13 @@ func _draw() -> void:
 	draw_arc(center, radius, 0.0, TAU, 24, outline, 2.0)
 	if has_focus():
 		draw_arc(center, radius + 3.0, 0.0, TAU, 24, Color("ffd84a"), 1.0)
-	_draw_symbol(center, Color("111318") if is_owned else outline)
+	var symbol_color := Color("08090b") if is_owned else (Color.WHITE if is_available else Color("b8bbc2"))
+	if data.icon != null:
+		var icon_size := clampf(radius * 1.55, 11.0, 18.0)
+		var icon_rect := Rect2(center - Vector2.ONE * icon_size * 0.5, Vector2.ONE * icon_size)
+		draw_texture_rect(data.icon, icon_rect, false, symbol_color)
+	else:
+		_draw_symbol(center, symbol_color)
 
 
 func _draw_symbol(center: Vector2, color: Color) -> void:
@@ -78,4 +84,3 @@ func _draw_symbol(center: Vector2, color: Color) -> void:
 
 func fill_color() -> Color:
 	return Color("d9dadd") if is_owned else Color("17191e")
-

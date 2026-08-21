@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://src/data/upgrades/upgrade_data.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/icons/pack_16x16/sprite_05.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1")
+id = &"luck"
+name_key = &"UPGRADE_LUCK_NAME"
+description_key = &"UPGRADE_LUCK_DESC"
+icon = ExtResource("2_icon")
+rarity = 1
+category = 3
+max_level = 5
+weight = 5.0
+tags = Array[StringName]([&"UTILITY", &"LUCK"])
+stat = 13
+amount_per_level = 0.1

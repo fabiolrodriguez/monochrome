@@ -1,0 +1,27 @@
+Creator: SunGraphica
+
+Pack reviewed: Flat Game user interface asset pack
+Official page: https://sungraphica.itch.io/flat-game-user-interface-asset-pack
+Downloaded archive: FREE VERSION.zip
+
+Terms verified on the official itch.io page on 2026-08-21:
+- Personal and commercial use is permitted.
+- Modification and use in other game engines are permitted.
+- Reselling or redistributing the asset pack is prohibited.
+- Credit is requested as: SunGraphica
+
+Pack reviewed: 600 clean and minimal game Icons ultimate pack
+Official page: https://sungraphica.itch.io/minimal-game-icons-pack
+Downloaded archive: FREE.zip (90-icon free version)
+
+Terms verified on the official itch.io page on 2026-08-21:
+- Personal and commercial use is permitted.
+- Editing and modification are permitted.
+- Reselling or redistributing the original files is prohibited.
+- Credit to SunGraphica is requested whenever possible.
+
+The minimal icon pack contributes the key and currency silhouettes used by the
+skill tree. They were reduced to dedicated high-contrast 16x16 monochrome
+versions. The remaining free icons were reviewed but not copied because their
+modern general-purpose style does not consistently match the pixel-art UI.
+Preserve the SunGraphica credit and do not redistribute the source pack.
